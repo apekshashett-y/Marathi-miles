@@ -486,20 +486,7 @@ const MoodRecommendation = () => {
                 Start Mood Analysis
               </button>
 
-              <div className="stats-preview">
-                <div className="stat">
-                  <span className="stat-number">50+</span>
-                  <span className="stat-label">Destinations</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">6</span>
-                  <span className="stat-label">Mood Types</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">₹5K+</span>
-                  <span className="stat-label">Budget Plans</span>
-                </div>
-              </div>
+
             </div>
           </div>
         )}
