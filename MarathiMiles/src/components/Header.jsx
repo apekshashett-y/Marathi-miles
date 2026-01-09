@@ -75,6 +75,19 @@ const Header = ({ onSectionChange, heroSectionRef }) => {
                 Mood Recommendations
               </a>
             </li>
+            {/* New Place Explorer Navigation Item */}
+            <li className="nav-item">
+              <a
+                href="#place-explorer"
+                className={`nav-link ${
+                  activeSection === "place-explorer" ? "active" : ""
+                }`}
+                onClick={(e) => handleNavClick("place-explorer", e)}
+              >
+                <i className="fas fa-camera"></i>
+                Place Explorer
+              </a>
+            </li>
           </ul>
 
           <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -117,6 +130,12 @@ const Header = ({ onSectionChange, heroSectionRef }) => {
                 <i className="fas fa-mountain"></i>
                 <h4>Western Ghats</h4>
                 <p>UNESCO world heritage sites</p>
+              </div>
+              {/* New Feature Card for Place Explorer */}
+              <div className="feature-card">
+                <i className="fas fa-camera"></i>
+                <h4>AI Explorer</h4>
+                <p>Upload & discover places</p>
               </div>
             </div>
           </div>

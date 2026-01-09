@@ -1,66 +1,71 @@
-import React, { useState, useRef, useEffect } from 'react'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import MoodRecommendation from './components/MoodRecommendation/MoodRecommendation'
+import React, { useState, useRef, useEffect } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import MoodRecommendation from './components/MoodRecommendation/MoodRecommendation';
+import Timeline from './components/Passport/Timeline';
+import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer'; // Add this import
 
 const App = () => {
   const [currentSection, setCurrentSection] = useState("home");
   const heroSectionRef = useRef(null);
   const moodRecommendationsRef = useRef(null);
+  const passportRef = useRef(null);
+  const placeExplorerRef = useRef(null); // Add this ref
 
   const scrollToSection = (section) => {
-    // Use setTimeout to ensure DOM is ready
     setTimeout(() => {
-      const navbarHeight = 80; // Height of your fixed navbar
+      const navbarHeight = 80;
       
       if (section === "home") {
-        // Scroll to hero section (home)
         const heroElement = document.getElementById('home');
         if (heroElement) {
           const elementPosition = heroElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
           });
         } else {
-          // Fallback to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else if (section === "mood-recommendations") {
-        // Scroll to mood recommendations section
         const moodElement = document.getElementById('mood-recommendations');
         if (moodElement) {
           const elementPosition = moodElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
           });
-        } else {
-          // If element not found by ID, try to calculate position
-          const headerElement = document.querySelector('.hero-section');
-          if (headerElement) {
-            const headerHeight = headerElement.offsetHeight;
-            const targetPosition = headerHeight - navbarHeight;
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
-          }
+        }
+      } else if (section === "passport") {
+        const passportElement = document.getElementById('passport');
+        if (passportElement) {
+          const elementPosition = passportElement.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - navbarHeight;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      } else if (section === "place-explorer") {
+        const placeElement = document.getElementById('place-explorer');
+        if (placeElement) {
+          const elementPosition = placeElement.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - navbarHeight;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
         }
       }
     }, 100);
   };
 
   useEffect(() => {
-    // Scroll to section when currentSection changes
     scrollToSection(currentSection);
   }, [currentSection]);
 
-  // Handle initial page load - don't scroll on reload
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -73,6 +78,18 @@ const App = () => {
             <MoodRecommendation />
           </div>
         );
+      case "passport":
+        return (
+          <div ref={passportRef} id="passport">
+            <Timeline />
+          </div>
+        );
+      case "place-explorer":
+        return (
+          <div ref={placeExplorerRef} id="place-explorer">
+            <PlaceExplorer />
+          </div>
+        );
       case "home":
       default:
         return null;
@@ -80,15 +97,15 @@ const App = () => {
   };
 
   return (
-   <>
-     <Header 
-       onSectionChange={setCurrentSection} 
-       heroSectionRef={heroSectionRef}
-     />
-     {renderCurrentSection()}
-     <Footer />
-   </>
-  )
-}
+    <>
+      <Header 
+        onSectionChange={setCurrentSection} 
+        heroSectionRef={heroSectionRef}
+      />
+      {renderCurrentSection()}
+      <Footer />
+    </>
+  );
+};
 
 export default App;
