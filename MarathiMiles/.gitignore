@@ -59,3 +59,5 @@ Thumbs.db
 # Android / Capacitor
 MarathiMiles/android/
 
+.env
+
