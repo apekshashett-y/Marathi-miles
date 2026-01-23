@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Marathi Miles</string>
+    <string name="title_activity_main">Marathi Miles</string>
+    <string name="package_name">com.marathimiles.app</string>
+    <string name="custom_url_scheme">com.marathimiles.app</string>
+</resources>

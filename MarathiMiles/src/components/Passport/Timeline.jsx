@@ -1,10 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  maharashtraHistoricalEvents,
-  getTimelineYears,
-  searchEvents,
-  getEraByYear,
-} from "../../services/historicalData.js";
+import AIChatSection from './AIChatSection.jsx';
 import "./Timeline.css";
 
 const Timeline = () => {
@@ -16,13 +11,129 @@ const Timeline = () => {
   const [yearNotFound, setYearNotFound] = useState(false);
   const timelineRef = useRef(null);
   const eventsSectionRef = useRef(null);
-  const years = getTimelineYears();
-  const currentEra = getEraByYear(selectedYear);
+  
+  // API States
+  const [years, setYears] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [currentEra, setCurrentEra] = useState("");
 
-  // Get events for selected year
-  const yearEvents =
-    maharashtraHistoricalEvents.find((event) => event.year === selectedYear)
-      ?.events || [];
+  // AI States
+  const [aiExplanation, setAiExplanation] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(false);
+
+  // Fetch all years from backend
+  useEffect(() => {
+    fetch("http://localhost:8080/api/timeline/years")
+      .then(res => res.json())
+      .then(data => {
+        const yearNumbers = data.map(item => item.year);
+        setYears(yearNumbers);
+      })
+      .catch(err => console.error("Error fetching years:", err));
+  }, []);
+
+  // Fetch events for selected year
+  useEffect(() => {
+    if (!selectedYear) return;
+    
+    fetch(`http://localhost:8080/api/timeline/${selectedYear}`)
+      .then(res => res.json())
+      .then(data => {
+        setEvents(data);
+        // Set era from first event if available
+        if (data.length > 0) {
+          setCurrentEra(data[0].era || "");
+        }
+      })
+      .catch(err => console.error("Error fetching events:", err));
+  }, [selectedYear]);
+
+  // Clear AI explanation when modal closes
+  useEffect(() => {
+    if (!selectedEvent) {
+      setAiExplanation("");
+      setAiLoading(false);
+      setAiError(false);
+    }
+  }, [selectedEvent]);
+
+<div className="modal-section ai-chat-section">
+  <h3>💬 Chat with AI Historian</h3>
+  <p className="section-description">
+    Ask follow-up questions about this event and get detailed answers
+  </p>
+  
+  <AIChatSection 
+    selectedEvent={selectedEvent}
+    selectedYear={selectedYear}
+    currentEra={currentEra}
+  />
+</div>
+  // Search events in backend
+  const searchEventsAPI = async (query) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/timeline/search?q=${encodeURIComponent(query)}`);
+      if (!response.ok) throw new Error('Search failed');
+      return await response.json();
+    } catch (error) {
+      console.error("Search error:", error);
+      return [];
+    }
+  };
+
+  // AI Explanation Function
+  const fetchAIExplanation = async (event) => {
+    setAiLoading(true);
+    setAiExplanation("");
+    setAiError(false);
+
+    try {
+      console.log("Sending event to AI:", {
+        title: event.title,
+        year: selectedYear,
+        location: event.location,
+        category: event.category
+      });
+
+      const res = await fetch("http://localhost:8080/api/ai/explain-event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event: {
+            title: event.title,
+            year: selectedYear,
+            location: event.location,
+            category: event.category,
+            description: event.fullDescription || event.shortDescription,
+            era: event.era || currentEra,
+            tags: event.tags || []
+          }
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`AI API error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      
+      if (data.explanation) {
+        setAiExplanation(data.explanation);
+      } else {
+        setAiError(true);
+        setAiExplanation("AI couldn't generate explanation. Please try again.");
+      }
+    } catch (err) {
+      console.error("AI Explanation Error:", err);
+      setAiError(true);
+      setAiExplanation("Unable to fetch AI explanation. Please check your connection or try again later.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Smooth scroll to events section
   const scrollToEventsSection = () => {
@@ -49,13 +160,15 @@ const Timeline = () => {
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
+    // Fetch AI explanation immediately
+    fetchAIExplanation(event);
   };
 
   const handleCloseEvent = () => {
     setSelectedEvent(null);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     setYearNotFound(false);
@@ -75,25 +188,25 @@ const Timeline = () => {
         
         if (yearExists) {
           // Show year in results
-          const eventsForYear = maharashtraHistoricalEvents.find(e => e.year === year)?.events || [];
-          setSearchResults([
+          const results = [
             {
               year,
-              id: 'year-search',
+              _id: 'year-search',
               title: `View all events for ${year}`,
-              shortDescription: `${eventsForYear.length} historical events found`,
+              shortDescription: `${events.length} historical events found`,
               category: 'Year Search',
               location: 'Maharashtra'
             }
-          ]);
+          ];
+          setSearchResults(results);
         } else {
           // Year not found
           setYearNotFound(true);
           setSearchResults([]);
         }
       } else {
-        // Regular keyword search
-        const results = searchEvents(query);
+        // Regular keyword search from backend
+        const results = await searchEventsAPI(query);
         setSearchResults(results);
       }
     }
@@ -101,14 +214,12 @@ const Timeline = () => {
 
   const handleSearchResultClick = (result) => {
     setSelectedYear(result.year);
-    const events =
-      maharashtraHistoricalEvents.find((event) => event.year === result.year)
-        ?.events || [];
     
-    if (result.id !== 'year-search') {
-      const event = events.find((e) => e.id === result.id);
+    if (result._id !== 'year-search') {
+      const event = events.find((e) => e._id === result._id);
       if (event) {
         setSelectedEvent(event);
+        fetchAIExplanation(event);
       }
     }
     
@@ -231,7 +342,7 @@ const Timeline = () => {
                   <>
                     {searchResults.map((result, index) => (
                       <div
-                        key={`${result.year}-${result.id}-${index}`}
+                        key={`${result.year}-${result._id}-${index}`}
                         className="search-result-item"
                         onClick={() => handleSearchResultClick(result)}
                       >
@@ -296,7 +407,7 @@ const Timeline = () => {
             </h2>
             <div className="era-badge">{currentEra}</div>
             <div className="events-count">
-              {yearEvents.length} Historical Events
+              {events.length} Historical Events
             </div>
           </div>
 
@@ -356,9 +467,7 @@ const Timeline = () => {
                     <div className="year-label">
                       <span className="year-number">{year}</span>
                       <span className="event-count">
-                        {maharashtraHistoricalEvents.find(
-                          (e) => e.year === year
-                        )?.events?.length || 0}
+                        {year === selectedYear ? events.length : "..."}
                       </span>
                     </div>
                   </div>
@@ -392,11 +501,11 @@ const Timeline = () => {
           )}
         </div>
 
-        {yearEvents.length > 0 ? (
+        {events.length > 0 ? (
           <div className="events-grid">
-            {yearEvents.map((event) => (
+            {events.map((event) => (
               <div
-                key={event.id}
+                key={event._id}
                 className="event-card"
                 onClick={() => handleEventClick(event)}
               >
@@ -423,7 +532,7 @@ const Timeline = () => {
                     ))}
                   </div>
                   <button className="view-details-btn">
-                    View Details
+                    View Details + AI Explanation
                     <span className="btn-arrow">→</span>
                   </button>
                 </div>
@@ -483,6 +592,59 @@ const Timeline = () => {
                 </p>
               </div>
 
+              {/* AI EXPLANATION SECTION - PASSPORT FEATURE */}
+              <div className="modal-section ai-section">
+                <div className="ai-section-header">
+                  <h3>🤖 AI Historical Explanation</h3>
+                  <span className="ai-badge">Powered by Gemini AI</span>
+                </div>
+                
+                <div className="ai-explanation-box">
+                  {aiLoading ? (
+                    <div className="ai-loading">
+                      <div className="ai-loading-spinner"></div>
+                      <p>AI is analyzing this historical event...</p>
+                      <p className="ai-loading-subtext">Generating detailed explanation</p>
+                    </div>
+                  ) : aiError ? (
+                    <div className="ai-error">
+                      <div className="ai-error-icon">⚠️</div>
+                      <p>{aiExplanation}</p>
+                      <button 
+                        className="ai-retry-btn"
+                        onClick={() => fetchAIExplanation(selectedEvent)}
+                      >
+                        Retry AI Explanation
+                      </button>
+                    </div>
+                  ) : aiExplanation ? (
+                    <>
+                      <div className="ai-explanation-content">
+                        {aiExplanation.split('\n').map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
+                      </div>
+                      <div className="ai-footer">
+                        <span className="ai-note">
+                          💡 This AI-generated explanation provides historical context and significance.
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="ai-placeholder">
+                      <div className="ai-placeholder-icon">🤖</div>
+                      <p>Click "Generate AI Explanation" to get an AI-powered historical analysis.</p>
+                      <button 
+                        className="ai-generate-btn"
+                        onClick={() => fetchAIExplanation(selectedEvent)}
+                      >
+                        Generate AI Explanation
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="modal-section">
                 <h3>Historical Context</h3>
                 <div className="historical-context">
@@ -517,6 +679,14 @@ const Timeline = () => {
            
             <div className="modal-footer">
               <div className="modal-actions">
+                {!aiLoading && !aiExplanation && (
+                  <button
+                    className="modal-button ai-button"
+                    onClick={() => fetchAIExplanation(selectedEvent)}
+                  >
+                    Generate AI Explanation
+                  </button>
+                )}
                 <button
                   className="modal-button close"
                   onClick={handleCloseEvent}
@@ -536,8 +706,8 @@ const Timeline = () => {
       {/* Footer */}
       <div className="timeline-footer">
         <p>
-          Maharashtra Historical Timeline • From {years[0]} CE to{" "}
-          {years[years.length - 1]} CE
+          Maharashtra Historical Timeline • From {years[0] || "Loading..."} CE to{" "}
+          {years[years.length - 1] || "Loading..."} CE
         </p>
         <p className="footer-note">
           Explore Maharashtra's glorious history through centuries

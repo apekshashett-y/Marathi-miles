@@ -56,3 +56,6 @@ Thumbs.db
 # Zip files
 *.zip
 
+# Android / Capacitor
+MarathiMiles/android/
+

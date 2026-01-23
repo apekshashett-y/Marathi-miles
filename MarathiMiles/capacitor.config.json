@@ -1,0 +1,9 @@
+﻿{
+  "appId": "com.marathimiles.app",
+  "appName": "Marathi Miles",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
