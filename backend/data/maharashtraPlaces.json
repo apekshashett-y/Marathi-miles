@@ -1,0 +1,740 @@
+[
+  {
+    "id": 1,
+    "name": "Alibaug",
+    "location": "Raigad, Maharashtra",
+    "category": ["beach"],
+    "interests": ["Beaches", "Fort", "Water Sports"],
+    "budget": "mid-range",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "couple", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Couple", "Family"],
+    "tripTypeTags": ["Relaxing", "Adventure", "Beach"],
+    "interestTags": ["Beaches", "Fort", "Water Sports", "Photography", "Food"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["happy", "excited"],
+    "accessibility": ["road", "ferry"],
+    "bestSeason": "Oct–Feb",
+    "moodTags": ["happy", "excited"],
+    "highlights": ["Kolaba Fort", "Alibaug Beach", "Kashid Beach nearby"],
+    "description": "Coastal town with beaches, forts and watersport options.",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.6414, "lng": 72.8722 },
+    "baseBudget": 8500,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2,
+        "durationPer100Km": 2,
+        "features": ["Comfortable seating", "Food available", "Scenic route"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.5,
+        "durationPer100Km": 2.5,
+        "features": ["Direct service", "Comfortable"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 8,
+        "durationPer100Km": 1.8,
+        "features": ["Flexible timing", "Private", "Door-to-door"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Kolaba Fort",
+        "duration": "2-3 hours",
+        "cost": 100,
+        "description": "Historic sea fort accessible during low tide"
+      },
+      {
+        "name": "Alibaug Beach",
+        "duration": "3-4 hours",
+        "cost": 0,
+        "description": "Main beach for swimming and water sports"
+      },
+      {
+        "name": "Kashid Beach",
+        "duration": "2-3 hours",
+        "cost": 0,
+        "description": "White sand beach with water sports"
+      }
+    ],
+    "itineraryTemplate": [
+      {
+        "day": 1,
+        "title": "Arrival & Beach Exploration",
+        "activities": [
+          "Travel to Alibaug via chosen transport",
+          "Check into hotel/resort",
+          "Visit Alibaug Beach for swimming and relaxation",
+          "Evening at Kolaba Fort (check low tide timing)",
+          "Dinner with local seafood"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Local Sightseeing & Departure",
+        "activities": [
+          "Breakfast with local Maharashtrian cuisine",
+          "Visit Kashid Beach for water sports",
+          "Explore local markets for souvenirs",
+          "Lunch with coastal delicacies",
+          "Return journey with beautiful memories"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Matheran",
+    "location": "Raigad, Maharashtra",
+    "category": ["hill-station", "nature", "relaxing"],
+    "interests": ["Nature", "Scenic Views", "Trekking"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["solo", "couple", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Solo", "Couple", "Family"],
+    "tripTypeTags": ["Relaxing", "Nature", "Peaceful"],
+    "interestTags": ["Nature", "Scenic Views", "Trekking", "Photography"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "sad", "happy"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["calm", "sad", "happy"],
+    "highlights": ["Echo Point", "Charlotte Lake", "Toy Train"],
+    "description": "Vehicle-free hill station ideal for peaceful walks and viewpoints.",
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.9822, "lng": 73.2687 },
+    "baseBudget": 6000,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2.5,
+        "durationPer100Km": 2.2,
+        "features": ["Toy train experience", "Scenic route", "Heritage ride"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.8,
+        "durationPer100Km": 2.8,
+        "features": ["Direct service", "Comfortable"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 9,
+        "durationPer100Km": 2,
+        "features": ["Flexible timing", "Private vehicle"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Toy Train Ride",
+        "duration": "1-2 hours",
+        "cost": 300,
+        "description": "Heritage toy train with breathtaking valley views"
+      },
+      {
+        "name": "Echo Point",
+        "duration": "1 hour",
+        "cost": 0,
+        "description": "Famous viewpoint where your voice echoes back"
+      },
+      {
+        "name": "Charlotte Lake",
+        "duration": "2 hours",
+        "cost": 0,
+        "description": "Serene lake perfect for photography and relaxation"
+      }
+    ],
+    "itineraryTemplate": [
+      {
+        "day": 1,
+        "title": "Arrival & Toy Train Experience",
+        "activities": [
+          "Travel to Matheran via chosen transport",
+          "Check into hotel/homestay",
+          "Enjoy the famous toy train ride",
+          "Visit Echo Point and experience the echo",
+          "Evening walk through the vehicle-free streets"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Nature Exploration & Departure",
+        "activities": [
+          "Morning trek to Charlotte Lake",
+          "Breakfast with local Parsi cuisine",
+          "Visit Panorama Point for scenic views",
+          "Horse riding through forest trails",
+          "Return journey with peaceful memories"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Lonavala",
+    "location": "Pune, Maharashtra",
+    "category": ["hill-station", "nature", "adventure"],
+    "interests": ["Nature", "Waterfalls", "Weekend Getaway"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Family", "Couple", "Solo"],
+    "tripTypeTags": ["Relaxing", "Adventure", "Nature"],
+    "interestTags": ["Nature", "Waterfalls", "Weekend Getaway", "Photography", "Food"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["happy", "excited", "calm"],
+    "accessibility": ["road"],
+    "bestSeason": "All year (monsoon is beautiful)",
+    "moodTags": ["happy", "excited", "calm"],
+    "highlights": ["Bhushi Dam", "Tiger's Leap", "Kune Falls"],
+    "description": "Popular weekend hill station with easy access from Mumbai/Pune.",
+    "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.7480, "lng": 73.4072 },
+    "baseBudget": 7000,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2.2,
+        "durationPer100Km": 1.8,
+        "features": ["Frequent service", "Comfortable", "Scenic route"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.6,
+        "durationPer100Km": 2.2,
+        "features": ["Direct buses", "Economical"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 7,
+        "durationPer100Km": 1.5,
+        "features": ["Flexible stops", "Private", "Road trip experience"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Bhushi Dam",
+        "duration": "2-3 hours",
+        "cost": 0,
+        "description": "Famous dam with waterfall during monsoon season"
+      },
+      {
+        "name": "Tiger's Leap",
+        "duration": "1-2 hours",
+        "cost": 0,
+        "description": "Cliff top with spectacular valley views"
+      },
+      {
+        "name": "Local Chikki Shopping",
+        "duration": "1 hour",
+        "cost": 500,
+        "description": "Famous Lonavala chikki and fudge shopping"
+      }
+    ],
+    "itineraryTemplate": [
+      {
+        "day": 1,
+        "title": "Waterfalls & Scenic Views",
+        "activities": [
+          "Travel to Lonavala via chosen transport",
+          "Check into resort/hotel",
+          "Visit Bhushi Dam (monsoon special)",
+          "Trek to Tiger's Leap for sunset views",
+          "Evening chikki shopping spree"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Adventure & Departure",
+        "activities": [
+          "Breakfast with local delicacies",
+          "Visit Kune Waterfalls for photography",
+          "Adventure activities at nearby parks",
+          "Lunch with Maharashtrian thali",
+          "Return journey with sweet memories"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Lonavala",
+    "location": "Pune, Maharashtra",
+    "category": ["hill-station", "nature"],
+    "interests": ["Hiking", "Waterfalls", "Photography", "Nature"],
+    "budget": "mid-range",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "couple", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Couple", "Family"],
+    "tripTypeTags": ["Adventure", "Relaxing", "Nature"],
+    "interestTags": ["Hiking", "Waterfalls", "Photography", "Nature", "Food"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "excited", "stressed"],
+    "accessibility": ["road", "train"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["calm", "excited"],
+    "highlights": ["Lonavala Lake", "Karla Caves", "Bushy Dam", "Strawberry farms"],
+    "description": "Popular hill station with lakes, caves and waterfalls.",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.7541, "lng": 73.4057 },
+    "baseBudget": 7500,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2,
+        "durationPer100Km": 2.5,
+        "features": ["Scenic route", "Comfortable"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.2,
+        "durationPer100Km": 2.8,
+        "features": ["Direct service"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 7,
+        "durationPer100Km": 2,
+        "features": ["Flexible", "Private"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Lonavala Lake",
+        "duration": "1-2 hours",
+        "cost": 50,
+        "description": "Peaceful lake with boating facilities"
+      },
+      {
+        "name": "Karla Caves",
+        "duration": "2-3 hours",
+        "cost": 200,
+        "description": "Ancient Buddhist caves with stunning architecture"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Mahabaleshwar",
+    "location": "Satara, Maharashtra",
+    "category": ["hill-station", "nature"],
+    "interests": ["Hiking", "Strawberry Farms", "Viewpoints", "Temples"],
+    "budget": "mid-range",
+    "duration": "2-3 days",
+    "recommendedFor": ["couple", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Couple", "Family"],
+    "tripTypeTags": ["Relaxing", "Nature", "Cultural"],
+    "interestTags": ["Hiking", "Strawberry Farms", "Viewpoints", "Temples", "Food"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["2-3 Days", "3-5 Days"],
+    "moodCompatibility": ["calm", "romantic", "happy"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["calm", "romantic"],
+    "highlights": ["Arthur's Seat", "Venna Lake", "Strawberry Farms", "Mapro Garden"],
+    "description": "Queen of hill stations with strawberry farms and panoramic views.",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 17.9213, "lng": 73.6581 },
+    "baseBudget": 9500,
+    "transportOptions": [
+      {
+        "mode": "Bus",
+        "costPerKm": 1.5,
+        "durationPer100Km": 3,
+        "features": ["Direct service", "Scenic"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 8,
+        "durationPer100Km": 2.5,
+        "features": ["Comfortable", "Flexible"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Arthur's Seat",
+        "duration": "1 hour",
+        "cost": 0,
+        "description": "Highest viewpoint with stunning sunrise/sunset"
+      },
+      {
+        "name": "Venna Lake",
+        "duration": "2 hours",
+        "cost": 100,
+        "description": "Beautiful lake with boating and paddle sports"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Ajanta Caves",
+    "location": "Aurangabad, Maharashtra",
+    "category": ["historical", "cultural"],
+    "interests": ["Ancient Art", "Buddhist Monuments", "History", "Photography"],
+    "budget": "budget",
+    "duration": "1 day",
+    "recommendedFor": ["friends", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Family"],
+    "tripTypeTags": ["Cultural", "Historical", "Educational"],
+    "interestTags": ["Ancient Art", "Buddhist Monuments", "History", "Photography"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day"],
+    "moodCompatibility": ["calm", "curious", "happy"],
+    "accessibility": ["road", "train"],
+    "bestSeason": "Oct–Mar",
+    "moodTags": ["calm", "curious"],
+    "highlights": ["UNESCO World Heritage Site", "Ancient Buddhist caves", "Rock-cut architecture"],
+    "description": "UNESCO World Heritage site with ancient Buddhist cave paintings and sculptures.",
+    "image": "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 20.5517, "lng": 75.7033 },
+    "baseBudget": 5500,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2.5,
+        "durationPer100Km": 2,
+        "features": ["Direct trains", "Comfortable"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.8,
+        "durationPer100Km": 2.2,
+        "features": ["Regular service"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Cave Paintings",
+        "duration": "3-4 hours",
+        "cost": 250,
+        "description": "2,000 year old Buddhist art and architecture"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Tarkarli Beach",
+    "location": "Sindhudurg, Maharashtra",
+    "category": ["beach", "adventure"],
+    "interests": ["Scuba Diving", "Snorkeling", "Water Sports", "Marine Life"],
+    "budget": "luxury",
+    "duration": "2-3 days",
+    "recommendedFor": ["friends", "couple"],
+    "suitableAgeGroups": ["18-30", "30-50"],
+    "suitableTravelGroups": ["Friends", "Couple"],
+    "tripTypeTags": ["Adventure", "Beach", "Water Sports"],
+    "interestTags": ["Scuba Diving", "Snorkeling", "Water Sports", "Marine Life", "Photography"],
+    "budgetCompatibility": "luxury",
+    "durationCompatibility": ["2-3 Days", "3-5 Days"],
+    "moodCompatibility": ["excited", "adventurous", "happy"],
+    "accessibility": ["road", "ferry"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["excited", "adventurous"],
+    "highlights": ["Malvan Marine Sanctuary", "Scuba diving", "Beautiful beaches", "Seafood"],
+    "description": "Paradise for water sports enthusiasts with pristine beaches and marine life.",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 16.0364, "lng": 73.4667 },
+    "baseBudget": 15000,
+    "transportOptions": [
+      {
+        "mode": "Car",
+        "costPerKm": 10,
+        "durationPer100Km": 3,
+        "features": ["Scenic coastal drive", "Private"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 2,
+        "durationPer100Km": 4,
+        "features": ["Long journey"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Scuba Diving",
+        "duration": "2-3 hours",
+        "cost": 3000,
+        "description": "Explore underwater marine life"
+      },
+      {
+        "name": "Malvan Marine Sanctuary",
+        "duration": "1-2 hours",
+        "cost": 500,
+        "description": "Protected marine ecosystem"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Panchgani",
+    "location": "Satara, Maharashtra",
+    "category": ["hill-station", "nature"],
+    "interests": ["Table Land", "Caves", "Hiking", "Education"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["family", "students"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Family", "Students"],
+    "tripTypeTags": ["Relaxing", "Nature", "Educational"],
+    "interestTags": ["Table Land", "Caves", "Hiking", "Education", "Food"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "peaceful", "happy"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["calm", "peaceful"],
+    "highlights": ["Table Land viewpoint", "Sydney Point", "Parsi Point", "Dhom Dam"],
+    "description": "Educational hub with stunning viewpoints and peaceful atmosphere.",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 17.9244, "lng": 73.8217 },
+    "baseBudget": 4500,
+    "transportOptions": [
+      {
+        "mode": "Bus",
+        "costPerKm": 1.2,
+        "durationPer100Km": 2.5,
+        "features": ["Regular service"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 6,
+        "durationPer100Km": 2,
+        "features": ["Comfortable"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Table Land",
+        "duration": "2 hours",
+        "cost": 0,
+        "description": "Largest plateau in Asia with panoramic views"
+      },
+      {
+        "name": "Sydney Point",
+        "duration": "1 hour",
+        "cost": 0,
+        "description": "Beautiful viewpoint with valley views"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Ellora Caves",
+    "location": "Aurangabad, Maharashtra",
+    "category": ["historical", "cultural"],
+    "interests": ["Rock-cut Architecture", "Hindu Temples", "Buddhist Caves", "History"],
+    "budget": "budget",
+    "duration": "1 day",
+    "recommendedFor": ["friends", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Family"],
+    "tripTypeTags": ["Cultural", "Historical", "Educational"],
+    "interestTags": ["Rock-cut Architecture", "Hindu Temples", "Buddhist Caves", "History", "Photography"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day"],
+    "moodCompatibility": ["curious", "calm", "inspired"],
+    "accessibility": ["road", "train"],
+    "bestSeason": "Oct–Mar",
+    "moodTags": ["curious", "inspired"],
+    "highlights": ["Kailasa Temple", "UNESCO site", "Ancient rock-cut architecture"],
+    "description": "UNESCO World Heritage site with magnificent rock-cut temples and caves.",
+    "image": "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 20.0269, "lng": 75.1778 },
+    "baseBudget": 5000,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2.5,
+        "durationPer100Km": 2,
+        "features": ["Direct trains"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.8,
+        "durationPer100Km": 2.2,
+        "features": ["Regular service"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Kailasa Temple",
+        "duration": "2-3 hours",
+        "cost": 250,
+        "description": "Largest monolithic rock-cut temple in the world"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Mumbai",
+    "location": "Mumbai, Maharashtra",
+    "category": ["city", "urban"],
+    "interests": ["Gateway of India", "Marine Drive", "Film City", "Shopping"],
+    "budget": "mid-range",
+    "duration": "2-3 days",
+    "recommendedFor": ["friends", "couple"],
+    "suitableAgeGroups": ["18-30", "30-50"],
+    "suitableTravelGroups": ["Friends", "Couple"],
+    "tripTypeTags": ["Urban", "Cultural", "Shopping"],
+    "interestTags": ["Gateway of India", "Marine Drive", "Film City", "Shopping", "Food", "Nightlife"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["2-3 Days", "3-5 Days"],
+    "moodCompatibility": ["excited", "happy", "energetic"],
+    "accessibility": ["train", "flight", "road"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["excited", "energetic"],
+    "highlights": ["Gateway of India", "Marine Drive promenade", "Elephanta Caves", "Street food"],
+    "description": "The city that never sleeps - vibrant metropolis with iconic landmarks.",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 19.0760, "lng": 72.8777 },
+    "baseBudget": 12000,
+    "transportOptions": [
+      {
+        "mode": "Flight",
+        "costPerKm": 5,
+        "durationPer100Km": 0.5,
+        "features": ["Fast", "Direct"]
+      },
+      {
+        "mode": "Train",
+        "costPerKm": 3,
+        "durationPer100Km": 1.5,
+        "features": ["Comfortable", "Scenic"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Gateway of India",
+        "duration": "1 hour",
+        "cost": 0,
+        "description": "Iconic monument and harbor cruises"
+      },
+      {
+        "name": "Marine Drive",
+        "duration": "2 hours",
+        "cost": 0,
+        "description": "Beautiful promenade with Queen's Necklace view"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Nashik",
+    "location": "Nashik, Maharashtra",
+    "category": ["wine", "religious"],
+    "interests": ["Wine Tourism", "Grape Gardens", "Temples", "Wine Tasting"],
+    "budget": "mid-range",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "couple"],
+    "suitableAgeGroups": ["21-30", "30-50"],
+    "suitableTravelGroups": ["Friends", "Couple"],
+    "tripTypeTags": ["Wine Tourism", "Cultural", "Relaxing"],
+    "interestTags": ["Wine Tourism", "Grape Gardens", "Temples", "Wine Tasting", "Food"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["happy", "romantic", "excited"],
+    "accessibility": ["road", "train"],
+    "bestSeason": "Oct–Mar",
+    "moodTags": ["happy", "romantic"],
+    "highlights": ["Wine yards", "Sula Vineyards", "Pandu Lena Caves", "Grape gardens"],
+    "description": "Wine capital of India with vineyards, temples and natural beauty.",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 19.9975, "lng": 73.7898 },
+    "baseBudget": 8500,
+    "transportOptions": [
+      {
+        "mode": "Train",
+        "costPerKm": 2.2,
+        "durationPer100Km": 2,
+        "features": ["Direct trains"]
+      },
+      {
+        "mode": "Bus",
+        "costPerKm": 1.5,
+        "durationPer100Km": 2.5,
+        "features": ["Regular service"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Sula Vineyards",
+        "duration": "3-4 hours",
+        "cost": 500,
+        "description": "Wine tours and tastings"
+      },
+      {
+        "name": "Pandu Lena Caves",
+        "duration": "2 hours",
+        "cost": 100,
+        "description": "Ancient Buddhist caves"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Ganpatipule",
+    "location": "Ratnagiri, Maharashtra",
+    "category": ["beach", "temple"],
+    "interests": ["Beaches", "Temples", "Coconut Groves", "Seafood"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["family", "friends"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Family", "Friends"],
+    "tripTypeTags": ["Religious", "Beach", "Relaxing"],
+    "interestTags": ["Beaches", "Temples", "Coconut Groves", "Seafood", "Photography"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "spiritual", "happy"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["calm", "spiritual"],
+    "highlights": ["Ganpatipule Temple", "Prachin Konkan", "Beautiful beaches", "Coconut plantations"],
+    "description": "Peaceful beach destination with ancient temple and pristine beaches.",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 17.1448, "lng": 73.2667 },
+    "baseBudget": 6000,
+    "transportOptions": [
+      {
+        "mode": "Bus",
+        "costPerKm": 1.8,
+        "durationPer100Km": 3,
+        "features": ["Scenic route"]
+      },
+      {
+        "mode": "Car",
+        "costPerKm": 8,
+        "durationPer100Km": 2.5,
+        "features": ["Comfortable", "Flexible"]
+      }
+    ],
+    "detailedHighlights": [
+      {
+        "name": "Ganpatipule Temple",
+        "duration": "1-2 hours",
+        "cost": 0,
+        "description": "Ancient Sula Ganapati temple"
+      },
+      {
+        "name": "Prachin Konkan",
+        "duration": "2 hours",
+        "cost": 0,
+        "description": "Beautiful beach with clear waters"
+      }
+    ]
+  }
+]
