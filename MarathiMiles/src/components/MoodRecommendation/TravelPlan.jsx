@@ -12,6 +12,18 @@ import {
 } from '../../utils/travelCalculations';
 import './TravelPlan.css';
 
+// Simple function to get city name from coordinates (for Maharashtra)
+const getCityFromCoordinates = async (lat, lng) => {
+  try {
+    // For now, return a formatted location string
+    // In a real app, you'd use a reverse geocoding service
+    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
+  } catch (error) {
+    console.error('Error getting city from coordinates:', error);
+    return 'Your Location';
+  }
+};
+
 // AI Assistant Component
 const AIAssistant = ({ destination, userLocation, userPreferences }) => {
   const [messages, setMessages] = useState([
@@ -211,18 +223,18 @@ const AIAssistant = ({ destination, userLocation, userPreferences }) => {
 };
 
 // Main TravelPlan Component
-const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences }) => {
+const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences, userLocation: propUserLocation }) => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [selectedTransport, setSelectedTransport] = useState('Bus');
   const [dynamicData, setDynamicData] = useState({});
-  const [userLocation, setUserLocation] = useState(null);
-  const [isLocating, setIsLocating] = useState(true);
-  const [locationStatus, setLocationStatus] = useState('detecting');
+  const [userLocation, setUserLocation] = useState(propUserLocation || null); // ✅ Use prop if available
+  const [isLocating, setIsLocating] = useState(!propUserLocation); // ✅ Only locate if not provided
+  const [locationStatus, setLocationStatus] = useState(propUserLocation ? 'located' : 'detecting');
   const [hotelRecommendations, setHotelRecommendations] = useState([]);
   const [isLoadingHotels, setIsLoadingHotels] = useState(false);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
 
-  console.log('🧩 TravelPlan Props:', { userPreferences, selectedPlace, plan });
+  console.log('🧩 TravelPlan Props:', { userPreferences, selectedPlace, plan, userLocation: propUserLocation });
 
   // ✅ Extract user preferences
   const getUserDuration = () => {
@@ -322,10 +334,26 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences })
   // Enhanced Location detection
   useEffect(() => {
     const init = async () => {
+      // ✅ If userLocation is provided as prop, use it directly
+      if (propUserLocation) {
+        console.log('📍 Using provided user location:', propUserLocation);
+        const locationWithCity = {
+          ...propUserLocation,
+          city: await getCityFromCoordinates(propUserLocation.lat, propUserLocation.lng) || 'Your Location',
+          state: 'Maharashtra', // Default for Maharashtra
+          source: 'user-provided'
+        };
+        setUserLocation(locationWithCity);
+        setLocationStatus('user-provided');
+        setIsLocating(false);
+        await loadHotelRecommendations();
+        return;
+      }
+
       try {
         setIsLocating(true);
         const loc = await initializeUserLocation();
-        
+
         if (!loc || !loc.city) {
           // If location detection fails, use Mumbai as default
           const defaultLoc = {
@@ -343,7 +371,7 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences })
           setLocationStatus(getLocationSource() === 'gps' ? 'precise' : 'approximate');
           console.log('Location detected:', loc);
         }
-        
+
         // Load hotel recommendations
         await loadHotelRecommendations();
       } catch (error) {
@@ -364,7 +392,7 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences })
       }
     };
     init();
-  }, []);
+  }, [propUserLocation]);
 
   // Generate realistic hotel recommendations
   const loadHotelRecommendations = async () => {
@@ -985,6 +1013,11 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences })
             {locationStatus === 'approximate' && (
               <div className="location-badge approximate">
                 📍 Using location: {userLocation?.city || 'Mumbai'} • Estimated distances
+              </div>
+            )}
+            {locationStatus === 'user-provided' && (
+              <div className="location-badge user-provided">
+                📍 Your location: {userLocation?.city || 'Current Location'} • Personalized for you
               </div>
             )}
             {locationStatus === 'default' && (

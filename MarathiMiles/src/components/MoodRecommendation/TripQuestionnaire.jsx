@@ -72,11 +72,28 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
         budget: formData.budget,
         interests: formData.interests
       };
+
       
       setIsGenerating(true);
       
       try {
-        // 🎯 FIRST: Try REAL-TIME local recommendations
+        // 🚀 DIRECT: Skip local processing, let MoodRecommendation handle backend call
+        console.log('🔄 Skipping local processing, passing to backend...');
+        
+        // Just pass the user profile without any recommendations
+        const simplePlan = {
+          userProfile,
+          recommendations: [], // Empty - let backend handle this
+          totalRecommendations: 0,
+          generatedAt: new Date().toISOString(),
+          source: 'backend-only',
+          plan: []
+        };
+        
+        onQuestionnaireSubmit(simplePlan);
+        
+        /*
+        // 🎯 COMMENTED OUT: Real-time local recommendations
         console.log('🔍 Starting real-time recommendation search...');
         const realTimeResults = getRealTimeRecommendations(userProfile);
         
@@ -116,9 +133,10 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
             onQuestionnaireSubmit(fallbackPlan);
           }
         }
+        */
       } catch (error) {
         console.error('❌ Error generating travel plan:', error);
-        // 🚨 ULTIMATE FALLBACK
+        // 🚨 ULTIMATE FALLBACK - Keep this as emergency only
         const emergencyResults = getFallbackRecommendations({ mood: 'happy', budget: 'mid-range' });
         const emergencyPlan = {
           userProfile,
@@ -135,6 +153,8 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
     }
   };
 
+  // ✅ DISABLED FOR BACKEND-ONLY MODE
+  /*
   const generateItineraryFromRecommendations = (recommendations, userProfile) => {
     return recommendations.map(place => ({
       place: {
@@ -149,6 +169,7 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
       matchReasons: place.matchReasons
     }));
   };
+  */
 
   // ✅ UPDATED: Fallback places with user's selected duration and budget
   const generateFallbackPlan = (userProfile) => {
@@ -256,6 +277,8 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
     }));
   };
 
+  // ✅ DISABLED FOR BACKEND-ONLY MODE
+  /*
   const generateFallbackItinerary = (place, userSelectedDuration) => {
     // ✅ USER KE SELECTED DURATION KE HISAB SE DAYS CALCULATE KARO
     const getDaysFromUserDuration = (duration) => {
@@ -332,6 +355,7 @@ const TripQuestionnaire = ({ onQuestionnaireSubmit, detectedMood, isLoading, onB
       itinerary
     };
   };
+  */
 
   // ✅ UPDATED: Emergency fallback with user's preferences
   const generateEmergencyFallback = (userProfile) => {

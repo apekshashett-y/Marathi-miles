@@ -4,7 +4,8 @@ import FaceRecognition from './FaceRecognition';
 import PlaceRecommendations from './PlaceRecommendations';
 import TravelPlan from './TravelPlan';
 import TripQuestionnaire from './TripQuestionnaire.jsx';
-import getAutomatedTravelPlan from '../../services/automatedTravelApi';
+// import getAutomatedTravelPlan from '../../services/automatedTravelApi'; // COMMENTED OUT: Backend-only operation
+import { getMoodRecommendations, getUserLocation } from '../../services/backendApi';
 import './MoodRecommendation.css';
 
 const MoodRecommendation = () => {
@@ -15,6 +16,8 @@ const MoodRecommendation = () => {
   const [travelPlan, setTravelPlan] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userPreferences, setUserPreferences] = useState(null); // ✅ Store user preferences
+  const [userLocation, setUserLocation] = useState(null); // ✅ Store user location
+  const [locationPermissionGranted, setLocationPermissionGranted] = useState(false);
 
   // ✅ STEP 1: Face detection
   const handleMoodDetected = useCallback((mood) => {
@@ -24,7 +27,29 @@ const MoodRecommendation = () => {
       return;
     }
     setDetectedMood(mood);
-    setCurrentStep('questionnaire');
+    setCurrentStep('location'); // ✅ Go to location permission step first
+  }, []);
+
+  // ✅ STEP 2: Location permission
+  const handleLocationPermission = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      console.log('📍 Requesting location permission...');
+
+      const location = await getUserLocation();
+      setUserLocation(location);
+      setLocationPermissionGranted(true);
+
+      console.log('✅ Location permission granted, proceeding to questionnaire');
+      setCurrentStep('questionnaire');
+    } catch (error) {
+      console.error('❌ Location permission failed:', error);
+      // Still proceed to questionnaire even if location fails
+      setLocationPermissionGranted(false);
+      setCurrentStep('questionnaire');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   // ✅ STEP 2: CRITICAL FIX - Handle questionnaire submit with PROPER user preferences storage
@@ -61,7 +86,33 @@ const MoodRecommendation = () => {
       
       console.log('📤 Sending to API:', apiData);
       
-      const result = await getAutomatedTravelPlan(apiData, 5);
+      // Try backend API first, fallback to local
+      let result;
+      try {
+        // Use stored user location (already fetched in location step)
+        console.log('📍 Using stored user location:', userLocation);
+
+        const backendData = {
+          mood: detectedMood,
+          userProfile: preferences,
+          userLocation: userLocation
+        };
+
+        const backendResult = await getMoodRecommendations(backendData);
+        
+        if (backendResult.success && backendResult.data) {
+          console.log('✅ Backend API Success:', backendResult);
+          // Backend already returns the correct structure
+          result = backendResult;
+        } else {
+          throw new Error('Backend API failed - backend is required for recommendations');
+        }
+      } catch (backendError) {
+        console.error('❌ Backend API failed - no local fallback available:', backendError);
+        // COMMENTED OUT: Local fallback disabled to ensure backend-only operation
+        // result = await getAutomatedTravelPlan(apiData, 5);
+        throw new Error('Backend unavailable - please ensure backend server is running');
+      }
       
       if (result?.success && result.data) {
         console.log('✅ API Success:', result.data);
@@ -69,24 +120,29 @@ const MoodRecommendation = () => {
         const recommendations = result.data.recommendations || result.data.plan || [];
         
         // ✅ ENSURE DURATION & BUDGET ARE PROPAGATED TO ALL PLACES
-        const updatedRecommendations = recommendations.map(rec => ({
-          ...rec,
-          place: {
-            ...rec.place,
-            duration: preferences.duration, // ✅ Force user's duration
-            budget: preferences.budget      // ✅ Force user's budget
-          },
-          userPreferences: preferences // ✅ Attach preferences to each recommendation
-        }));
+        // Backend already structures as { place, itinerary, matchScore, ... }
+        const updatedRecommendations = recommendations.map(rec => {
+          // Handle both backend format (rec.place) and local format (rec.place or rec)
+          const placeData = rec.place || rec;
+          return {
+            ...rec,
+            place: {
+              ...placeData,
+              duration: preferences.duration, // ✅ Force user's duration
+              budget: preferences.budget      // ✅ Force user's budget
+            },
+            userPreferences: preferences // ✅ Attach preferences to each recommendation
+          };
+        });
         
         console.log('📍 Updated recommendations with user preferences:', updatedRecommendations);
         
         setRecommendedPlaces(updatedRecommendations);
         setCurrentStep('recommendations');
       } else {
-        console.log('⚠️ API failed, using fallback');
-        const fallbackPlaces = generateFallbackPlaces(detectedMood, preferences);
-        setRecommendedPlaces(fallbackPlaces);
+        console.log('⚠️ API failed, no fallback available - backend only mode');
+        // const fallbackPlaces = generateFallbackPlaces(detectedMood, preferences);
+        // setRecommendedPlaces(fallbackPlaces);
         setCurrentStep('recommendations');
       }
     } catch (error) {
@@ -102,15 +158,17 @@ const MoodRecommendation = () => {
       
       setUserPreferences(preferences);
       
-      const emergencyPlaces = generateFallbackPlaces(detectedMood, preferences);
-      setRecommendedPlaces(emergencyPlaces);
+      // const emergencyPlaces = generateFallbackPlaces(detectedMood, preferences);
+      // setRecommendedPlaces(emergencyPlaces);
+      console.log('⚠️ Error occurred, no fallback available - backend only mode');
       setCurrentStep('recommendations');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // ✅ UPDATED: Fallback places with CORRECT budget (₹5,000)
+  // ✅ UPDATED: Fallback places with CORRECT budget (₹5,000) - DISABLED FOR BACKEND-ONLY MODE
+  /*
   const generateFallbackPlaces = (mood, userProfile) => {
     console.log('🔄 Generating fallback places');
     console.log('  Mood:', mood);
@@ -249,6 +307,7 @@ const MoodRecommendation = () => {
     console.log('✅ Generated fallback places:', places);
     return places;
   };
+  */
 
   // ✅ CRITICAL FIX: Budget calculation based on DURATION and BUDGET LEVEL
   const calculateBaseBudget = (userBudget, duration) => {
@@ -289,7 +348,8 @@ const MoodRecommendation = () => {
     return totalBudget;
   };
 
-  // ✅ UPDATED: Itinerary generation with full 14-day support
+  // ✅ UPDATED: Itinerary generation with full 14-day support - DISABLED FOR BACKEND-ONLY MODE
+  /*
   const generateFallbackItinerary = (placeName, duration) => {
     const getDaysFromDuration = (duration) => {
       if (!duration) return 2;
@@ -384,6 +444,7 @@ const MoodRecommendation = () => {
       itinerary
     };
   };
+  */
 
   // ✅ CRITICAL FIX: Place selection with userPreferences
   const handlePlaceSelect = (placeWithItinerary) => {
@@ -410,7 +471,8 @@ const MoodRecommendation = () => {
     } catch (error) {
       console.error('❌ Error selecting place:', error);
       
-      // Emergency fallback
+      // Emergency fallback - DISABLED FOR BACKEND-ONLY MODE
+      /*
       const emergencyPlan = {
         place: {
           name: "Maharashtra Destination",
@@ -426,6 +488,8 @@ const MoodRecommendation = () => {
       
       setSelectedPlace(emergencyPlan.place);
       setTravelPlan(emergencyPlan);
+      */
+      console.log('⚠️ Error in place selection, no fallback available - backend only mode');
       setCurrentStep('plan');
     }
   };
@@ -499,6 +563,70 @@ const MoodRecommendation = () => {
           />
         )}
 
+        {currentStep === 'location' && (
+          <div className="location-step">
+            <div className="location-content">
+              <h2>📍 Location Permission</h2>
+              <p>To provide personalized recommendations based on your location, we need access to your current location.</p>
+              
+              <div className="location-info">
+                <div className="info-card">
+                  <i className="fas fa-map-marker-alt"></i>
+                  <h3>Why do we need your location?</h3>
+                  <p>We'll sort destinations by distance from your current location for better recommendations.</p>
+                </div>
+                <div className="info-card">
+                  <i className="fas fa-shield-alt"></i>
+                  <h3>Your privacy matters</h3>
+                  <p>Location data is only used for this session and helps customize your travel suggestions.</p>
+                </div>
+              </div>
+
+              <div className="location-actions">
+                <button 
+                  className="location-btn primary"
+                  onClick={handleLocationPermission}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Getting Location...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-location-arrow"></i>
+                      Allow Location Access
+                    </>
+                  )}
+                </button>
+                
+                <button 
+                  className="location-btn secondary"
+                  onClick={() => {
+                    setLocationPermissionGranted(false);
+                    setUserLocation({ lat: 19.0760, lng: 72.8777 }); // Mumbai fallback
+                    setCurrentStep('questionnaire');
+                  }}
+                  disabled={isLoading}
+                >
+                  <i className="fas fa-times"></i>
+                  Skip (Use Mumbai as default)
+                </button>
+              </div>
+
+              <button 
+                className="back-btn"
+                onClick={() => setCurrentStep('camera')}
+                disabled={isLoading}
+              >
+                <i className="fas fa-arrow-left"></i>
+                Back to Camera
+              </button>
+            </div>
+          </div>
+        )}
+
         {currentStep === 'questionnaire' && detectedMood && (
           <TripQuestionnaire 
             onQuestionnaireSubmit={handleQuestionnaireSubmit}
@@ -523,6 +651,7 @@ const MoodRecommendation = () => {
             plan={travelPlan}
             userPreferences={userPreferences} // ✅ CRITICAL: PASS USER PREFERENCES
             selectedPlace={selectedPlace}
+            userLocation={userLocation} // ✅ PASS USER LOCATION
             onRestart={restartProcess}
             onBack={backToRecommendations}
           />
