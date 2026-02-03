@@ -1,549 +1,512 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  maharashtraHistoricalEvents,
-  getTimelineYears,
-  searchEvents,
-  getEraByYear,
-} from "../../services/historicalData.js";
-import "./Timeline.css";
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import "./PastPort.css";
 
-const Timeline = () => {
-  const [selectedYear, setSelectedYear] = useState(1630);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [yearNotFound, setYearNotFound] = useState(false);
+const getMoodIcon = (mood) => {
+  const moods = {
+    birth: "🕯️",
+    conflict: "⚔️",
+    resistance: "🔥",
+    homecoming: "🏠",
+    legacy: "📜",
+    mystery: "🔮",
+    victory: "🎯",
+    tragedy: "💔",
+    foundation: "🏛️",
+    battle: "🛡️",
+    peace: "🕊️",
+    renaissance: "🎨"
+  };
+  return moods[mood] || "📖";
+};
+
+const MARATHI_TIMELINE_TRANSLATIONS = {
+  "The Ancient Sentinel": {
+    preview:
+      "राजसत्तांच्या उदयापूर्वीच शिवनेरी हा घाट मार्गांवर लक्ष ठेवणारा मौन पहारेकरी होता…",
+    fullStory:
+      "राजसत्तांच्या उदयापूर्वीच शिवनेरी हा पश्चिम घाटातील महत्त्वाच्या व्यापारी मार्गांवर लक्ष ठेवणारा मौन पहारेकरी होता. यादवांनी बांधलेल्या या किल्ल्याने जुन्नर प्रदेशातील संपन्नता आणि लष्करी महत्त्व यांचे रक्षण केले. डोंगरकड्यांवर उभा असलेला हा गड केवळ दगड-माती नव्हता, तर परिस्थितीनुसार बदलणाऱ्या सत्तांचे साक्षीदार असलेला जिवंत इतिहास होता.",
+    significance:
+      "या टप्प्यात किल्ल्याचे धोरणात्मक महत्त्व निर्माण झाले, ज्यामुळे पुढील अनेक शतकांपर्यंत तो सत्ता संघर्षाचा केंद्रबिंदू राहिला."
+  },
+  "Years of Turmoil": {
+    preview:
+      "दिल्ली सल्तनतीच्या विस्तारासोबत शिवनेरी पहिल्यांदा मुस्लिम सत्तेखाली गेला…",
+    fullStory:
+      "दिल्ली सल्तनतीच्या विस्तारासोबत शिवनेरी पहिल्यांदा मुस्लिम सत्तेखाली गेला. अलाउद्दीन खिलजीच्या सरदारांनी किल्ला ताब्यात घेतला आणि स्थानिक राजसत्तेचा शेवट झाला. उत्तर हिंदुस्थानातून आलेल्या सैनिकी संस्कृतीचा आणि दखनी परंपरांचा संगम या किल्ल्याच्या भिंतींनी अनुभवला. हिंदू स्थापत्यकलेवर इस्लामी लष्करी गरजांचे थर चढू लागले आणि शिवनेरीचे व्यक्तिमत्त्व अधिक बहुरंगी होत गेले.",
+    significance:
+      "या काळात किल्ला बहुसांस्कृतिक लष्करी ठाण्यात रूपांतरित झाला आणि पुढील संघर्षांसाठी पार्श्वभूमी तयार झाली."
+  },
+  "A Star is Born": {
+    preview:
+      "फाल्गुन महिन्यातील वादळग्रस्त रात्री शिवनेरीच्या कुशीत एका ताऱ्याचा जन्म झाला…",
+    fullStory:
+      "फाल्गुन महिन्यातील वादळग्रस्त रात्री, शिवनेरीच्या गर्भात एका ताऱ्याचा जन्म झाला. जिजाबाईंनी एका लेकराला जन्म दिला, ज्याचे नाव ठेवले गेले शिवाजी—जो पुढे स्वराज्याचा स्वप्नवत शिल्पकार ठरणार होता. लोककथांनुसार त्या रात्री किल्ल्याच्या भिंतीही हलल्या, जणू इतिहास स्वतः या जन्माचे स्वागत करत होता. त्या छोट्या खोलीतील पहिल्या रडण्याचा प्रतिध्वनी पुढील शतकभर डोंगर-दऱ्यांमध्ये घुमत राहिला.",
+    significance:
+      "ही घटना केवळ एका राजाचा नव्हे, तर संपूर्ण मराठा साम्राज्याच्या उदयाची सुरुवात ठरली."
+  },
+  "The Exile Years": {
+    preview:
+      "शिवाजी दूरवर नेतृत्व घडवत असताना, शिवनेरी बीजापुरी सत्तेखाली शांतपणे पण तणावात होता…",
+    fullStory:
+      "शिवाजी महाराजांचा बालपण निघून गेले आणि ते दूरवर स्वराज्याची बीजे रोवत असताना, शिवनेरी बीजापुरी सत्तेखाली शांतपणे पण तणावात राहत होता. आदिलशाही सरदारांनी किल्ल्याची तटबंदी मजबूत केली, त्यांना हे माहीत नव्हते की हाच गड त्यांच्या भावी शत्रूचा जन्मकिल्ला आहे. स्थानिक लोककथांमध्ये ‘इथेच राजा जन्मला’ अशी कुजबुज वाढत गेली आणि त्या कुजबुजीतूनच नव्या प्रतिकाराची प्रेरणा तयार झाली.",
+    significance:
+      "जन्मकिल्ला शत्रूच्या ताब्यात असल्याची खंतच शिवाजींच्या स्वराज्य स्वप्नाला अधिक धार देणारी ठरली."
+  },
+  Homecoming: {
+    preview:
+      "दशकांच्या संघर्षानंतर शिवाजी महाराज पुन्हा स्वतःच्या जन्मभूमीवर परतले…",
+    fullStory:
+      "दशकांच्या संघर्षानंतर शिवाजी महाराजांनी अखेर शिवनेरीवर भगवा पुन्हा फडकवला. हा केवळ लष्करी विजय नव्हता, तर घरवापसीचा भावनिक क्षण होता. आदिलशाहीची निशाणी असलेले ध्वज उतरले आणि त्यांच्या जागी स्वराज्याचा भगवा टांगला गेला. किल्ल्याच्या तटांवरून आता परत एकदा मराठी जयघोष घुमू लागला, जिथे एकेकाळी परक्या हुकूमांचा आवाज घुमत होता.",
+    significance:
+      "या विजयाने दख्खनमधील सत्तासंतुलन पालटले आणि मराठी स्वराज्याची मुळे अधिक खोलवर रुजली."
+  },
+  "The Lion Sleeps": {
+    preview:
+      "मराठा साम्राज्याच्या पराभवानंतर इंग्रजांच्या तोफांनी शिवनेरीच्या शांततेला भेदले…",
+    fullStory:
+      "मराठा साम्राज्याच्या पराभवानंतर इंग्रजांच्या आधुनिक तोफांनी शिवनेरीच्या शांततेला चिरले. ज्या भिंतींनी मध्ययुगीन वेढ्यांना तोंड दिले होते त्या तोफांच्या अचूक माऱ्याने विदीर्ण झाल्या. इंग्रजांसाठी हा आणखी एक धोरणात्मक विजय होता, पण मराठी मनांसाठी ती आत्मिक पराजयाची जखम होती. किल्ला आता केवळ सैनिकी ठाणे राहिला, जिथे इतिहासाची खरी जाण कमी आणि नोंदवहीतील नोंदी अधिक होत्या.",
+    significance:
+      "मराठा सार्वभौमत्वाच्या अंताचा आणि औपनिवेशिक कालखंडाच्या सुरूवातीचा हा निर्णायक टप्पा होता."
+  },
+  "Living Legacy": {
+    preview:
+      "आज शिवनेरी हे केवळ अवशेष नाहीत, तर जिवंत वारशाचा तीर्थक्षेत्र आहे…",
+    fullStory:
+      "आज शिवनेरी केवळ तुटलेल्या भिंतींचा समूह नाही, तर जिवंत वारशाचा तीर्थक्षेत्र आहे. यात्रेकरू, अभ्यासक आणि पर्यटक—सर्वजण येथे इतिहासाशी व्यक्तिगत संवाद साधण्यासाठी येतात. ज्या पायऱ्यांवरून जिजाबाई चालल्या, त्याच पायऱ्यांवरून आजची पिढी स्वराज्याच्या गोष्टी ऐकत चढते. प्रत्येक दगडात एक कथा, प्रत्येक झुळुकीत एका काळाचा सुगंध दडलेला आहे.",
+    significance:
+      "शिवनेरी आजच्या आणि पुढच्या पिढ्यांना महाराष्ट्राच्या परिवर्तनशील इतिहासाशी जिवंत नातं जोडून ठेवतो."
+  }
+};
+
+const getLocalizedChapter = (chapter, language) => {
+  if (language !== "mr") return chapter;
+  const translation = MARATHI_TIMELINE_TRANSLATIONS[chapter.era];
+  if (!translation) return chapter;
+  return {
+    ...chapter,
+    preview: translation.preview || chapter.preview,
+    fullStory: translation.fullStory || chapter.fullStory,
+    significance: translation.significance || chapter.significance
+  };
+};
+
+const Timeline = ({
+  chapters = [],
+  expandedChapter,
+  onToggleChapter,
+  language = "en"
+}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isAudioAvailable, setIsAudioAvailable] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [audioChapterIndex, setAudioChapterIndex] = useState(null);
+   const [isAudioPaused, setIsAudioPaused] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const timelineRef = useRef(null);
-  const eventsSectionRef = useRef(null);
-  const years = getTimelineYears();
-  const currentEra = getEraByYear(selectedYear);
+  const scrollContainerRef = useRef(null);
+  const audioUtteranceRef = useRef(null);
+  
+  // Store scroll position to detect if user is scrolling
+  const scrollTimeoutRef = useRef(null);
 
-  // Get events for selected year
-  const yearEvents =
-    maharashtraHistoricalEvents.find((event) => event.year === selectedYear)
-      ?.events || [];
+  // Check if browser supports Web Speech API
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      setIsAudioAvailable(true);
+    }
+  }, []);
 
-  // Smooth scroll to events section
-  const scrollToEventsSection = () => {
-    if (eventsSectionRef.current) {
-      eventsSectionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+  // Disable automatic IntersectionObserver-based active card detection to ensure
+  // the timeline always starts and stays on explicitly selected indices.
+  useEffect(() => {
+    return () => {
+      clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
+
+  // Handle manual scroll detection
+  const handleManualScroll = useCallback(() => {
+    setIsScrolling(true);
+    clearTimeout(scrollTimeoutRef.current);
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      setIsScrolling(false);
+    }, 300);
+  }, []);
+
+  // When chapters or language change (e.g. fort switch), reset to first chapter and scroll to start
+  useEffect(() => {
+    setActiveIndex(0);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        left: 0,
+        behavior: "auto"
+      });
+    }
+  }, [chapters, language]);
+
+  // Also ensure initial mount starts at the first card
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        left: 0,
+        behavior: "auto"
+      });
+    }
+  }, []);
+
+  // Handle focus mode
+  useEffect(() => {
+    if (isFocusMode) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      
+      // Stop any playing audio
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        audioUtteranceRef.current = null;
+        setIsPlayingAudio(false);
+        setIsAudioPaused(false);
+        setAudioChapterIndex(null);
+      }
+
+      setActiveIndex(0);
+      
+      // Scroll to active card
+       setTimeout(() => {
+      const firstCard = document.querySelector('[data-index="0"]');
+      if (firstCard && scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const cardRect = firstCard.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        const scrollLeft = cardRect.left - containerRect.left + container.scrollLeft;
+        container.scrollTo({
+          left: scrollLeft - (containerRect.width - cardRect.width) / 2,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  } else {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
+
+  return () => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    clearTimeout(scrollTimeoutRef.current);
+    };
+  }, [isFocusMode]);
+
+  // Handle card click - FIXED: e.stopPropagation()
+  const handleCardClick = (index, e) => {
+    if (e) {
+      e.stopPropagation(); // IMPORTANT: Prevent closing focus mode
+    }
+    
+    setActiveIndex(index);
+    
+    // Scroll to clicked card
+    const card = document.querySelector(`[data-index="${index}"]`);
+    if (card && scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cardRect = card.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      
+      const scrollLeft = cardRect.left - containerRect.left + container.scrollLeft;
+      container.scrollTo({
+        left: scrollLeft - (containerRect.width - cardRect.width) / 2,
+        behavior: 'smooth'
       });
     }
   };
 
-  const handleYearClick = (year) => {
-    setSelectedYear(year);
-    setSelectedEvent(null);
-    setIsSearching(false);
-    setSearchQuery("");
-    setYearNotFound(false);
+  // Handle audio narration
+  const handleAudioClick = (chapter, index, e) => {
+    if (e) {
+      e.stopPropagation(); // Prevent closing focus mode
+    }
     
-    // Scroll to events section after a short delay
-    setTimeout(() => {
-      scrollToEventsSection();
-    }, 100);
-  };
+    if (!isAudioAvailable || !window.speechSynthesis) {
+      alert(`🎧 Audio narration coming soon!\n\n"${chapter.era}"\n\nFull story available below.`);
+      return;
+    }
 
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-  };
+    // Clicked the same chapter that's currently active in audio
+    if (audioChapterIndex === index && audioUtteranceRef.current) {
+      if (isPlayingAudio && !isAudioPaused) {
+        // Pause and preserve position
+        window.speechSynthesis.pause();
+        setIsPlayingAudio(false);
+        setIsAudioPaused(true);
+        return;
+      }
 
-  const handleCloseEvent = () => {
-    setSelectedEvent(null);
-  };
-
-  const handleSearch = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    setYearNotFound(false);
-
-    if (query.trim() === "") {
-      setIsSearching(false);
-      setSearchResults([]);
-    } else {
-      setIsSearching(true);
-      
-      // Check if it's a year search (numbers only)
-      const isYearSearch = /^\d+$/.test(query.trim());
-      
-      if (isYearSearch) {
-        const year = parseInt(query.trim());
-        const yearExists = years.includes(year);
-        
-        if (yearExists) {
-          // Show year in results
-          const eventsForYear = maharashtraHistoricalEvents.find(e => e.year === year)?.events || [];
-          setSearchResults([
-            {
-              year,
-              id: 'year-search',
-              title: `View all events for ${year}`,
-              shortDescription: `${eventsForYear.length} historical events found`,
-              category: 'Year Search',
-              location: 'Maharashtra'
-            }
-          ]);
-        } else {
-          // Year not found
-          setYearNotFound(true);
-          setSearchResults([]);
-        }
-      } else {
-        // Regular keyword search
-        const results = searchEvents(query);
-        setSearchResults(results);
+      if (!isPlayingAudio && isAudioPaused) {
+        // Resume from same timestamp
+        window.speechSynthesis.resume();
+        setIsPlayingAudio(true);
+        setIsAudioPaused(false);
+        return;
       }
     }
+
+    // Switching chapter or starting fresh: stop any existing speech
+    window.speechSynthesis.cancel();
+    audioUtteranceRef.current = null;
+    setIsAudioPaused(false);
+
+    // Use localized content for the current language
+    const localizedChapter = getLocalizedChapter(chapter, language);
+
+    const speech = new SpeechSynthesisUtterance();
+
+    const textToRead =
+      expandedChapter === index
+        ? `${localizedChapter.era}. ${localizedChapter.fullStory || ""} ${
+            localizedChapter.significance
+              ? `Historical Significance: ${localizedChapter.significance}`
+              : ""
+          }`
+        : `${localizedChapter.era}. ${localizedChapter.preview}`;
+
+    speech.text = textToRead;
+    speech.rate = 0.9;
+    speech.pitch = 1;
+    speech.volume = 1;
+    speech.lang = language === "mr" ? "mr-IN" : "en-IN";
+
+    speech.onend = () => {
+      setIsPlayingAudio(false);
+      setAudioChapterIndex(null);
+      setIsAudioPaused(false);
+      audioUtteranceRef.current = null;
+    };
+
+    speech.onerror = () => {
+      setIsPlayingAudio(false);
+      setAudioChapterIndex(null);
+      setIsAudioPaused(false);
+      audioUtteranceRef.current = null;
+    };
+
+    audioUtteranceRef.current = speech;
+    window.speechSynthesis.speak(speech);
+    setIsPlayingAudio(true);
+    setAudioChapterIndex(index);
   };
 
-  const handleSearchResultClick = (result) => {
-    setSelectedYear(result.year);
-    const events =
-      maharashtraHistoricalEvents.find((event) => event.year === result.year)
-        ?.events || [];
-    
-    if (result.id !== 'year-search') {
-      const event = events.find((e) => e.id === result.id);
-      if (event) {
-        setSelectedEvent(event);
+  // Handle escape key to exit focus mode
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isFocusMode) {
+        setIsFocusMode(false);
       }
-    }
-    
-    setIsSearching(false);
-    setSearchQuery("");
-    setYearNotFound(false);
-    
-    // Scroll to events section
-    setTimeout(() => {
-      scrollToEventsSection();
-    }, 100);
-  };
+    };
 
-  const handleTimelineScroll = (direction) => {
-    const timelineContainer = timelineRef.current;
-    if (timelineContainer) {
-      const scrollAmount = 200;
-      timelineContainer.scrollBy({
-        left: direction === "next" ? scrollAmount : -scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isFocusMode]);
 
-  const handleYearSelect = (e) => {
-    const year = parseInt(e.target.value);
-    if (years.includes(year)) {
-      handleYearClick(year);
-    }
-  };
-
-  // Handle direct year input in search (e.g., pressing Enter)
-  const handleSearchKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      const query = searchQuery.trim();
-      const isYearSearch = /^\d+$/.test(query);
-      
-      if (isYearSearch) {
-        const year = parseInt(query);
-        const yearExists = years.includes(year);
-        
-        if (yearExists) {
-          handleYearClick(year);
-        } else {
-          setYearNotFound(true);
-          setIsSearching(true);
-          setSearchResults([]);
-        }
-        e.preventDefault();
-      }
-    }
-  };
+  if (!chapters.length) return null;
 
   return (
-    <div className="timeline-container">
-      <div className="timeline-header">
-        <h1>Maharashtra Historical Timeline</h1>
-        <p className="subtitle">
-          Explore the rich history of Maharashtra from ancient times to modern days
-        </p>
+    <>
+      {/* Focus mode overlay - sirf outside click pe close hoga */}
+      {isFocusMode && (
+        <div 
+          className="focus-mode-overlay" 
+          onClick={() => setIsFocusMode(false)}
+          aria-label="Click outside to exit focus mode"
+          style={{ cursor: 'pointer' }}
+        />
+      )}
 
-        {/* Search and Year Selector */}
-        <div className="controls-container">
-          <div className="search-wrapper">
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Search by year, event, location, or keyword..."
-                value={searchQuery}
-                onChange={handleSearch}
-                onKeyDown={handleSearchKeyDown}
-                className="search-input"
-              />
-              <span className="search-icon">🔍</span>
-            </div>
-
-            {/* Search Results */}
-            {isSearching && (
-              <div className="search-results">
-                <div className="search-results-header">
-                  <span>
-                    {yearNotFound 
-                      ? "Year not found" 
-                      : searchResults.length > 0 
-                        ? `${searchResults.length} result${searchResults.length > 1 ? 's' : ''} found`
-                        : "Searching..."
-                    }
-                  </span>
-                  <button
-                    onClick={() => {
-                      setIsSearching(false);
-                      setYearNotFound(false);
-                    }}
-                    className="close-results"
-                  >
-                    ×
-                  </button>
-                </div>
-                
-                {/* Year Not Found Message */}
-                {yearNotFound && (
-                  <div className="year-not-found">
-                    <div className="year-not-found-icon">📅</div>
-                    <div className="year-not-found-content">
-                      <h4>Year "{searchQuery}" Not Found</h4>
-                      <p>The year {searchQuery} is not available in our timeline database.</p>
-                      <p>Try searching between {years[0]} and {years[years.length - 1]}</p>
-                      <div className="suggested-years">
-                        <span>Suggested years:</span>
-                        <button onClick={() => handleYearClick(1630)}>1630 (Shivaji's Birth)</button>
-                        <button onClick={() => handleYearClick(1674)}>1674 (Maratha Empire)</button>
-                        <button onClick={() => handleYearClick(1818)}>1818 (British Rule)</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Search Results */}
-                {!yearNotFound && searchResults.length > 0 && (
-                  <>
-                    {searchResults.map((result, index) => (
-                      <div
-                        key={`${result.year}-${result.id}-${index}`}
-                        className="search-result-item"
-                        onClick={() => handleSearchResultClick(result)}
-                      >
-                        <div className="result-year-badge">{result.year}</div>
-                        <div className="result-content">
-                          <h4>{result.title}</h4>
-                          <p>{result.shortDescription}</p>
-                          <div className="result-meta">
-                            <span className="result-category">
-                              {result.category}
-                            </span>
-                            <span className="result-location">
-                              {result.location}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                )}
-
-                {/* No Results Found */}
-                {!yearNotFound && searchQuery.trim() !== "" && searchResults.length === 0 && (
-                  <div className="no-search-results">
-                    <div className="no-results-icon">🔍</div>
-                    <div className="no-results-content">
-                      <h4>No Results Found</h4>
-                      <p>No matches found for "{searchQuery}"</p>
-                      <p>Try searching with different keywords or browse the timeline.</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+      <div 
+        className={`historical-journey ${isFocusMode ? "focus-mode" : ""}`}
+        ref={timelineRef}
+      >
+        {!isFocusMode ? (
+          <>
+            <h2 className="journey-title">A Walk Through Time</h2>
+            <p className="journey-subtitle">
+              Scroll right to follow the story from past to present
+            </p>
+          </>
+        ) : (
+          <div className="focus-mode-header">
+            <h2 className="focus-mode-title">✨ Focus Mode: {chapters[activeIndex]?.era}</h2>
+            <p className="focus-mode-subtitle">
+              Immerse yourself in the story. Press ESC or click outside to exit.
+            </p>
           </div>
+        )}
 
-          <div className="year-selector">
-            <label htmlFor="yearSelect">Jump to Year:</label>
-            <select
-              id="yearSelect"
-              value={selectedYear}
-              onChange={handleYearSelect}
-              className="year-dropdown"
-            >
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year} {year === 1630 ? "(Shivaji's Birth)" : ""}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Timeline Section */}
-      <div className="main-timeline-section">
-        <div className="timeline-info">
-          <div className="selected-year-info">
-            <h2>
-              Currently Viewing:{" "}
-              <span className="year-highlight">{selectedYear}</span>
-            </h2>
-            <div className="era-badge">{currentEra}</div>
-            <div className="events-count">
-              {yearEvents.length} Historical Events
-            </div>
-          </div>
-
-          <div className="timeline-navigation">
-            <button
-              className="nav-button prev"
-              onClick={() => {
-                const currentIndex = years.indexOf(selectedYear);
-                if (currentIndex > 0) {
-                  handleYearClick(years[currentIndex - 1]);
-                }
-              }}
-              disabled={years.indexOf(selectedYear) === 0}
-            >
-              ← Previous Year
-            </button>
-            <button
-              className="nav-button next"
-              onClick={() => {
-                const currentIndex = years.indexOf(selectedYear);
-                if (currentIndex < years.length - 1) {
-                  handleYearClick(years[currentIndex + 1]);
-                }
-              }}
-              disabled={years.indexOf(selectedYear) === years.length - 1}
-            >
-              Next Year →
-            </button>
-          </div>
-        </div>
-
-        {/* Horizontal Timeline */}
-        <div className="timeline-wrapper">
-          <div className="timeline-scroll-controls">
-            <button
-              className="scroll-button left"
-              onClick={() => handleTimelineScroll("prev")}
-            >
-              ←
-            </button>
-            <div className="timeline-track" ref={timelineRef}>
-              <div className="timeline-line">
-                {years.map((year) => (
-                  <div
-                    key={year}
-                    className={`timeline-year ${
-                      year === selectedYear ? "active" : ""
-                    }`}
-                    onClick={() => handleYearClick(year)}
-                  >
-                    <div className="year-marker">
-                      <div className="marker-dot"></div>
-                      {year === selectedYear && (
-                        <div className="active-ring"></div>
-                      )}
-                    </div>
-                    <div className="year-label">
-                      <span className="year-number">{year}</span>
-                      <span className="event-count">
-                        {maharashtraHistoricalEvents.find(
-                          (e) => e.year === year
-                        )?.events?.length || 0}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <button
-              className="scroll-button right"
-              onClick={() => handleTimelineScroll("next")}
-            >
-              →
-            </button>
-          </div>
-          <div className="timeline-guide">
-            <div className="timeline-start">{years[0]} CE</div>
-            <div className="timeline-middle">Historical Timeline</div>
-            <div className="timeline-end">{years[years.length - 1]} CE</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Events Section with ref */}
-      <div className="events-section" ref={eventsSectionRef}>
-        <div className="events-header">
-          <h3>Historical Events in {selectedYear}</h3>
-          {selectedYear < 1630 && (
-            <div className="pre-shivaji-note">
-              <span className="note-icon">📜</span>
-              Pre-Shivaji Maharaj Era
+        {/* Timeline Controls */}
+        <div className="timeline-controls">
+          <button 
+            className="focus-mode-btn"
+            onClick={() => setIsFocusMode(!isFocusMode)}
+            aria-label={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
+          >
+            {isFocusMode ? "← Exit Focus Mode" : "🎬 Focus on Story"}
+          </button>
+          
+          {isAudioAvailable && !isFocusMode && (
+            <div className="audio-availability-hint">
+              <span className="audio-icon">🔊</span>
+              <span className="audio-text">Audio narration available</span>
             </div>
           )}
         </div>
 
-        {yearEvents.length > 0 ? (
-          <div className="events-grid">
-            {yearEvents.map((event) => (
-              <div
-                key={event.id}
-                className="event-card"
-                onClick={() => handleEventClick(event)}
+        {/* Progress indicator with rail - Hide in focus mode */}
+        {!isFocusMode && (
+          <div className="timeline-progress-container">
+            <div className="timeline-rail">
+              <div 
+                className="timeline-progress" 
+                style={{ width: `${((activeIndex + 1) / chapters.length) * 100}%` }}
+              />
+            </div>
+            <span className="progress-text">
+              Chapter {activeIndex + 1} of {chapters.length}
+            </span>
+          </div>
+        )}
+
+        {/* Typewriter effect indicator */}
+        {expandedChapter !== null && (
+          <div className="typewriter-indicator">
+            <span className="typewriter-dot"></span>
+            <span className="typewriter-dot"></span>
+            <span className="typewriter-dot"></span>
+            <span className="typewriter-text">Storytelling...</span>
+          </div>
+        )}
+
+        <div 
+          className="timeline-scroll-wrapper" 
+          ref={scrollContainerRef}
+          onScroll={handleManualScroll}
+        >
+          <div className="horizontal-timeline-track">
+            {chapters.map((chapter, index) => (
+              (() => {
+                const localized = getLocalizedChapter(chapter, language);
+                return (
+              <article
+                key={index}
+                data-index={index}
+                className={`timeline-chapter ${chapter.isMajor ? "major" : ""} ${
+                  activeIndex === index ? "is-active" : "is-dimmed"
+                } ${expandedChapter === index ? "expanded" : ""}`}
+                onClick={(e) => handleCardClick(index, e)}
               >
-                <div className="event-image-container">
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="event-image"
-                  />
-                  <div className="event-image-overlay">
-                    <span className="event-category">{event.category}</span>
-                    <span className="event-location">{event.location}</span>
-                  </div>
+                <div className="chapter-marker">
+                  <span className="chapter-year">{localized.year || chapter.year}</span>
+                  {activeIndex === index && (
+                    <div className="active-indicator"></div>
+                  )}
                 </div>
-                <div className="event-content">
-                  <div className="event-date">{event.date}</div>
-                  <h4 className="event-title">{event.title}</h4>
-                  <p className="event-description">{event.shortDescription}</p>
-                  <div className="event-tags">
-                    {event.tags.map((tag, index) => (
-                      <span key={index} className="event-tag">
-                        {tag}
+
+                <div className="chapter-content">
+                  <div className="chapter-header">
+                    <span className="era-tag">{localized.year || chapter.year}</span>
+                    {chapter.mood && (
+                      <span className="mood-tag">
+                        {getMoodIcon(chapter.mood)} {chapter.mood}
                       </span>
-                    ))}
+                    )}
+                    <h3 className="chapter-title">{localized.era}</h3>
+                    
+                    {/* Audio Narration Button */}
+                    <button
+                      className={`audio-narration-btn ${isPlayingAudio && audioChapterIndex === index ? "is-playing" : ""}`}
+                      onClick={(e) => {
+                        handleAudioClick(chapter, index, e);
+                      }}
+                      aria-label={`Listen to audio narration for ${localized.era}`}
+                      title={isAudioAvailable ? "Play audio narration" : "Audio narration coming soon"}
+                    >
+                      <span className="audio-btn-icon">
+                        {isPlayingAudio && audioChapterIndex === index ? "⏸️" : "🔊"}
+                      </span>
+                      <span className="audio-btn-text">
+                        {isPlayingAudio && audioChapterIndex === index ? "Playing..." : "Listen"}
+                      </span>
+                    </button>
                   </div>
-                  <button className="view-details-btn">
-                    View Details
-                    <span className="btn-arrow">→</span>
-                  </button>
+
+                  <div className="chapter-story">
+                    {expandedChapter === index ? (
+                      <div className="full-story">
+                        <div className="story-paragraphs">
+                          {localized.fullStory && (
+                            <p className="story-paragraph typewriter-text">
+                              {localized.fullStory}
+                            </p>
+                          )}
+                        </div>
+                        {localized.significance && (
+                          <div className="significance-box">
+                            <div className="significance-label">
+                              <span>📜</span>
+                              Historical Significance
+                            </div>
+                            <p className="significance-text">{localized.significance}</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="story-preview">{localized.preview}</p>
+                    )}
+                  </div>
+
+                  <div className="chapter-footer">
+                    <button
+                      className="read-more-btn"
+                      onClick={(e) => {
+                        e.stopPropagation(); // IMPORTANT: Prevent closing focus mode
+                        onToggleChapter(index);
+                      }}
+                    >
+                      {expandedChapter === index ? "Read Less" : "Read Full Story"}
+                      <span className="read-more-icon">
+                        {expandedChapter === index ? "↑" : "↓"}
+                      </span>
+                    </button>
+                    
+                    {/* Ambient sound indicator */}
+                    {isFocusMode && activeIndex === index && (
+                      <div className="ambient-sound-indicator">
+                        <span className="ambient-icon">🎵</span>
+                        <span className="ambient-text">Ambient sound on</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </article>
+                );
+              })()
             ))}
           </div>
-        ) : (
-          <div className="no-events">
-            <div className="no-events-icon">📅</div>
-            <h4>No Historical Events Found</h4>
-            <p>
-              There are no recorded historical events for {selectedYear} in our
-              database.
-            </p>
-            <p>Try selecting a different year from the timeline.</p>
-            <div className="suggested-years">
-              <span>Suggested years with events:</span>
-              <button onClick={() => handleYearClick(1630)}>1630 (Shivaji's Birth)</button>
-              <button onClick={() => handleYearClick(1674)}>1674 (Maratha Empire)</button>
-              <button onClick={() => handleYearClick(1818)}>1818 (British Rule)</button>
-            </div>
+        </div>
+
+        {/* Ambient sound toggle */}
+        {isFocusMode && (
+          <div className="ambient-sound-control">
+            <button className="ambient-toggle-btn">
+              <span className="ambient-toggle-icon">🎵</span>
+              <span className="ambient-toggle-text">Ambient Sound</span>
+              <span className="ambient-toggle-status">ON</span>
+            </button>
           </div>
         )}
       </div>
-
-      {/* Event Detail Modal */}
-      {selectedEvent && (
-        <div className="event-modal-overlay" onClick={handleCloseEvent}>
-          <div className="event-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal" onClick={handleCloseEvent}>
-              ×
-            </button>
-            <div className="modal-header">
-              <div className="modal-image-container">
-                <img src={selectedEvent.imageUrl} alt={selectedEvent.title} />
-                <div className="modal-image-gradient"></div>
-              </div>
-              <div className="modal-title-section">
-                <div className="modal-meta">
-                  <span className="modal-year">{selectedYear}</span>
-                  <span className="modal-category">
-                    {selectedEvent.category}
-                  </span>
-                  <span className="modal-location">
-                    {selectedEvent.location}
-                  </span>
-                </div>
-                <h2>{selectedEvent.title}</h2>
-                <div className="modal-date">{selectedEvent.date}</div>
-              </div>
-            </div>
-            <div className="modal-body">
-              <div className="modal-section">
-                <h3>Event Description</h3>
-                <p className="modal-description">
-                  {selectedEvent.fullDescription}
-                </p>
-              </div>
-
-              <div className="modal-section">
-                <h3>Historical Context</h3>
-                <div className="historical-context">
-                  <div className="context-item">
-                    <span className="context-label">Era:</span>
-                    <span className="context-value">{currentEra}</span>
-                  </div>
-                  <div className="context-item">
-                    <span className="context-label">Significance:</span>
-                    <span className="context-value">
-                      {selectedYear < 1630
-                        ? "This event occurred during the pre-Shivaji era, when Maharashtra was under various dynasties and sultanates."
-                        : selectedYear === 1630
-                        ? "This year marks the birth of Chhatrapati Shivaji Maharaj, founder of the Maratha Empire."
-                        : "This event took place during the Maratha Empire period, a significant era in Maharashtra's history."}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-section">
-                <h3>Tags & Keywords</h3>
-                <div className="modal-tags">
-                  {selectedEvent.tags.map((tag, index) => (
-                    <span key={index} className="modal-tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-           
-            <div className="modal-footer">
-              <div className="modal-actions">
-                <button
-                  className="modal-button close"
-                  onClick={handleCloseEvent}
-                >
-                  Close
-                </button>
-              </div>
-              <div className="modal-note">
-                <span className="note-icon">💡</span>
-                This information is part of Maharashtra's rich historical heritage
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Footer */}
-      <div className="timeline-footer">
-        <p>
-          Maharashtra Historical Timeline • From {years[0]} CE to{" "}
-          {years[years.length - 1]} CE
-        </p>
-        <p className="footer-note">
-          Explore Maharashtra's glorious history through centuries
-        </p>
-      </div>
-    </div>
+    </>
   );
 };
 

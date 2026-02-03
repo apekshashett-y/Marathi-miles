@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MoodRecommendation from './components/MoodRecommendation/MoodRecommendation';
-import Timeline from './components/Passport/Timeline';
 import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer'; // Add this import
+import PastPort from './components/Passport/PastPort';
 
 const App = () => {
   const [currentSection, setCurrentSection] = useState("home");
@@ -81,7 +81,7 @@ const App = () => {
       case "passport":
         return (
           <div ref={passportRef} id="passport">
-            <Timeline />
+            <PastPort />
           </div>
         );
       case "place-explorer":

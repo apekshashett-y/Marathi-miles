@@ -1,0 +1,3314 @@
+/* PastPort - Deep Historical Storytelling Experience */
+.pastport-storytelling {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fdf6e3 0%, #f8f3e6 100%);
+  font-family: 'Crimson Text', 'Georgia', serif;
+  color: #2c1810;
+  position: relative;
+  padding: 0;
+}
+
+/* Header - Storybook Style */
+.story-header {
+  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
+    url('https://images.unsplash.com/photo-1548013146-72479768bada?w=1600&auto=format&fit=crop&q=80');
+  background-size: cover;
+  background-position: center;
+  color: #f5e9d9;
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.story-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #d4a574, #b37a4e, #d4a574);
+}
+
+.story-title {
+  font-size: 3.8rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.story-subtitle {
+  font-size: 1.3rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  color: rgba(245, 233, 217, 0.9);
+  font-weight: 300;
+}
+
+/* Fort Selection View (default when no fort selected) */
+.fort-selection-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+.fort-selection-heading {
+  text-align: center;
+  font-size: 1.75rem;
+  font-family: 'Playfair Display', serif;
+  color: #2c1810;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.fort-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.fort-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e8d9c5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+  padding: 0;
+}
+
+.fort-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+}
+
+.fort-card-image {
+  width: 100%;
+  height: 200px;
+  background-color: #e8d9c5;
+}
+
+.fort-card-content {
+  padding: 1.5rem;
+}
+
+.fort-card-name {
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  color: #2c1810;
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+}
+
+.fort-card-subtitle {
+  font-size: 0.95rem;
+  color: #5a4a3a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.story-footer--compact {
+  padding: 2rem;
+}
+
+/* Hero: full-width bg, left-aligned, name + one subtitle only */
+.fort-hero {
+  height: 65vh;
+  min-height: 400px;
+  position: relative;
+  margin-bottom: 4rem;
+  background-color: #2c1810;
+}
+
+.hero-overlay--left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.85) 40%);
+  padding: 4rem 2rem 3rem;
+  color: white;
+  text-align: left;
+}
+
+.hero-overlay--left .fort-hero-name,
+.hero-overlay--left .fort-hero-subtitle {
+  max-width: 640px;
+}
+
+.fort-hero-name {
+  font-size: 2.75rem;
+  font-family: 'Playfair Display', serif;
+  margin: 0 0 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.fort-hero-subtitle {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(245, 233, 217, 0.95);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Legacy hero overlay (when used elsewhere) */
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  padding: 3rem;
+  color: white;
+}
+
+.fort-legend {
+  font-size: 2.8rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.fort-subtitle,
+.fort-era {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(245, 233, 217, 0.95);
+  margin-bottom: 1rem;
+}
+
+/* HORIZONTAL STORYTELLING TIMELINE — past → present, scroll left → right */
+.historical-journey {
+  padding: 4rem 0 5rem;
+  position: relative;
+}
+
+.journey-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.75rem;
+  color: #2c1810;
+  position: relative;
+}
+
+.journey-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: #b37a4e;
+}
+
+.journey-subtitle {
+  text-align: center;
+  color: #5a4a3a;
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.timeline-scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0 2rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #b37a4e #f5e9d9;
+}
+
+.timeline-scroll-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.timeline-scroll-wrapper::-webkit-scrollbar-track {
+  background: #f5e9d9;
+  border-radius: 4px;
+}
+
+.timeline-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #b37a4e;
+  border-radius: 4px;
+}
+
+.horizontal-timeline-track {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 0 2rem 1rem;
+  min-width: min-content;
+}
+
+/* Timeline chapter cards — fixed width, auto height, top-aligned */
+.timeline-chapter {
+  flex: 0 0 360px;
+  width: 360px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: flex-start;
+}
+
+.chapter-marker {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fdf6e3;
+  border: 3px solid #b37a4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-chapter:hover .chapter-marker {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 8px rgba(179, 122, 78, 0.15);
+}
+
+.timeline-chapter.major .chapter-marker {
+  width: 56px;
+  height: 56px;
+  background: #b37a4e;
+  border-color: #8b5a2b;
+  color: white;
+}
+
+.chapter-year {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #b37a4e;
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 2px;
+  word-break: break-word;
+}
+
+.timeline-chapter.major .chapter-year {
+  color: white;
+}
+
+/* Chapter Content — fixed width, auto height, expands vertically only */
+.chapter-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8d9c5;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter-content::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #d4a574;
+}
+
+.timeline-chapter.major .chapter-content::before {
+  background: #8b5a2b;
+}
+
+.chapter-header {
+  margin-bottom: 1.5rem;
+}
+
+.era-tag {
+  display: inline-block;
+  background: #f5e9d9;
+  color: #8b5a2b;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.8rem;
+}
+
+.chapter-title {
+  font-size: 1.6rem;
+  font-family: 'Playfair Display', serif;
+  color: #2c1810;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+/* Storytelling Content */
+.chapter-story {
+  flex: 1;
+  color: #3e2c1c;
+  line-height: 1.75;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.story-preview {
+  color: #5a4a3a;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.full-story {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e8d9c5;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Historical Significance */
+.significance-box {
+  background: #f9f5f0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  border-left: 3px solid #b37a4e;
+}
+
+.significance-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #8b5a2b;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.significance-text {
+  color: #3e2c1c;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* Expand/Collapse */
+.read-more-btn {
+  margin-top: auto;
+  padding-top: 1rem;
+  background: none;
+  border: none;
+  color: #b37a4e;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 1rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s;
+}
+
+.read-more-btn:hover {
+  color: #8b5a2b;
+}
+
+/* 360° IMMERSIVE EXPERIENCE */
+.immersive-experience {
+  background: #0a0a0a;
+  padding: 4rem 2rem;
+  border-radius: 20px;
+  margin: 4rem auto;
+  max-width: 1200px;
+  color: #fff;
+}
+
+.immersive-eyebrow {
+  display: block;
+  text-align: center;
+  color: #fbbf24;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.immersive-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.immersive-subtitle {
+  text-align: center;
+  color: #a1a1aa;
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+
+.immersive-viewport {
+  width: 100%;
+  height: 60vh;
+  min-height: 450px;
+  max-height: 600px;
+  position: relative;
+  margin: 0 auto 2.5rem;
+}
+
+.immersive-viewport-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+}
+
+.immersive-viewport-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.immersive-viewport-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.immersive-viewport-image.is-active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.immersive-viewport-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.immersive-drag-icon {
+  font-size: 2rem;
+  color: #fbbf24;
+}
+
+.immersive-drag-text {
+  font-weight: 600;
+  color: #fff;
+}
+
+.immersive-drag-hint {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.immersive-viewport-controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 4;
+}
+
+.immersive-control-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.immersive-view-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* FIX FOR FULLSCREEN MODE INTERACTION */
+.immersive-viewport-overlay {
+  pointer-events: none !important; /* MOST IMPORTANT FIX */
+}
+
+.immersive-viewport-frame {
+  cursor: grab;
+  user-select: none;
+}
+
+.immersive-viewport-frame:active {
+  cursor: grabbing;
+}
+
+/* Fullscreen mode fixes */
+.full-immersive-mode .immersive-viewport-frame {
+  cursor: grab !important;
+}
+
+.full-immersive-mode .immersive-viewport-inner {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+.full-immersive-mode .immersive-viewport-image {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: center !important;
+  opacity: 0 !important;
+  transition: opacity 0.8s ease-in-out !important;
+}
+
+.full-immersive-mode .immersive-viewport-image.is-active {
+  opacity: 1 !important;
+  z-index: 1 !important;
+}
+
+/* Fullscreen controls */
+.full-immersive-mode .immersive-viewport-controls {
+  position: absolute !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 10001 !important;
+  pointer-events: auto !important;
+}
+
+.full-immersive-mode .exit-immersive-btn {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 10001 !important;
+  pointer-events: auto !important;
+}
+
+/* Hide overlay in fullscreen */
+.full-immersive-mode .immersive-viewport-overlay {
+  display: none !important;
+}
+
+/* Fix image positioning for normal mode */
+.immersive-viewport-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.immersive-viewport-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.immersive-viewport-image.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Auto-play indicator */
+.auto-play-indicator {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #fbbf24;
+}
+
+.auto-play-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.auto-play-status {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Fullscreen immersive experience styling */
+.full-immersive-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: #000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.full-immersive-mode .immersive-viewport {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+.full-immersive-mode .immersive-viewport-frame {
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+/* Hide elements in fullscreen */
+.full-immersive-mode .immersive-eyebrow,
+.full-immersive-mode .immersive-title,
+.full-immersive-mode .immersive-subtitle,
+.full-immersive-mode .immersive-progress,
+.full-immersive-mode .immersive-cards,
+.full-immersive-mode .immersive-cta,
+.full-immersive-mode .immersive-view-badge {
+  display: none !important;
+}
+
+/* Fullscreen button styling */
+.full-immersive-mode .immersive-control-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.full-immersive-mode .immersive-control-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Ensure proper fullscreen styling */
+:fullscreen .immersive-experience,
+:-webkit-full-screen .immersive-experience,
+:-moz-full-screen .immersive-experience,
+:-ms-fullscreen .immersive-experience {
+  background: #000 !important;
+}
+
+/* Dragging state */
+.immersive-viewport-overlay.dragging {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+/* Progress indicator */
+.immersive-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0;
+  gap: 0.5rem;
+}
+
+.immersive-progress-track {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.immersive-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.immersive-progress-dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(1.2);
+}
+
+.immersive-progress-dot.active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+.immersive-progress-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Ensure immersive viewport is responsive */
+.immersive-viewport-frame {
+  cursor: grab;
+  user-select: none;
+}
+
+.immersive-viewport-frame:active {
+  cursor: grabbing;
+}
+
+/* Smooth transitions for image switching */
+.immersive-viewport-image {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  .immersive-drag-hint {
+    font-size: 0.8rem;
+  }
+  
+  .immersive-viewport-frame {
+    touch-action: pan-y;
+  }
+}
+/* Full Immersive Mode - FIXED */
+.full-immersive-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: #000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.full-immersive-mode .immersive-viewport {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.full-immersive-mode .immersive-viewport-frame {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: #000 !important;
+  cursor: grab !important;
+}
+
+.full-immersive-mode .immersive-viewport-frame:active {
+  cursor: grabbing !important;
+}
+
+.full-immersive-mode .immersive-viewport-inner {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+.full-immersive-mode .immersive-viewport-image {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.full-immersive-mode .immersive-viewport-image.is-active {
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+.full-immersive-mode .immersive-viewport-controls {
+  position: absolute !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 10px 15px !important;
+  border-radius: 8px !important;
+  z-index: 10000 !important;
+}
+
+.full-immersive-mode .exit-immersive-btn {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: white !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s !important;
+  z-index: 10001 !important;
+}
+
+.full-immersive-mode .exit-immersive-btn:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Hide unnecessary elements in fullscreen */
+.full-immersive-mode .immersive-eyebrow,
+.full-immersive-mode .immersive-title,
+.full-immersive-mode .immersive-subtitle,
+.full-immersive-mode .immersive-progress,
+.full-immersive-mode .immersive-cards,
+.full-immersive-mode .immersive-cta,
+.full-immersive-mode .immersive-view-badge,
+.full-immersive-mode .immersive-viewport-overlay {
+  display: none !important;
+}
+
+/* Ensure immersive viewport takes full space in fullscreen */
+.immersive-experience:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #000 !important;
+}
+
+/* For WebKit browsers (Safari) */
+.immersive-experience:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #000 !important;
+}
+
+/* For Firefox */
+.immersive-experience:-moz-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #000 !important;
+}
+
+/* For IE/Edge */
+.immersive-experience:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #000 !important;
+}
+
+/* Auto-play indicator */
+.auto-play-indicator {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #fbbf24;
+}
+
+.auto-play-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.auto-play-status {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Update immersive viewport image styles */
+.immersive-viewport-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.immersive-viewport-image.is-active {
+  opacity: 1;
+}
+
+/* Fix for image display */
+.immersive-viewport-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  .immersive-drag-hint {
+    font-size: 0.8rem;
+  }
+  
+  .immersive-viewport-frame {
+    touch-action: pan-y;
+  }
+  
+  .full-immersive-mode .immersive-viewport-controls {
+    bottom: 10px !important;
+    right: 10px !important;
+  }
+  
+  .full-immersive-mode .exit-immersive-btn {
+    bottom: 10px !important;
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+
+
+/* Ensure immersive viewport takes full space */
+.immersive-viewport-frame:fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* For WebKit browsers (Safari) */
+.immersive-viewport-frame:-webkit-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* For Firefox */
+.immersive-viewport-frame:-moz-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* For IE/Edge */
+.immersive-viewport-frame:-ms-fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Auto-play indicator */
+.auto-play-indicator {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #fbbf24;
+}
+
+.auto-play-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.auto-play-status {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Update image styles for better auto-play experience */
+.immersive-viewport-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out; /* Slower transition for museum feel */
+}
+
+.immersive-viewport-image.is-active {
+  opacity: 1;
+}
+
+/* Fullscreen mode image fix */
+.full-immersive-mode .immersive-viewport-image {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+/* Hide overlay in fullscreen */
+.full-immersive-mode .immersive-viewport-overlay {
+  display: none !important;
+}
+
+/* Pause/Play button styling */
+.immersive-control-btn .immersive-control-icon {
+  font-size: 1rem;
+}
+
+/* Mobile responsive for auto-play indicator */
+@media (max-width: 768px) {
+  .auto-play-indicator {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .immersive-viewport-image {
+    transition: opacity 0.6s ease-in-out;
+  }
+}
+
+/* Fix for fullscreen mode */
+.full-immersive-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: #000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+.full-immersive-mode .immersive-viewport {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.full-immersive-mode .immersive-viewport-frame {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: #000 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  cursor: grab !important;
+}
+
+.full-immersive-mode .immersive-viewport-frame:active {
+  cursor: grabbing !important;
+}
+
+.full-immersive-mode .immersive-viewport-inner {
+  width: 100vw !important;
+  height: 100vh !important;
+  position: relative !important;
+}
+
+/* Fullscreen me image styling */
+.full-immersive-mode .immersive-viewport-image {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.5s ease-in-out !important;
+  z-index: 1 !important;
+}
+
+.full-immersive-mode .immersive-viewport-image.is-active {
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+/* Fullscreen controls */
+.full-immersive-mode .immersive-viewport-controls {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  padding: 10px 15px !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  z-index: 10000 !important;
+}
+
+/* Fullscreen drag hint */
+.fullscreen-drag-hint {
+  position: fixed !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  font-size: 0.9rem !important;
+  backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  z-index: 10000 !important;
+  animation: fadeInOut 3s ease-in-out !important;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  10%, 90% { opacity: 1; }
+}
+
+/* Exit button in fullscreen */
+.full-immersive-mode .exit-immersive-btn {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s !important;
+  z-index: 10001 !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.full-immersive-mode .exit-immersive-btn:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Hide unnecessary elements in fullscreen */
+.full-immersive-mode .immersive-eyebrow,
+.full-immersive-mode .immersive-title,
+.full-immersive-mode .immersive-subtitle,
+.full-immersive-mode .immersive-progress,
+.full-immersive-mode .immersive-cards,
+.full-immersive-mode .immersive-cta,
+.full-immersive-mode .immersive-view-badge,
+.full-immersive-mode .immersive-viewport-overlay {
+  display: none !important;
+}
+
+/* Auto-play indicator in normal mode */
+.auto-play-indicator {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #fbbf24;
+}
+
+.auto-play-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.auto-play-status {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* ✅ FIXED: Image cards */
+.immersive-cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.immersive-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 150px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.immersive-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fbbf24;
+}
+
+.immersive-card.is-active {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
+}
+
+.immersive-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #fbbf24;
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+}
+
+.immersive-card.is-active .immersive-card-accent {
+  opacity: 1;
+}
+
+.immersive-card-label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.immersive-card-subtitle {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.immersive-cta {
+  display: block;
+  margin: 2rem auto 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.immersive-cta:hover {
+  transform: translateY(-2px);
+}
+/* 360° Container */
+.vr-experience-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 500px;
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(0, 0, 0, 0.3));
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(212, 165, 116, 0.3);
+}
+
+.vr-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+.vr-guidance {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: rgba(245, 233, 217, 0.9);
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.drag-hint {
+  display: inline-block;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.85rem 1.75rem;
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 165, 116, 0.5);
+  color: #f5e9d9;
+}
+
+/* Transition Note */
+.transition-note {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #5a4a3a;
+  font-size: 1.1rem;
+  font-style: italic;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+  border-bottom: 1px solid #e8d9c5;
+}
+
+/* EXPLORE MORE - Travel Magazine Style */
+.travel-magazine {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.magazine-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  color: #2c1810;
+  margin-bottom: 1rem;
+}
+
+.magazine-subtitle {
+  text-align: center;
+  color: #5a4a3a;
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+/* Full-width Horizontal Sections */
+.magazine-section {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8d9c5;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f5e9d9;
+}
+
+.section-icon {
+  font-size: 2rem;
+  color: #b37a4e;
+}
+
+.section-header h3 {
+  font-size: 1.8rem;
+  font-family: 'Playfair Display', serif;
+  color: #2c1810;
+  margin: 0;
+}
+
+/* Cuisine Cards */
+.cuisine-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.cuisine-card {
+  background: #f9f5f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.cuisine-card:hover {
+  transform: translateY(-5px);
+}
+
+.cuisine-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.cuisine-content {
+  padding: 1.5rem;
+}
+
+.cuisine-name {
+  font-size: 1.4rem;
+  color: #2c1810;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.cuisine-desc {
+  color: #5a4a3a;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.cuisine-details {
+  display: flex;
+  justify-content: space-between;
+  color: #8b5a2b;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Shopping Areas */
+.shopping-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.shopping-card {
+  background: linear-gradient(135deg, #f9f5f0, #f5e9d9);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #e8d9c5;
+}
+
+.market-name {
+  font-size: 1.5rem;
+  color: #2c1810;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.market-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.feature-tag {
+  background: #e8d9c5;
+  color: #5a4a3a;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+/* Cultural Experiences */
+.experience-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.experience-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 2px solid #e8d9c5;
+  transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+  border-color: #b37a4e;
+  transform: translateY(-3px);
+}
+
+.experience-duration {
+  color: #b37a4e;
+  font-weight: 600;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* SMART ITINERARY GENERATOR */
+.itinerary-generator-section {
+  background: linear-gradient(135deg, #f9f5f0, #f5e9d9);
+  border-radius: 20px;
+  padding: 3rem;
+  margin: 3rem 0;
+}
+
+.itinerary-eyebrow {
+  display: block;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: #b37a4e;
+  margin-bottom: 0.75rem;
+}
+
+.itinerary-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.itinerary-question {
+  font-size: 2rem;
+  color: #2c1810;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.itinerary-description {
+  color: #5a4a3a;
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.time-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.time-option {
+  background: white;
+  border: 2px solid #e8d9c5;
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5a4a3a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  text-align: center;
+}
+
+.time-option:hover {
+  border-color: #b37a4e;
+  transform: translateY(-3px);
+}
+
+.time-option.selected {
+  background: #b37a4e;
+  color: white;
+  border-color: #b37a4e;
+}
+
+/* Generated Itinerary */
+.generated-itinerary {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.day-plan {
+  margin-bottom: 2.5rem;
+}
+
+.day-plan:last-child {
+  margin-bottom: 0;
+}
+
+.day-title {
+  font-size: 1.5rem;
+  color: #2c1810;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f5e9d9;
+  font-family: 'Playfair Display', serif;
+}
+
+.time-slot {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid #f5e9d9;
+}
+
+.time-slot:last-child {
+  border-bottom: none;
+}
+
+.time-label {
+  min-width: 100px;
+  color: #b37a4e;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 1.2rem;
+  color: #2c1810;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.activity-desc {
+  color: #5a4a3a;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.activity-tip {
+  color: #8b5a2b;
+  font-size: 0.9rem;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Footer */
+.story-footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #5a4a3a;
+  border-top: 1px solid #e8d9c5;
+  background: #f9f5f0;
+}
+
+.footer-quote {
+  font-size: 1.2rem;
+  font-style: italic;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.7;
+  color: #8b5a2b;
+}
+
+/* Back Navigation */
+.back-to-forts {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e8d9c5;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  color: #2c1810;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.back-to-forts:hover {
+  background: white;
+  transform: translateX(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+/* PastPort.css में नीचे जोड़ें */
+
+/* Timeline Progress Bar */
+.timeline-progress-bar {
+  width: 100%;
+  max-width: 800px;
+  height: 4px;
+  background: #e8d9c5;
+  border-radius: 2px;
+  margin: 0 auto 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4a574, #b37a4e);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #8b5a2b;
+  font-weight: 500;
+}
+
+/* Timeline Controls */
+.timeline-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+}
+
+.focus-mode-btn {
+  background: #b37a4e;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.focus-mode-btn:hover {
+  background: #8b5a2b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 90, 43, 0.2);
+}
+
+.audio-availability-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(179, 122, 78, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #8b5a2b;
+  font-size: 0.9rem;
+}
+
+.audio-icon {
+  font-size: 1rem;
+}
+
+.audio-text {
+  font-weight: 500;
+}
+
+/* Active Card Styling */
+.timeline-chapter.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: #b37a4e;
+}
+
+.timeline-chapter.is-active .chapter-marker {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 12px rgba(179, 122, 78, 0.2);
+}
+
+.timeline-chapter:not(.is-active) {
+  opacity: 0.5;
+  transform: translateY(8px);
+}
+
+/* Audio Narration Button */
+.audio-narration-btn {
+  background: rgba(179, 122, 78, 0.1);
+  border: 1px solid rgba(179, 122, 78, 0.3);
+  color: #8b5a2b;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  transition: all 0.3s ease;
+}
+
+.audio-narration-btn:hover {
+  background: rgba(179, 122, 78, 0.2);
+  transform: scale(1.05);
+}
+
+.audio-narration-btn.is-playing {
+  background: rgba(139, 90, 43, 0.2);
+  border-color: #8b5a2b;
+}
+
+.audio-btn-icon {
+  font-size: 0.9rem;
+}
+
+.audio-btn-text {
+  font-weight: 500;
+}
+
+/* Audio Hint Future */
+.audio-hint-future {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(139, 90, 43, 0.7);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(179, 122, 78, 0.05);
+  border-radius: 10px;
+  border: 1px dashed rgba(179, 122, 78, 0.3);
+}
+
+.audio-hint-icon {
+  font-size: 0.9rem;
+}
+
+/* Chapter Header Adjustments */
+.chapter-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chapter-title {
+  flex: 1;
+  min-width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Focus Mode Styling */
+.historical-journey.focus-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.historical-journey.focus-mode .timeline-scroll-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.historical-journey.focus-mode .horizontal-timeline-track {
+  justify-content: center;
+}
+
+.historical-journey.focus-mode .timeline-chapter {
+  opacity: 1;
+  transform: scale(1.02);
+  border: 2px solid rgba(212, 165, 116, 0.5);
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-active {
+  transform: scale(1.05);
+  border-color: #d4a574;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.historical-journey.focus-mode .chapter-content {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.historical-journey.focus-mode .journey-title,
+.historical-journey.focus-mode .journey-subtitle,
+.historical-journey.focus-mode .timeline-progress-bar,
+.historical-journey.focus-mode .timeline-controls {
+  display: none;
+}
+
+.focus-mode-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.focus-mode-title {
+  font-size: 2.2rem;
+  color: #f5e9d9;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.focus-mode-subtitle {
+  color: rgba(245, 233, 217, 0.8);
+  font-size: 1rem;
+}
+
+/* FOCUS MODE CARD CONTENT FIX */
+
+/* Card content area - height control */
+.focus-mode .timeline-chapter .chapter-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Story area - scrollable */
+.focus-mode .timeline-chapter .chapter-story {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
+  padding-right: 5px;
+  margin-bottom: 1rem;
+}
+
+/* Scrollbar styling */
+.focus-mode .timeline-chapter .chapter-story::-webkit-scrollbar {
+  width: 4px;
+}
+
+.focus-mode .timeline-chapter .chapter-story::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.focus-mode .timeline-chapter .chapter-story::-webkit-scrollbar-thumb {
+  background: #c58a44;
+  border-radius: 10px;
+}
+
+/* Full story text */
+.focus-mode .timeline-chapter .full-story {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Story paragraphs */
+.focus-mode .timeline-chapter .story-paragraphs {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.focus-mode .timeline-chapter .story-paragraph {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #2c1810;
+  margin-bottom: 1.2rem;
+}
+
+/* Significance box */
+.focus-mode .timeline-chapter .significance-box {
+  background: rgba(197, 138, 68, 0.1);
+  border-left: 3px solid #c58a44;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Preview text */
+.focus-mode .timeline-chapter .story-preview {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #2c1810;
+  max-height: 150px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+/* Card height optimization */
+.focus-mode .timeline-chapter {
+  height: 450px; /* Reduced from 500px */
+  min-width: 380px;
+  max-width: 380px;
+}
+
+.focus-mode .timeline-chapter.is-active {
+  height: 470px; /* Reduced from 520px */
+  min-width: 400px;
+  max-width: 400px;
+}
+
+/* Chapter header spacing */
+.focus-mode .timeline-chapter .chapter-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Read more button position */
+.focus-mode .timeline-chapter .chapter-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Audio button position */
+.focus-mode .timeline-chapter .audio-narration-btn {
+  margin-top: 0.5rem;
+}
+
+.focus-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  cursor: pointer;
+}
+/* COMPACT CARD LAYOUT */
+.focus-mode .timeline-chapter {
+  padding: 1.2rem; /* Reduced padding */
+}
+
+.focus-mode .timeline-chapter .chapter-title {
+  font-size: 1.3rem; /* Slightly smaller title */
+  margin-bottom: 0.5rem;
+}
+
+.focus-mode .timeline-chapter .era-tag,
+.focus-mode .timeline-chapter .mood-tag {
+  font-size: 0.8rem; /* Smaller tags */
+  padding: 0.2rem 0.6rem;
+  margin-right: 0.5rem;
+}
+
+.focus-mode .timeline-chapter .audio-narration-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+/* FOCUS MODE RESPONSIVE FIXES */
+
+/* Base focus mode styles */
+.focus-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+/* Card size based on screen */
+.focus-mode .timeline-chapter {
+  height: 420px;
+  min-width: 350px;
+  max-width: 350px;
+  margin: 0 10px;
+  opacity: 0.3;
+  transform: scale(0.9);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.focus-mode .timeline-chapter.is-active {
+  height: 440px;
+  min-width: 370px;
+  max-width: 370px;
+  transform: scale(1.02);
+}
+
+/* MEDIA QUERIES FOR DIFFERENT SCREEN SIZES */
+
+/* Small screens (mobile) */
+@media (max-width: 768px) {
+  .focus-mode {
+    padding: 1rem;
+  }
+  
+  .focus-mode .timeline-chapter {
+    height: 380px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+  
+  .focus-mode .timeline-chapter.is-active {
+    height: 400px;
+    min-width: 320px;
+    max-width: 320px;
+  }
+  
+  .focus-mode-header {
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .focus-mode-title {
+    font-size: 1.6rem;
+  }
+  
+  .focus-mode-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .focus-mode .timeline-chapter {
+    height: 400px;
+    min-width: 330px;
+    max-width: 330px;
+  }
+  
+  .focus-mode .timeline-chapter.is-active {
+    height: 420px;
+    min-width: 350px;
+    max-width: 350px;
+  }
+  
+  .focus-mode .timeline-scroll-wrapper {
+    max-width: 95%;
+  }
+}
+
+/* Large screens (desktop) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .focus-mode .timeline-chapter {
+    height: 430px;
+    min-width: 360px;
+    max-width: 360px;
+  }
+  
+  .focus-mode .timeline-chapter.is-active {
+    height: 450px;
+    min-width: 380px;
+    max-width: 380px;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1441px) {
+  .focus-mode .timeline-chapter {
+    height: 450px;
+    min-width: 380px;
+    max-width: 380px;
+  }
+  
+  .focus-mode .timeline-chapter.is-active {
+    height: 470px;
+    min-width: 400px;
+    max-width: 400px;
+  }
+}
+
+/* Card content responsive */
+.focus-mode .timeline-chapter .chapter-content {
+  height: 100%;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Story area with responsive height */
+.focus-mode .timeline-chapter .chapter-story {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 250px;
+  margin-bottom: 1rem;
+}
+
+@media (max-height: 800px) {
+  .focus-mode .timeline-chapter .chapter-story {
+    max-height: 220px;
+  }
+}
+
+@media (max-height: 700px) {
+  .focus-mode .timeline-chapter .chapter-story {
+    max-height: 200px;
+  }
+  
+  .focus-mode .timeline-chapter {
+    height: 380px;
+  }
+  
+  .focus-mode .timeline-chapter.is-active {
+    height: 400px;
+  }
+}
+
+/* Text size responsive */
+.focus-mode .timeline-chapter .story-paragraph {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .focus-mode .timeline-chapter .story-paragraph {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .focus-mode .timeline-chapter .chapter-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Exit button responsive */
+@media (max-width: 768px) {
+  .focus-mode-btn[style*="position: fixed"] {
+    top: 10px !important;
+    left: 10px !important;
+    padding: 8px 16px !important;
+    font-size: 0.9rem !important;
+  }
+}
+.focus-mode-instructions {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Chapter Footer */
+.chapter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f5e9d9;
+}
+
+/* Mood Tags */
+.mood-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(179, 122, 78, 0.1);
+  color: #8b5a2b;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: 1px solid rgba(179, 122, 78, 0.3);
+}
+
+/* Story Paragraph Animations */
+.story-paragraph {
+  animation: fadeUp 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(10px);
+  margin-bottom: 1rem;
+}
+
+.story-paragraph:nth-child(1) { animation-delay: 0.1s; }
+.story-paragraph:nth-child(2) { animation-delay: 0.3s; }
+.story-paragraph:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Significance Box Animation */
+.significance-box {
+  animation: slideInLeft 0.5s ease 0.7s forwards;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .timeline-controls {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .focus-mode-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .audio-availability-hint {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .historical-journey.focus-mode {
+    padding: 1rem;
+  }
+  
+  .historical-journey.focus-mode .timeline-chapter {
+    flex: 0 0 90%;
+  }
+  
+  .chapter-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .audio-narration-btn {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .chapter-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+}
+
+/* Whispered History Effect */
+.timeline-chapter::before {
+  content: "History whispers here…";
+  position: absolute;
+  top: -30px;
+  left: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #b37a4e;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+  font-weight: 500;
+}
+
+.timeline-chapter:hover::before {
+  opacity: 0.8;
+}
+
+/* FIX 1: Focus Mode में cards को faded नहीं दिखना चाहिए */
+.historical-journey.focus-mode .timeline-chapter {
+  opacity: 1 !important;
+  transform: scale(1.02) !important;
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-active {
+  opacity: 1 !important;
+  transform: scale(1.05) !important;
+}
+
+/* FIX 2: Focus Mode में active card highlight करें */
+.historical-journey.focus-mode .timeline-chapter.is-active .chapter-content {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 2px solid #b37a4e !important;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* FIX 3: Normal mode में सिर्फ non-active cards faded हों */
+.timeline-chapter:not(.is-active) {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.timeline-chapter.is-active {
+  opacity: 1;
+}
+
+/* FIX 4: Read Full Story button को ठीक से दिखाएं */
+.read-more-btn {
+  background: none;
+  border: none;
+  color: #b37a4e;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.8rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s;
+  width: 100%;
+  justify-content: center;
+  border-top: 1px solid #f5e9d9;
+  margin-top: 1rem;
+}
+
+.read-more-btn:hover {
+  color: #8b5a2b;
+}
+
+/* FIX 5: Listen button styling */
+.audio-narration-btn {
+  background: rgba(179, 122, 78, 0.1);
+  border: 1px solid rgba(179, 122, 78, 0.3);
+  color: #8b5a2b;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.audio-narration-btn:hover {
+  background: rgba(179, 122, 78, 0.2);
+  transform: translateY(-2px);
+}
+
+.audio-narration-btn.is-playing {
+  background: rgba(139, 90, 43, 0.2);
+  border-color: #8b5a2b;
+}
+
+/* FIX 6: Focus mode में chapter header fix */
+.historical-journey.focus-mode .chapter-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.historical-journey.focus-mode .chapter-title {
+  font-size: 1.8rem;
+  color: #2c1810;
+  margin: 0.5rem 0;
+}
+
+/* FIX 7: Story content visibility */
+.full-story {
+  display: block !important;
+  opacity: 1 !important;
+  animation: fadeIn 0.5s ease !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* FIX 8: Ensure expanded content shows properly */
+.timeline-chapter .chapter-content .full-story {
+  display: none;
+}
+
+.timeline-chapter .chapter-content .story-preview {
+  display: block;
+}
+
+.timeline-chapter.expanded .chapter-content .full-story {
+  display: block;
+}
+
+.timeline-chapter.expanded .chapter-content .story-preview {
+  display: none;
+}
+
+/* FIX 9: Add expanded class to chapter when read more is clicked */
+.timeline-chapter.expanded {
+  background: linear-gradient(145deg, #ffffff, #faf5ed);
+}
+
+/* FIX 10: Focus mode में scroll behavior */
+.historical-journey.focus-mode .horizontal-timeline-track {
+  scroll-snap-type: x mandatory;
+  justify-content: flex-start;
+}
+
+.historical-journey.focus-mode .timeline-chapter {
+  scroll-snap-align: center;
+}
+/* FIX: Focus Mode Overlay */
+.focus-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* FIX: Audio button text spacing */
+.audio-btn-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* FIX: Chapter expanded state */
+.timeline-chapter.expanded .chapter-content {
+  background: linear-gradient(145deg, #ffffff, #faf5ed);
+  border-color: #b37a4e;
+}
+
+.timeline-chapter.expanded .read-more-btn {
+  color: #8b5a2b;
+  font-weight: 700;
+}
+
+/* FIX: Ensure content visibility in all modes */
+.historical-journey .full-story,
+.historical-journey.focus-mode .full-story {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.historical-journey .story-preview,
+.historical-journey.focus-mode .story-preview {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* FIX: Toggle properly between preview and full story */
+.timeline-chapter .full-story {
+  display: none;
+}
+
+.timeline-chapter.expanded .full-story {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+.timeline-chapter .story-preview {
+  display: block;
+}
+
+.timeline-chapter.expanded .story-preview {
+  display: none;
+}
+
+/* FIX: Focus mode में chapter height */
+.historical-journey.focus-mode .timeline-chapter {
+  height: auto;
+  min-height: 400px;
+}
+
+/* FIX: Mobile responsiveness */
+@media (max-width: 768px) {
+  .timeline-chapter {
+    flex: 0 0 85%;
+  }
+  
+  .historical-journey.focus-mode .timeline-chapter {
+    flex: 0 0 90%;
+    min-height: 350px;
+  }
+  
+  .chapter-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .audio-narration-btn {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* FIXED: Card opacity states */
+.timeline-chapter {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.timeline-chapter.is-dimmed {
+  opacity: 0.4;
+  transform: translateY(4px);
+}
+
+.timeline-chapter.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: #b37a4e;
+}
+
+.timeline-chapter.is-active .chapter-marker {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 12px rgba(179, 122, 78, 0.2);
+}
+
+/* Active indicator on marker */
+.active-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: #b37a4e;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* FIXED: Focus Mode - NO faded cards */
+.historical-journey.focus-mode .timeline-chapter {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-active {
+  transform: scale(1.05) !important;
+  border: 2px solid #d4a574 !important;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-dimmed {
+  opacity: 0.8 !important;
+}
+
+/* Progress rail system */
+.timeline-progress-container {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+}
+
+.timeline-rail {
+  width: 100%;
+  height: 6px;
+  background: #e8d9c5;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #d4a574, #b37a4e);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+.timeline-progress::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: #8b5a2b;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(139, 90, 43, 0.4);
+}
+
+/* Typewriter effect */
+.typewriter-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.3s forwards;
+}
+
+.typewriter-dot {
+  width: 6px;
+  height: 6px;
+  background: #b37a4e;
+  border-radius: 50%;
+  animation: typewriterDots 1.4s infinite ease-in-out;
+}
+
+.typewriter-dot:nth-child(1) { animation-delay: -0.32s; }
+.typewriter-dot:nth-child(2) { animation-delay: -0.16s; }
+.typewriter-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typewriterDots {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.typewriter-text {
+  font-size: 0.9rem;
+  color: #8b5a2b;
+  font-weight: 500;
+}
+
+/* Typewriter text effect for story */
+.story-paragraph.typewriter-text {
+  opacity: 0;
+  animation: typewriterReveal 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes typewriterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ambient sound indicators */
+.ambient-sound-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(179, 122, 78, 0.1);
+  border-radius: 15px;
+  margin-top: 0.5rem;
+  border: 1px solid rgba(179, 122, 78, 0.2);
+}
+
+.ambient-icon {
+  font-size: 0.9rem;
+  animation: gentlePulse 3s infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.ambient-text {
+  font-size: 0.8rem;
+  color: #8b5a2b;
+  font-weight: 500;
+}
+
+.ambient-sound-control {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+}
+
+.ambient-toggle-btn {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid rgba(212, 165, 116, 0.5);
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.ambient-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(212, 165, 116, 0.8);
+}
+
+.ambient-toggle-icon {
+  font-size: 1rem;
+}
+
+.ambient-toggle-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ambient-toggle-status {
+  font-size: 0.8rem;
+  background: #059669;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+}
+
+/* FIXED: Focus overlay */
+.focus-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9998;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Ensure chapter content is clickable in focus mode */
+.historical-journey.focus-mode .chapter-content,
+.historical-journey.focus-mode .audio-narration-btn,
+.historical-journey.focus-mode .read-more-btn {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Scroll snapping in focus mode */
+.historical-journey.focus-mode .horizontal-timeline-track {
+  scroll-snap-type: x mandatory;
+}
+
+.historical-journey.focus-mode .timeline-chapter {
+  scroll-snap-align: center;
+}
+
+/* Hover effects */
+.timeline-chapter:hover:not(.is-active) {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+.timeline-chapter:hover .chapter-content::before {
+  width: 6px;
+  background: linear-gradient(180deg, #d4a574, #8b5a2b);
+}
+
+/* Whispered history effect */
+.timeline-chapter::before {
+  content: "History whispers here…";
+  position: absolute;
+  top: -25px;
+  left: 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #b37a4e;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+  font-weight: 500;
+}
+
+.timeline-chapter:hover::before {
+  opacity: 0.8;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .timeline-chapter {
+    flex: 0 0 85%;
+  }
+  
+  .historical-journey.focus-mode .timeline-chapter {
+    flex: 0 0 90%;
+  }
+  
+  .ambient-sound-control {
+    bottom: 1rem;
+  }
+  
+  .ambient-toggle-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Focus Mode Overlay */
+.focus-mode {
+  background: rgba(0, 0, 0, 0.85);
+  transition: background 0.3s ease;
+}
+
+/* Focus Mode में सभी cards faded */
+.focus-mode .timeline-card {
+  opacity: 0.25;
+  transform: scale(0.96);
+  transition: all 0.3s ease;
+  pointer-events: auto; /* clickable रहे */
+}
+
+/* Active Card को clear और highlighted दिखाएं */
+.focus-mode .timeline-card.is-active {
+  opacity: 1;
+  transform: scale(1);
+  background: #fffaf2;
+  box-shadow: 0 0 0 2px #c58a44;
+}
+
+/* FOCUS MODE FIXES */
+
+/* Focus mode overlay - sirf background */
+.focus-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease;
+}
+
+/* Focus mode container - content area */
+.focus-mode .timeline-scroll-wrapper {
+  position: relative;
+  z-index: 1001;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Focus mode me sab cards dimmed */
+.focus-mode .timeline-chapter {
+  opacity: 0.4;
+  transform: scale(0.95);
+  filter: blur(1px);
+  transition: all 0.3s ease;
+  pointer-events: auto !important;
+}
+
+/* Focus mode me active card full visible */
+.focus-mode .timeline-chapter.is-active {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  filter: blur(0) !important;
+  box-shadow: 0 0 0 3px #c58a44, 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 1002;
+  background: linear-gradient(135deg, #fffaf2 0%, #f5e9d9 100%);
+  border: 1px solid #e0c9a6;
+}
+
+/* Focus mode me baki cards par hover karne par thoda highlight */
+.focus-mode .timeline-chapter:hover {
+  opacity: 0.7;
+  transform: scale(0.98);
+  filter: blur(0.5px);
+}
+/* Hover glow effect */
+.timeline-chapter:hover {
+  background: linear-gradient(145deg, #ffffff, #faf5ed);
+}
+
+.timeline-chapter:hover .chapter-content::before {
+  width: 6px;
+  background: linear-gradient(180deg, #d4a574, #8b5a2b);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .story-title {
+    font-size: 2.8rem;
+  }
+
+  .fort-cinematic-hero {
+    height: 50vh;
+  }
+
+  .fort-legend {
+    font-size: 2.2rem;
+  }
+
+  .historical-journey {
+    padding: 3rem 0 4rem;
+  }
+
+  .journey-subtitle {
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .horizontal-timeline-track {
+    padding: 0 1rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .timeline-chapter {
+    flex: 0 0 300px;
+  }
+
+  .chapter-content {
+    min-height: 260px;
+    padding: 1.5rem;
+  }
+
+  .chapter-year {
+    font-size: 0.65rem;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  .magazine-section {
+    padding: 2rem;
+  }
+
+  .time-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .time-option {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .time-slot {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .back-to-forts {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Scroll Progress */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4a574, #b37a4e);
+  transform-origin: 0%;
+  z-index: 1001;
+}
+
+/* LANGUAGE TOGGLE ABOVE TIMELINE */
+.timeline-header-bar {
+  max-width: 1200px;
+  margin: 0 auto 1rem;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.timeline-language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e8d9c5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.timeline-language-label {
+  font-size: 0.85rem;
+  color: #5a4a3a;
+  font-weight: 500;
+}
+
+.timeline-language-toggle-buttons {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.language-toggle-btn {
+  border: none;
+  background: transparent;
+  color: #8b5a2b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-toggle-btn.is-active {
+  background: #b37a4e;
+  color: #ffffff;
+}
+
+.language-toggle-btn:not(.is-active):hover {
+  background: rgba(179, 122, 78, 0.08);
+}
+
+@media (max-width: 768px) {
+  .timeline-header-bar {
+    padding: 0 1rem;
+    justify-content: center;
+  }
+}
+
+/* TIMELINE CARD STATE NORMALIZATION */
+.timeline-chapter {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.timeline-chapter.is-active {
+  opacity: 1;
+  transform: translateY(0) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: #b37a4e;
+}
+
+.timeline-chapter.is-dimmed {
+  opacity: 0.65;
+  transform: translateY(3px);
+  filter: none;
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-dimmed {
+  opacity: 0.75;
+}
+
+.historical-journey.focus-mode .timeline-chapter.is-active {
+  transform: translateY(0) scale(1.05);
+}
+
+/* Focus mode container: avoid clipping with vh */
+.historical-journey.focus-mode {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 4rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.historical-journey.focus-mode .timeline-scroll-wrapper {
+  flex: 0 1 auto;
+  max-height: 80vh;
+}
+
+@media (max-width: 768px) {
+  .historical-journey.focus-mode {
+    padding-top: 3.5rem;
+    padding-inline: 1rem;
+    justify-content: flex-start;
+  }
+
+  .historical-journey.focus-mode .timeline-scroll-wrapper {
+    max-height: none;
+  }
+}
