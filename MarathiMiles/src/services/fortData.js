@@ -322,167 +322,267 @@ export const maharashtraForts = [
       {
         name: "Misal Pav",
         image: "/assets/forts/shivneri/hero.jpg",
-        description: "A fiery curry of sprouted lentils topped with crispy farsan, served with soft bread rolls—said to be favored by Maratha soldiers for its energy-giving properties.",
-        culturalNote: "Traditionally eaten by warriors before battle",
+        description: "A spicy sprouted moth bean curry topped with farsan, onions, and lemon. Originally a peasant dish, it's now a beloved breakfast across Maharashtra. Junnar has its own spicy variant.",
+        culturalNote: "Best eaten at local eateries near the bus stand.",
         spiceLevel: "High",
         bestTime: "Breakfast",
         priceRange: "₹80-120",
         heritageTip: "Try it with extra chopped onions and lemon for authentic taste"
       },
       {
-        name: "Pithla Bhakri",
-        image: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?w=800&auto=format&fit=crop",
-        description: "Traditional gram flour curry slow-cooked with spices, served with rustic millet flatbread. A staple of rural Maharashtra, this dish sustained farmers and soldiers alike.",
-        culturalNote: "Peasant food that became royal favorite",
-        spiceLevel: "Medium",
+        name: "Bhakri with Thecha",
+        image: "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=1000&auto=format&fit=crop",
+        description: "Jowar or Bajra flatbread served with fiery green chili chutney (Thecha). The staple food of the Mawalas (Shivaji's soldiers), providing lasting energy for fort climbing.",
+        culturalNote: "The diet of the Maratha warriors",
+        spiceLevel: "Very High",
         bestTime: "Lunch",
-        priceRange: "₹60-90",
-        heritageTip: "Best enjoyed with fresh green chilies and raw onions"
+        priceRange: "₹50-100",
+        heritageTip: "Eat with raw onion to balance the spice"
       },
       {
-        name: "Puran Poli",
-        image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop",
-        description: "Sweet flatbread stuffed with lentil and jaggery filling, traditionally prepared during festivals and special occasions.",
-        culturalNote: "Festive sweet often made during Shivaji Jayanti",
-        spiceLevel: "Sweet",
-        bestTime: "Evening",
-        priceRange: "₹40-60",
-        heritageTip: "Tastes best with a dollop of ghee on top"
+        name: "Solkadhi",
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1000&auto=format&fit=crop",
+        description: "A cooling drink made from kokum and coconut milk. Though a Konkan specialty, it's widely available here to beat the heat after a trek.",
+        culturalNote: "Digestive and cooling",
+        spiceLevel: "Mild",
+        bestTime: "Post-Trek",
+        priceRange: "₹30-50",
+        heritageTip: "Don't miss the garlic hint in the drink"
+      },
+      {
+        name: "Maswadi",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8Xf2g0k3k92k2m2522222222222222222&s",
+        description: "A delicacy from the Pune region, it's a stuffed gram flour roll with a spicy coconut-garlic-sesame filling, often served with curry.",
+        culturalNote: "A special occasion dish",
+        spiceLevel: "Medium",
+        bestTime: "Lunch",
+        priceRange: "₹100-150",
+        heritageTip: "Enjoy with hot bhakri"
       }
     ],
 
     // Enhanced Shopping Areas
     shopping: [
       {
-        name: "Shivneri Heritage Market",
-        description: "A curated market featuring artisans from surrounding villages, specializing in traditional Maratha-era crafts. Each stall tells a story of craftsmanship passed down through generations.",
-        highlights: ["Handwoven Paithani textiles", "Copperware replicas of fort artifacts", "Historical miniature paintings", "Traditional spice blends", "Handcrafted leather goods"],
-        timing: "8:00 AM - 6:00 PM",
-        bestFor: "Authentic souvenirs and handicrafts",
-        bargainingTip: "Politely negotiate - it's part of the local culture!",
-        mustBuy: "Miniature Shivaji statue, locally made"
+        name: "Junnar Weekly Market",
+        description: "Held every Sunday, this traditional market offers a glimpse into rural life. Farmers sell fresh vegetables, local spices, and agricultural tools.",
+        highlights: ["Fresh Produce", "Spices", "Agricultural Tools"],
+        timing: "Sundays, 7:00 AM - 2:00 PM",
+        bestFor: "Local vibes and photography",
+        bargainingTip: "Prices are usually fixed but can bargain on bulk",
+        mustBuy: "Homemade spice mixes"
       },
       {
-        name: "Junnar Local Bazaar",
-        description: "Vibrant weekly market where you can experience local life and find everything from fresh produce to traditional utensils.",
-        highlights: ["Fresh local produce", "Traditional kitchenware", "Handmade jewelry", "Local sweets", "Spices and herbs"],
-        timing: "Every Thursday, 7:00 AM - 2:00 PM",
-        bestFor: "Cultural immersion and local products",
-        bargainingTip: "Best prices in the morning hours",
-        mustBuy: "Local honey and chivda (spicy snack mix)"
+        name: "Sahyadri Handicrafts",
+        description: "Small shops selling tribal Warli art, which is indigenous to the North Sahyadri region. Great for souvenirs.",
+        highlights: ["Warli Paintings", "Artifacts", "Bamboo Crafts"],
+        timing: "10:00 AM - 7:00 PM",
+        bestFor: "Art lovers and souvenir hunters",
+        bargainingTip: "Good for supporting local artisans",
+        mustBuy: "Warli painted coaster or frame"
+      },
+      {
+        name: "Farm Fresh Outlets",
+        description: "The Junnar-Narayangaon belt is famous for grape cultivation. Buy export-quality raisins and fresh grapes directly from farm outlets.",
+        highlights: ["Grapes", "Raisins", "Fruit pulps"],
+        timing: "9:00 AM - 6:00 PM",
+        bestFor: "Fresh farm produce",
+        bargainingTip: "Check for seasonal discounts",
+        mustBuy: "Black raisins"
+      },
+      {
+        name: "Local Sweet Marts",
+        description: "Traditional sweet shops offering fresh milk-based sweets, famous in this dairy-rich belt.",
+        highlights: ["Pedha", "Mawa", "Basundi"],
+        timing: "9:00 AM - 9:00 PM",
+        bestFor: "Sweet tooth",
+        bargainingTip: "Fixed prices",
+        mustBuy: "Junnar Pedha"
       }
     ],
 
     // Enhanced Cultural Experiences
     experiences: [
       {
-        name: "Birth Chamber Meditation Experience",
-        duration: "1 hour",
-        description: "A guided meditation session in the actual room where Shivaji was born, focusing on the energy of new beginnings and connecting with historical significance.",
-        includes: ["Historical context narration", "Guided meditation", "Traditional prayers", "Energy healing techniques", "Personal reflection time"],
-        bestFor: "Spiritual seekers and history enthusiasts",
-        price: "₹500 per person",
-        groupSize: "Max 10 people",
-        timeSlot: "Early morning or sunset",
-        specialNote: "Silent contemplation encouraged"
+        name: "Shiv Jayanti Celebrations",
+        duration: "Half Day",
+        description: "Witness the grandeur of Chhatrapati Shivaji Maharaj's birth anniversary (19th Feb) at his birthplace. The fort comes alive with decorations, palanquins, and traditional music.",
+        includes: ["Processions", "Cultural Programs", "Decorations"],
+        bestFor: "Anyone visiting in February",
+        price: "Free",
+        groupSize: "Large Crowds",
+        timeSlot: "February 19th",
+        specialNote: "Very crowded, plan ahead"
       },
       {
-        name: "Fort Architecture & Engineering Walk",
+        name: "Powada Performance",
+        duration: "30-60 mins",
+        description: "Listen to the 'Powada', a traditional ballad genre that narrates historical events and heroic deeds of the Maratha warriors, performed by Shahirs.",
+        includes: ["Live Performance", "Historical Narration"],
+        bestFor: "Music & History Lovers",
+        price: "Donation based / Event based",
+        groupSize: "Any",
+        timeSlot: "Usually evenings or weekends",
+        specialNote: "Check local schedule"
+      },
+      {
+        name: "Kadelot Experience",
+        duration: "30 mins",
+        description: "Visit the 'Kadelot' point (execution point). While grim, standing there gives a chilling realization of the strict justice system of the Maratha administration.",
+        includes: ["Guided view", "Historical context"],
+        bestFor: "History Buffs",
+        price: "Included in entry",
+        groupSize: "Any",
+        timeSlot: "Daytime",
+        specialNote: "Steep drop, be careful"
+      },
+      {
+        name: "Buddhist Caves Tour",
         duration: "2 hours",
-        description: "Expert-led exploration of the fort's military innovations, water conservation systems, and construction techniques that made it impregnable for centuries.",
-        includes: ["Engineering insights", "Photography opportunities", "Interactive demonstrations", "Architectural diagrams", "Q&A session"],
-        bestFor: "Architecture students and engineering enthusiasts",
-        price: "₹750 per person",
-        groupSize: "Max 15 people",
-        timeSlot: "Morning or afternoon",
-        specialNote: "Includes hands-on demonstrations"
-      },
-      {
-        name: "Maratha Martial Arts Demonstration",
-        duration: "1.5 hours",
-        description: "Live demonstration of traditional Maratha combat techniques including mardani khel (spear play), dandpatta (gauntlet sword), and other weapons used by Shivaji's warriors.",
-        includes: ["Live demonstrations", "Historical context", "Photo opportunities with weapons", "Basic training session", "Cultural significance explanation"],
-        bestFor: "History buffs and martial arts enthusiasts",
-        price: "₹600 per person",
-        groupSize: "Max 20 people",
-        timeSlot: "Morning sessions only",
-        specialNote: "Safe participation allowed under supervision"
+        description: "Explore the ancient rock-cut caves surrounding Shivneri (like Lenyadri). These caves predate the Maratha empire, showing the region's ancient trade importance.",
+        includes: ["Cave exploration", "Sculpture viewing"],
+        bestFor: "Heritage Explorers",
+        price: "Minimal entry fee",
+        groupSize: "Any",
+        timeSlot: "Daytime",
+        specialNote: "Requires climbing steps"
       }
     ],
 
     // Enhanced Itinerary Data
     itineraries: {
+      "2h": [
+        {
+          time: "00:00 - 00:30",
+          activity: "Base to Maha Darwaja",
+          description: "Start the climb. Pass through the seven defensive gates.",
+          tip: "Wear grip shoes",
+          duration: "30 min"
+        },
+        {
+          time: "00:30 - 01:15",
+          activity: "Shiv Janmasthan",
+          description: "Visit the birth place building and majestic statue of young Shivaji and Jijabai.",
+          tip: "Silence observed inside",
+          duration: "45 min"
+        },
+        {
+          time: "01:15 - 01:45",
+          activity: "Badami Talav",
+          description: "Quick look at the water reservoir and surrounding ruins.",
+          tip: "Good photo spot",
+          duration: "30 min"
+        },
+        {
+          time: "01:45 - 02:00",
+          activity: "Descent",
+          description: "Return to base via the main route.",
+          tip: "Watch your step",
+          duration: "15 min"
+        }
+      ],
+      "4h": [
+        {
+          time: "00:00 - 01:00",
+          activity: "Detailed Climb",
+          description: "Observe the architecture of all 7 gates carefully (Maha Darwaja, Ganesh Darwaja, etc.).",
+          tip: "Read the info boards",
+          duration: "1 hour"
+        },
+        {
+          time: "01:00 - 02:00",
+          activity: "Fort Plateau Exploration",
+          description: "Visit Shiv Janmasthan, Kadelot Point, and Ganga-Jamuna water cisterns.",
+          tip: "Carry water",
+          duration: "1 hour"
+        },
+        {
+          time: "02:00 - 03:00",
+          activity: "Ambarkhana & Storage",
+          description: "Explore the grain storage houses and ruins of palaces.",
+          tip: "Historical significance",
+          duration: "1 hour"
+        },
+        {
+          time: "03:00 - 04:00",
+          activity: "Relaxed Descent",
+          description: "Walk down enjoying the Sahyadri views.",
+          tip: "Sunset view is great",
+          duration: "1 hour"
+        }
+      ],
       halfDay: [
         {
-          time: "9:00 AM",
-          activity: "Guided Tour of Birthplace",
-          description: "Visit the exact location where Shivaji Maharaj was born with historical narration",
-          tip: "Carry water and wear comfortable walking shoes",
-          audioGuide: "Available for this activity",
+          time: "08:00 - 11:30",
+          activity: "Comprehensive Fort Tour",
+          description: "Complete exploration of Shivneri Fort including all points of interest.",
+          tip: "Start early",
+          duration: "3.5 hours"
+        },
+        {
+          time: "11:30 - 12:30",
+          activity: "Lunch Break",
+          description: "Enjoy Pithla Bhakri at a local khanaval (eatery).",
+          tip: "Try local authentic taste",
+          duration: "1 hour"
+        },
+        {
+          time: "12:30 - 13:00",
+          activity: "Travel to Lenyadri",
+          description: "Short drive to Lenyadri Caves.",
+          tip: "Hire auto/taxi available",
+          duration: "30 min"
+        },
+        {
+          time: "13:00 - 14:30",
+          activity: "Lenyadri Girijatmaj",
+          description: "Climb to the Girijatmaj Ganpati (Ashtavinayak) cave temple.",
+          tip: "Monkeys present, be careful",
           duration: "1.5 hours"
-        },
-        {
-          time: "11:00 AM",
-          activity: "Explore Fortifications",
-          description: "Walk along the battlements and understand the military architecture",
-          tip: "Perfect for photography enthusiasts",
-          audioGuide: "Available for this activity",
-          duration: "1 hour"
-        },
-        {
-          time: "1:00 PM",
-          activity: "Traditional Lunch Experience",
-          description: "Enjoy authentic Maharashtrian thali at a local eatery",
-          tip: "Try the traditional Pithla Bhakri with buttermilk",
-          audioGuide: "Food history narration available",
-          duration: "1 hour"
         }
       ],
       oneDay: [
         {
-          time: "8:00 AM",
-          activity: "Sunrise at Shivneri",
-          description: "Witness the fort awakening with the first rays of sun",
-          tip: "Arrive early for the best experience and photography",
-          audioGuide: "Sunrise meditation audio available",
-          duration: "1 hour",
-          highlight: "⭐⭐⭐⭐⭐ Must-do experience"
+          time: "07:00 - 11:00",
+          activity: "Shivneri Fort",
+          description: "Early morning trek to beat the heat. Full exploration.",
+          tip: "Carry breakfast",
+          duration: "4 hours"
         },
         {
-          time: "10:00 AM",
-          activity: "Comprehensive Historical Tour",
-          description: "Detailed exploration of all major points with expert guide",
-          tip: "Take notes for deeper understanding",
-          audioGuide: "Available in multiple languages",
-          duration: "2 hours",
-          highlight: "Deep historical insights"
+          time: "11:00 - 12:00",
+          activity: "Junnar Heritage Walk",
+          description: "Visit old wadas and temples in Junnar town.",
+          tip: "Photography permitted",
+          duration: "1 hour"
         },
         {
-          time: "1:00 PM",
-          activity: "Traditional Cooking Experience",
-          description: "Learn to make and enjoy local cuisine",
-          tip: "Participate in the cooking demonstration for hands-on experience",
-          audioGuide: "Recipe and cultural history narration",
-          duration: "1.5 hours",
-          highlight: "Interactive culinary experience"
+          time: "12:00 - 13:00",
+          activity: "Lunch",
+          description: "Authentic Maharashtrian Thali.",
+          tip: "Ask for spicy Misal",
+          duration: "1 hour"
         },
         {
-          time: "3:00 PM",
-          activity: "Water Systems Exploration",
-          description: "Study the ancient water conservation techniques",
-          tip: "Great for engineering students and sustainability enthusiasts",
-          audioGuide: "Technical explanations available",
-          duration: "1.5 hours",
-          highlight: "Ancient engineering marvels"
+          time: "13:00 - 15:00",
+          activity: "Lenyadri Caves",
+          description: "Visit the Ashtavinayak temple and caves.",
+          tip: "Steps climbing",
+          duration: "2 hours"
         },
         {
-          time: "5:00 PM",
-          activity: "Sunset Photography Session",
-          description: "Capture the golden hour from strategic viewpoints",
-          tip: "Bring your camera and tripod for best results",
-          audioGuide: "Photography tips and historical context",
-          duration: "1 hour",
-          highlight: "Best photo opportunities"
+          time: "15:00 - 17:00",
+          activity: "Ozar Ganpati",
+          description: "Drive to Ozar Vighnahar (another Ashtavinayak) nearby.",
+          tip: "Beautiful riverside temple",
+          duration: "2 hours"
+        },
+        {
+          time: "17:00 - 18:00",
+          activity: "Sunset at Dam",
+          description: "Relax at Manikdoh Dam backwaters.",
+          tip: "Sunset point",
+          duration: "1 hour"
         }
       ]
     },

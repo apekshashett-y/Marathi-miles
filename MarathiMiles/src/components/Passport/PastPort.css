@@ -499,6 +499,7 @@
   height: 100%;
   z-index: 1;
 }
+
 .immersive-viewport-image {
   position: absolute;
   top: 0;
@@ -581,7 +582,8 @@
 
 /* FIX FOR FULLSCREEN MODE INTERACTION */
 .immersive-viewport-overlay {
-  pointer-events: none !important; /* MOST IMPORTANT FIX */
+  pointer-events: none !important;
+  /* MOST IMPORTANT FIX */
 }
 
 .immersive-viewport-frame {
@@ -686,8 +688,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .auto-play-status {
@@ -816,11 +825,12 @@
   .immersive-drag-hint {
     font-size: 0.8rem;
   }
-  
+
   .immersive-viewport-frame {
     touch-action: pan-y;
   }
 }
+
 /* Full Immersive Mode - FIXED */
 .full-immersive-mode {
   position: fixed !important;
@@ -969,8 +979,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .auto-play-status {
@@ -1008,16 +1025,16 @@
   .immersive-drag-hint {
     font-size: 0.8rem;
   }
-  
+
   .immersive-viewport-frame {
     touch-action: pan-y;
   }
-  
+
   .full-immersive-mode .immersive-viewport-controls {
     bottom: 10px !important;
     right: 10px !important;
   }
-  
+
   .full-immersive-mode .exit-immersive-btn {
     bottom: 10px !important;
     padding: 10px 20px !important;
@@ -1069,8 +1086,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .auto-play-status {
@@ -1089,7 +1113,8 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out; /* Slower transition for museum feel */
+  transition: opacity 0.8s ease-in-out;
+  /* Slower transition for museum feel */
 }
 
 .immersive-viewport-image.is-active {
@@ -1122,7 +1147,7 @@
     font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
   }
-  
+
   .immersive-viewport-image {
     transition: opacity 0.6s ease-in-out;
   }
@@ -1229,8 +1254,16 @@
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  10%, 90% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
 }
 
 /* Exit button in fullscreen */
@@ -1287,8 +1320,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .auto-play-status {
@@ -1373,6 +1413,7 @@
 .immersive-cta:hover {
   transform: translateY(-2px);
 }
+
 /* 360° Container */
 .vr-experience-container {
   max-width: 1200px;
@@ -1800,6 +1841,7 @@
   transform: translateX(-3px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
 /* PastPort.css में नीचे जोड़ें */
 
 /* Timeline Progress Bar */
@@ -2110,13 +2152,15 @@
 
 /* Card height optimization */
 .focus-mode .timeline-chapter {
-  height: 450px; /* Reduced from 500px */
+  height: 450px;
+  /* Reduced from 500px */
   min-width: 380px;
   max-width: 380px;
 }
 
 .focus-mode .timeline-chapter.is-active {
-  height: 470px; /* Reduced from 520px */
+  height: 470px;
+  /* Reduced from 520px */
   min-width: 400px;
   max-width: 400px;
 }
@@ -2149,19 +2193,23 @@
   z-index: 9999;
   cursor: pointer;
 }
+
 /* COMPACT CARD LAYOUT */
 .focus-mode .timeline-chapter {
-  padding: 1.2rem; /* Reduced padding */
+  padding: 1.2rem;
+  /* Reduced padding */
 }
 
 .focus-mode .timeline-chapter .chapter-title {
-  font-size: 1.3rem; /* Slightly smaller title */
+  font-size: 1.3rem;
+  /* Slightly smaller title */
   margin-bottom: 0.5rem;
 }
 
 .focus-mode .timeline-chapter .era-tag,
 .focus-mode .timeline-chapter .mood-tag {
-  font-size: 0.8rem; /* Smaller tags */
+  font-size: 0.8rem;
+  /* Smaller tags */
   padding: 0.2rem 0.6rem;
   margin-right: 0.5rem;
 }
@@ -2170,6 +2218,7 @@
   padding: 0.4rem 0.8rem;
   font-size: 0.85rem;
 }
+
 /* FOCUS MODE RESPONSIVE FIXES */
 
 /* Base focus mode styles */
@@ -2214,28 +2263,28 @@
   .focus-mode {
     padding: 1rem;
   }
-  
+
   .focus-mode .timeline-chapter {
     height: 380px;
     min-width: 300px;
     max-width: 300px;
   }
-  
+
   .focus-mode .timeline-chapter.is-active {
     height: 400px;
     min-width: 320px;
     max-width: 320px;
   }
-  
+
   .focus-mode-header {
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
-  
+
   .focus-mode-title {
     font-size: 1.6rem;
   }
-  
+
   .focus-mode-subtitle {
     font-size: 0.95rem;
   }
@@ -2248,13 +2297,13 @@
     min-width: 330px;
     max-width: 330px;
   }
-  
+
   .focus-mode .timeline-chapter.is-active {
     height: 420px;
     min-width: 350px;
     max-width: 350px;
   }
-  
+
   .focus-mode .timeline-scroll-wrapper {
     max-width: 95%;
   }
@@ -2267,7 +2316,7 @@
     min-width: 360px;
     max-width: 360px;
   }
-  
+
   .focus-mode .timeline-chapter.is-active {
     height: 450px;
     min-width: 380px;
@@ -2282,7 +2331,7 @@
     min-width: 380px;
     max-width: 380px;
   }
-  
+
   .focus-mode .timeline-chapter.is-active {
     height: 470px;
     min-width: 400px;
@@ -2316,11 +2365,11 @@
   .focus-mode .timeline-chapter .chapter-story {
     max-height: 200px;
   }
-  
+
   .focus-mode .timeline-chapter {
     height: 380px;
   }
-  
+
   .focus-mode .timeline-chapter.is-active {
     height: 400px;
   }
@@ -2337,7 +2386,7 @@
     font-size: 0.9rem;
     line-height: 1.4;
   }
-  
+
   .focus-mode .timeline-chapter .chapter-title {
     font-size: 1.2rem;
   }
@@ -2352,6 +2401,7 @@
     font-size: 0.9rem !important;
   }
 }
+
 .focus-mode-instructions {
   position: absolute;
   bottom: 2rem;
@@ -2397,9 +2447,17 @@
   margin-bottom: 1rem;
 }
 
-.story-paragraph:nth-child(1) { animation-delay: 0.1s; }
-.story-paragraph:nth-child(2) { animation-delay: 0.3s; }
-.story-paragraph:nth-child(3) { animation-delay: 0.5s; }
+.story-paragraph:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.story-paragraph:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.story-paragraph:nth-child(3) {
+  animation-delay: 0.5s;
+}
 
 @keyframes fadeUp {
   to {
@@ -2429,35 +2487,35 @@
     gap: 1rem;
     padding: 0 1rem;
   }
-  
+
   .focus-mode-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .audio-availability-hint {
     width: 100%;
     justify-content: center;
   }
-  
+
   .historical-journey.focus-mode {
     padding: 1rem;
   }
-  
+
   .historical-journey.focus-mode .timeline-chapter {
     flex: 0 0 90%;
   }
-  
+
   .chapter-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .audio-narration-btn {
     margin-left: 0;
     margin-top: 0.5rem;
   }
-  
+
   .chapter-footer {
     flex-direction: column;
     gap: 0.5rem;
@@ -2589,6 +2647,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2626,6 +2685,7 @@
 .historical-journey.focus-mode .timeline-chapter {
   scroll-snap-align: center;
 }
+
 /* FIX: Focus Mode Overlay */
 .focus-mode-overlay {
   position: fixed;
@@ -2699,18 +2759,18 @@
   .timeline-chapter {
     flex: 0 0 85%;
   }
-  
+
   .historical-journey.focus-mode .timeline-chapter {
     flex: 0 0 90%;
     min-height: 350px;
   }
-  
+
   .chapter-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .audio-narration-btn {
     margin-left: 0;
     margin-top: 0.5rem;
@@ -2758,8 +2818,17 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 /* FIXED: Focus Mode - NO faded cards */
@@ -2836,13 +2905,29 @@
   animation: typewriterDots 1.4s infinite ease-in-out;
 }
 
-.typewriter-dot:nth-child(1) { animation-delay: -0.32s; }
-.typewriter-dot:nth-child(2) { animation-delay: -0.16s; }
-.typewriter-dot:nth-child(3) { animation-delay: 0s; }
+.typewriter-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typewriter-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.typewriter-dot:nth-child(3) {
+  animation-delay: 0s;
+}
 
 @keyframes typewriterDots {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
 }
 
 .typewriter-text {
@@ -2863,6 +2948,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2887,8 +2973,15 @@
 }
 
 @keyframes gentlePulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .ambient-text {
@@ -3007,15 +3100,15 @@
   .timeline-chapter {
     flex: 0 0 85%;
   }
-  
+
   .historical-journey.focus-mode .timeline-chapter {
     flex: 0 0 90%;
   }
-  
+
   .ambient-sound-control {
     bottom: 1rem;
   }
-  
+
   .ambient-toggle-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
@@ -3024,8 +3117,13 @@
 
 /* Fade in animation */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Focus Mode Overlay */
@@ -3039,7 +3137,8 @@
   opacity: 0.25;
   transform: scale(0.96);
   transition: all 0.3s ease;
-  pointer-events: auto; /* clickable रहे */
+  pointer-events: auto;
+  /* clickable रहे */
 }
 
 /* Active Card को clear और highlighted दिखाएं */
@@ -3099,6 +3198,7 @@
   transform: scale(0.98);
   filter: blur(0.5px);
 }
+
 /* Hover glow effect */
 .timeline-chapter:hover {
   background: linear-gradient(145deg, #ffffff, #faf5ed);
@@ -3189,6 +3289,77 @@
   background: linear-gradient(90deg, #d4a574, #b37a4e);
   transform-origin: 0%;
   z-index: 1001;
+}
+
+/* Explore More quick links */
+.explore-more {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding: 0 2rem;
+}
+
+.explore-more-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.explore-more-card {
+  border: none;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.explore-more-card--cuisine {
+  background: linear-gradient(135deg, #f97316, #facc15);
+}
+
+.explore-more-card--shopping {
+  background: linear-gradient(135deg, #ec4899, #f97316);
+}
+
+.explore-more-card--experiences {
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+}
+
+.explore-more-card--itinerary {
+  background: linear-gradient(135deg, #22c55e, #14b8a6);
+}
+
+.explore-more-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+  opacity: 0.95;
+}
+
+.explore-more-label {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .explore-more-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .explore-more {
+    padding: 0 1rem;
+  }
+
+  .explore-more-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* LANGUAGE TOGGLE ABOVE TIMELINE */
@@ -3310,5 +3481,201 @@
 
   .historical-journey.focus-mode .timeline-scroll-wrapper {
     max-height: none;
+  }
+}
+
+/* ==========================================================================
+   MAGAZINE LAYOUT STYLES - HERITAGE THEME (Moved/Adapted for Culture Section)
+   ========================================================================== */
+
+/* Section Containers */
+.detailed-sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.detailed-section {
+  position: relative;
+}
+
+/* HERO SECTION LAYOUT */
+.section-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  background: white;
+  /* Optional: Clean background */
+}
+
+/* Text Content (Left Side) */
+.section-hero .hero-content {
+  flex: 1;
+  max-width: 50%;
+  text-align: left;
+}
+
+.hero-eyebrow {
+  display: block;
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #b37a4e;
+  /* Heritage Orange */
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 2.5rem;
+  color: #2c1810;
+  /* Dark Brown */
+  margin: 0 0 0.5rem;
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+.hero-tagline {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: #b37a4e;
+  font-size: 1.1rem;
+  margin: 0 0 1.5rem;
+}
+
+.hero-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #5a4a3a;
+  /* Muted Brown */
+  max-width: 95%;
+}
+
+/* Image (Right Side) */
+.section-hero .hero-image-container {
+  flex: 1;
+  max-width: 50%;
+  position: relative;
+}
+
+.section-hero .hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  display: block;
+  object-fit: cover;
+  min-height: 350px;
+  max-height: 450px;
+}
+
+/* CULTURE LIST (Stacked Cards) */
+.culture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 600px;
+  /* Limit width to match hero text column roughly or visually centered? Screenshot shows full width but stacked. Let's stick to full width of container or constrained */
+  /* Re-reading req: "Same width as hero text column (not full screen)" -> Wait.
+     "Cards stacked vertically... Same width as hero text column (not full screen)"
+     Does this mean they should be aligned ONLY under the text column?
+     OR does it mean the cards themselves shouldn't be 100vw?
+     Usually, a list goes full width of the container (1200px).
+     If the user wants them aligned left under the text, I should wrap them differently.
+     BUT screenshot 2 shows cards taking up width. Let's look closer at screenshot 2 description.
+     "Right side: large featured image. Below: stacked experience cards".
+     It usually implies the cards take the full width below the hero, OR they are in a grid.
+     Ah, "Same width as hero text column (not full screen)" constraint.
+     This is interesting. If they are ONLY under the text, that's a column layout.
+     If they are below the hero, they usually span full width.
+     Let's assume standard full container width (max 1200px) but maybe not edge-to-edge.
+     Current .detailed-sections-container is 1200px.
+     Let's make them fill the container.
+     Wait, "Same width as hero text column" constraint is tricky. The hero text column is 50%.
+     If I put them under the text column, the right side is empty?
+     If I put them below the whole hero, they are wider.
+     Let's verify the screenshot 2 again visually (mental model).
+     It shows Hero (Text | Image).
+     Below it, 4 cards.
+     They look wide.
+     Let's stick to full container width for cards as it looks better. The constraint "not full screen" implies containment in 1200px.
+     Actually, looking at the code I wrote: .culture-list gets detailed-section's width.
+  */
+  max-width: 100%;
+}
+
+/* CULTURE CARD */
+.culture-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e8d9c5;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.culture-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #b37a4e;
+}
+
+.culture-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  color: #2c1810;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.culture-card-desc {
+  font-size: 1rem;
+  color: #5a4a3a;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.culture-card-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #8b5a2b;
+  font-weight: 600;
+  background: rgba(179, 122, 78, 0.08);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+}
+
+.meta-icon {
+  font-size: 1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .section-hero {
+    flex-direction: column-reverse;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .section-hero .hero-content,
+  .section-hero .hero-image-container {
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
   }
 }

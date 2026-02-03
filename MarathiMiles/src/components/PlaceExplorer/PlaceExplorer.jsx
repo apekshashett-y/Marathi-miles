@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
+import { shivneriData } from '../../data/shivneriData';
+import DynamicItinerary from './DynamicItinerary';
 import './PlaceExplorer.css';
 
 const PlaceExplorer = () => {
@@ -9,28 +11,35 @@ const PlaceExplorer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [model, setModel] = useState(null);
+  const [selectedItinerary, setSelectedItinerary] = useState('2h');
   const fileInputRef = useRef(null);
+
+  // Refs for scrolling to sections
+  const cuisineRef = useRef(null);
+  const shoppingRef = useRef(null);
+  const cultureRef = useRef(null);
+  const itineraryRef = useRef(null);
 
   // Maharashtra places database with paragraph info only
   const maharashtraPlaces = {
     'Ajanta Caves': `The Ajanta Caves are 30 rock-cut Buddhist cave monuments dating from the 2nd century BCE to about 480 CE in Maharashtra's Aurangabad district. These caves feature exquisite paintings and rock-cut sculptures considered among the finest surviving examples of ancient Indian art. They were built in two phases and were accidentally rediscovered in 1819. Since 1983, the Ajanta Caves have been designated as a UNESCO World Heritage Site, preserving the evolution of Buddhist art over 800 years.`,
-    
+
     'Ellora Caves': `Ellora Caves, located in Maharashtra's Aurangabad district, form a remarkable multi-religious rock-cut cave complex with artwork from 600–1000 CE. The site comprises 34 caves featuring Buddhist, Hindu, and Jain monuments, with the magnificent Kailasa Temple being the largest single monolithic rock excavation in the world. Representing exceptional religious harmony, Ellora showcases the architectural brilliance of ancient India and has been a UNESCO World Heritage Site since 1983.`,
-    
+
     'Raigad Fort': `Raigad Fort (also known as Rajgad), situated in Maharashtra's Raigad district near Mahad city, stands as one of the strongest fortresses on the Deccan Plateau. Rising 820 meters above sea level in the Sahyadri mountain range, this hill fort served as the capital of the Maratha Empire under Chhatrapati Shivaji Maharaj, who was crowned here in 1674. Originally built in 1030 CE and later captured by Shivaji in 1656, the fort witnessed numerous significant events in Maratha history before falling to the British in 1818.`,
-    
+
     'Gateway of India': `The Gateway of India is an iconic arch monument in Mumbai, Maharashtra, built during the early 20th century to commemorate the landing of King-Emperor George V in 1911. Constructed between 1913 and 1924 in Indo-Islamic style with elements of 16th-century Gujarati architecture, this 26-meter-high basalt structure stands as a symbol of colonial Bombay and has become one of Mumbai's most recognizable landmarks and popular gathering spots.`,
-    
+
     'Sinhagad Fort': `Sinhagad Fort, historically known as Kondhana, is a hill fort near Pune with a history spanning over 2000 years. This strategically important fort gained fame during the Battle of Sinhagad in 1670 when Tanaji Malusare sacrificed his life while capturing it for Shivaji Maharaj. Perched on a steep cliff in the Sahyadris, Sinhagad offers panoramic views and remains a popular trekking destination that showcases Maharashtra's martial heritage.`,
-    
+
     'Elephanta Caves': `The Elephanta Caves, situated on Elephanta Island in Mumbai Harbour, are a collection of cave temples primarily dedicated to the Hindu god Shiva. Dating from the 5th to 8th centuries CE, these rock-cut temples feature impressive sculptures including the famous Trimurti (three-faced Shiva) statue. Accessible by boat from Mumbai, the caves represent medieval Indian rock-cut architecture and were designated a UNESCO World Heritage Site in 1987.`,
-    
+
     'Shaniwar Wada': `Shaniwar Wada in Pune was the magnificent seat of the Peshwas of the Maratha Empire from its completion in 1732 until 1818. Built as a seven-story fortress-palace complex, it served as the center of Indian politics throughout the 18th century. Though largely destroyed by a major fire in 1828, its surviving gates, walls, and foundations continue to evoke the grandeur of the Peshwa era, with its history preserved through light and sound shows.`,
-    
+
     'Pratapgad Fort': `Pratapgad Fort is a mountain fort located in Satara district, Maharashtra, built in 1656 by Chhatrapati Shivaji Maharaj. It is famous for the historic Battle of Pratapgad in 1659 where Shivaji Maharaj defeated Afzal Khan, marking a turning point in Maratha history. The fort stands at an elevation of 1,080 meters and offers stunning views of the surrounding valleys and hills.`,
-    
+
     'Daulatabad Fort': `Daulatabad Fort, originally known as Devagiri Fort, is a magnificent 12th-century fortress located near Aurangabad, Maharashtra. Considered one of the most powerful and impregnable forts in India, it features sophisticated defense mechanisms including a complex labyrinth and ingenious military architecture. The fort served as the capital of the Yadava dynasty and later under the Delhi Sultanate.`,
-    
+
     'Bibi Ka Maqbara': `Bibi Ka Maqbara, located in Aurangabad, Maharashtra, is a 17th-century mausoleum built by Mughal emperor Aurangzeb in memory of his wife Dilras Banu Begum. Often called the "Taj of the Deccan," this white marble structure showcases Mughal architectural style with Persian influences and features beautiful gardens surrounding the main tomb.`
   };
 
@@ -41,13 +50,13 @@ const PlaceExplorer = () => {
         const mobilenet = await tf.loadLayersModel(
           'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json'
         );
-        
+
         const layer = mobilenet.getLayer('conv_pw_13_relu');
         const featureExtractor = tf.model({
           inputs: mobilenet.inputs,
           outputs: layer.output
         });
-        
+
         setModel(featureExtractor);
       } catch (error) {
         console.warn('Could not load MobileNet, using simulated recognition');
@@ -67,7 +76,7 @@ const PlaceExplorer = () => {
   // Improved place recognition with better pattern matching
   const recognizePlace = async (imageFile) => {
     const fileName = imageFile.name.toLowerCase();
-    
+
     // Remove file extensions and special characters
     const cleanName = fileName
       .replace('.png', '')
@@ -78,9 +87,9 @@ const PlaceExplorer = () => {
       .replace('.webp', '')
       .replace(/[^a-z]/g, ' ')
       .trim();
-    
+
     console.log('Cleaned filename:', cleanName);
-    
+
     // Enhanced pattern matching for Maharashtra places
     const patterns = [
       { pattern: /rajgad|raigad|rai.*gad|rgd/, place: 'Raigad Fort' },
@@ -98,7 +107,7 @@ const PlaceExplorer = () => {
       { pattern: /matheran|mthrn/, place: 'Matheran' },
       { pattern: /shirdi|sai.*baba/, place: 'Shirdi Sai Baba Temple' },
     ];
-    
+
     // Check for exact matches first
     for (const { pattern, place } of patterns) {
       if (pattern.test(cleanName)) {
@@ -106,13 +115,13 @@ const PlaceExplorer = () => {
         return place;
       }
     }
-    
+
     // Check for partial matches in filename
     const places = Object.keys(maharashtraPlaces);
     for (const place of places) {
       const placeLower = place.toLowerCase();
       const placeWords = placeLower.split(' ');
-      
+
       // Check if any word from the place name appears in filename
       for (const word of placeWords) {
         if (word.length > 3 && cleanName.includes(word)) {
@@ -120,7 +129,7 @@ const PlaceExplorer = () => {
           return place;
         }
       }
-      
+
       // Check for common abbreviations
       if (cleanName.includes('rgd') && placeLower.includes('raigad')) {
         return 'Raigad Fort';
@@ -132,7 +141,7 @@ const PlaceExplorer = () => {
         return 'Ajanta Caves'; // Default cave
       }
     }
-    
+
     // If still no match, check the first word of filename
     const firstWord = cleanName.split(' ')[0];
     if (firstWord) {
@@ -148,28 +157,28 @@ const PlaceExplorer = () => {
         'shaniwar': 'Shaniwar Wada',
         'mahabaleshwar': 'Mahabaleshwar',
       };
-      
+
       if (firstWordMap[firstWord]) {
         return firstWordMap[firstWord];
       }
     }
-    
+
     // Final fallback - use weighted random (not truly random)
     console.log('Using fallback recognition');
     const placesList = Object.keys(maharashtraPlaces);
-    
+
     // If filename contains "gad" or "fort", prioritize forts
     if (cleanName.includes('gad') || cleanName.includes('fort')) {
       const forts = ['Raigad Fort', 'Sinhagad Fort', 'Pratapgad Fort', 'Daulatabad Fort'];
       return forts[Math.floor(Math.random() * forts.length)];
     }
-    
+
     // If filename contains "cave", prioritize caves
     if (cleanName.includes('cave') || cleanName.includes('gufa')) {
       const caves = ['Ajanta Caves', 'Ellora Caves', 'Elephanta Caves'];
       return caves[Math.floor(Math.random() * caves.length)];
     }
-    
+
     // Default random selection
     return placesList[Math.floor(Math.random() * placesList.length)];
   };
@@ -192,7 +201,7 @@ const PlaceExplorer = () => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       setImagePreview(e.target.result);
-      
+
       // Start recognition
       setIsLoading(true);
       setTimeout(async () => {
@@ -218,7 +227,7 @@ const PlaceExplorer = () => {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    
+
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -247,17 +256,21 @@ const PlaceExplorer = () => {
       name: `${placeName.toLowerCase().replace(/ /g, '_')}.jpg`,
       type: 'image/jpeg'
     };
-    
+
     setSelectedImage(mockFile);
     setImagePreview(`https://via.placeholder.com/600x400/4a6572/ffffff?text=${encodeURIComponent(placeName)}`);
     setError('');
     setHistoricalInfo('');
-    
+
     setIsLoading(true);
     setTimeout(() => {
       setHistoricalInfo(maharashtraPlaces[placeName]);
       setIsLoading(false);
     }, 800);
+  };
+
+  const scrollToExploreSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -270,7 +283,7 @@ const PlaceExplorer = () => {
       <div className="explorer-layout">
         {/* Upload Section */}
         <div className="upload-section">
-          <div 
+          <div
             className={`upload-area ${selectedImage ? 'has-image' : ''}`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -282,14 +295,14 @@ const PlaceExplorer = () => {
                 <h3>Upload Maharashtra Place Image</h3>
                 <p className="upload-hint">Click or drag & drop</p>
                 <p className="upload-requirements">JPG, PNG up to 10MB</p>
-                
+
                 <div className="sample-buttons">
                   <button onClick={() => handleSample('Raigad Fort')}>Raigad Fort</button>
                   <button onClick={() => handleSample('Ajanta Caves')}>Ajanta Caves</button>
                   <button onClick={() => handleSample('Ellora Caves')}>Ellora Caves</button>
                   <button onClick={() => handleSample('Gateway of India')}>Gateway of India</button>
                 </div>
-                
+
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -364,10 +377,170 @@ const PlaceExplorer = () => {
         </div>
       </div>
 
+
+
+      {/* Explore More Section */}
+      <div className="explore-more-section">
+        <h2 className="section-title">Explore More</h2>
+        <div className="explore-cards-grid">
+          <div className="explore-card" onClick={() => scrollToExploreSection(cuisineRef)}>
+            <div className="card-icon">🍴</div>
+            <h3>Famous Cuisine</h3>
+            <p>Taste the authentic flavors of Sahyadri</p>
+          </div>
+          <div className="explore-card" onClick={() => scrollToExploreSection(shoppingRef)}>
+            <div className="card-icon">🛍️</div>
+            <h3>Shopping Areas</h3>
+            <p>Local markets & authentic artifacts</p>
+          </div>
+          <div className="explore-card" onClick={() => scrollToExploreSection(cultureRef)}>
+            <div className="card-icon">🎭</div>
+            <h3>Cultural Experiences</h3>
+            <p>Festivals, art forms & history</p>
+          </div>
+          <div className="explore-card" onClick={() => scrollToExploreSection(itineraryRef)}>
+            <div className="card-icon">📝</div>
+            <h3>Travel Itinerary</h3>
+            <p>Plan your perfect visit</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Detailed Sections */}
+      <div className="detailed-sections-container">
+
+        {/* Cuisine Section - Magazine Style */}
+        <div ref={cuisineRef} className="detailed-section cuisine-section">
+          {/* Hero Section */}
+          <div className="section-hero">
+            <div className="hero-content">
+              <span className="hero-eyebrow">TASTE THE HERITAGE</span>
+              <h2 className="hero-title">Flavors of the Sahyadris</h2>
+              <p className="hero-tagline">Where mountain air meets ancestral recipes</p>
+              <p className="hero-description">
+                Maratha cuisine was fuel for warriors. Nutritious, portable, and full of the bold flavors
+                that sustained soldiers during long campaigns across the Sahyadri mountains.
+              </p>
+            </div>
+            <div className="hero-image-container">
+              <img
+                src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop"
+                alt="Traditional Marathi Cuisine"
+                className="hero-image"
+              />
+            </div>
+          </div>
+
+          {/* Cuisine Cards */}
+          <div className="cuisine-list">
+            {shivneriData.famousCuisine.map((item, index) => (
+              <div key={item.id} className="cuisine-item-card">
+                <div className="cuisine-item-header">
+                  <h4 className="cuisine-item-name">{item.name}</h4>
+                  {(index === 0 || index === 1) && <span className="badge-must-try">MUST TRY</span>}
+                </div>
+                <p className="cuisine-item-description">{item.description}</p>
+                {item.context && (
+                  <div className="cuisine-tip-box">
+                    <span className="tip-icon">💡</span>
+                    <span className="tip-text">{item.context}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Shopping Section - Magazine Style */}
+        <div ref={shoppingRef} className="detailed-section shopping-section">
+          {/* Hero Section */}
+          <div className="section-hero section-hero-reverse">
+            <div className="hero-image-container">
+              <img
+                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop"
+                alt="Local Markets"
+                className="hero-image"
+              />
+            </div>
+            <div className="hero-content">
+              <span className="hero-eyebrow">SHOP LIKE A LOCAL</span>
+              <h2 className="hero-title">Trading Routes of Empire</h2>
+              <p className="hero-tagline">Where commerce met conquest</p>
+              <p className="hero-description">
+                The Maratha Empire was as much about trade as territory. These markets prospered under
+                Shivaji's policies that protected merchants of all faiths.
+              </p>
+            </div>
+          </div>
+
+          {/* Shopping Cards */}
+          <div className="shopping-list">
+            {shivneriData.shoppingAreas.map((item) => (
+              <div key={item.id} className="shopping-item-card">
+                <h4 className="shopping-item-name">{item.name}</h4>
+                <p className="shopping-item-category">{item.items}</p>
+                <p className="shopping-item-description">{item.description}</p>
+                <div className="shopping-tip-box">
+                  <span className="tip-icon">💡</span>
+                  <span className="tip-text">{item.location}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Culture Section */}
+        <div ref={cultureRef} className="detailed-section culture-section">
+          <h3>Living Traditions of Swarajya</h3>
+          <p className="section-subtitle">Where history breathes in daily life</p>
+          <div className="items-grid">
+            {shivneriData.culturalExperiences.map((item) => (
+              <div key={item.id} className="detail-card">
+                <div className="card-content full-height">
+                  <h4>{item.name}</h4>
+                  <p>{item.description}</p>
+                  <div className="card-footer">
+                    <span className="significance-tag">✨ {item.significance}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Itinerary Section - Dynamic Planner */}
+        <div ref={itineraryRef} className="detailed-section itinerary-section">
+          <div className="section-hero">
+            <div className="hero-content">
+              <span className="hero-eyebrow">PLAN YOUR VISIT</span>
+              <h2 className="hero-title">Smart Itinerary Planner</h2>
+              <p className="hero-tagline">Your personalized fort exploration schedule</p>
+              <p className="hero-description">
+                Tell us when you're arriving and how long you can stay. We'll create a
+                realistic, time-optimized itinerary that ensures you don't miss the essentials.
+              </p>
+            </div>
+            <div className="hero-image-container">
+              <img
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop"
+                alt="Fort Pathway"
+                className="hero-image"
+              />
+            </div>
+          </div>
+
+          <DynamicItinerary
+            activities={shivneriData.activities}
+            rules={shivneriData.itineraryRules}
+          />
+        </div>
+
+      </div>
+
       <div className="simple-explorer-footer">
         <p>Maharashtra Place Explorer • Uses pattern matching for place identification</p>
       </div>
-    </div>
+    </div >
   );
 };
 
