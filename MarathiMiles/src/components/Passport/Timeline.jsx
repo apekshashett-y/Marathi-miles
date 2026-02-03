@@ -19,6 +19,21 @@ const getMoodIcon = (mood) => {
   return moods[mood] || "📖";
 };
 
+// Pick chapter text for the current language from fortData.
+// Falls back to English / legacy fields if bilingual text is missing.
+const getChapterContent = (chapter, language) => {
+  const textBlock =
+    chapter.text?.[language] ||
+    chapter.text?.en || {
+      title: chapter.era,
+      preview: chapter.preview,
+      fullStory: chapter.fullStory,
+      significance: chapter.significance
+    };
+
+  return textBlock;
+};
+
 const MARATHI_TIMELINE_TRANSLATIONS = {
   "The Ancient Sentinel": {
     preview:
@@ -258,19 +273,19 @@ const Timeline = ({
     audioUtteranceRef.current = null;
     setIsAudioPaused(false);
 
-    // Use localized content for the current language
-    const localizedChapter = getLocalizedChapter(chapter, language);
+    // Use stored bilingual content from fortData for the current language
+    const localizedChapter = getChapterContent(chapter, language);
 
     const speech = new SpeechSynthesisUtterance();
 
     const textToRead =
       expandedChapter === index
-        ? `${localizedChapter.era}. ${localizedChapter.fullStory || ""} ${
+        ? `${localizedChapter.title}. ${localizedChapter.fullStory || ""} ${
             localizedChapter.significance
-              ? `Historical Significance: ${localizedChapter.significance}`
+              ? ` Historical Significance: ${localizedChapter.significance}`
               : ""
           }`
-        : `${localizedChapter.era}. ${localizedChapter.preview}`;
+        : `${localizedChapter.title}. ${localizedChapter.preview}`;
 
     speech.text = textToRead;
     speech.rate = 0.9;
@@ -393,10 +408,9 @@ const Timeline = ({
           onScroll={handleManualScroll}
         >
           <div className="horizontal-timeline-track">
-            {chapters.map((chapter, index) => (
-              (() => {
-                const localized = getLocalizedChapter(chapter, language);
-                return (
+            {chapters.map((chapter, index) => {
+              const localized = getChapterContent(chapter, language);
+              return (
               <article
                 key={index}
                 data-index={index}
@@ -406,7 +420,7 @@ const Timeline = ({
                 onClick={(e) => handleCardClick(index, e)}
               >
                 <div className="chapter-marker">
-                  <span className="chapter-year">{localized.year || chapter.year}</span>
+                  <span className="chapter-year">{chapter.year}</span>
                   {activeIndex === index && (
                     <div className="active-indicator"></div>
                   )}
@@ -414,13 +428,13 @@ const Timeline = ({
 
                 <div className="chapter-content">
                   <div className="chapter-header">
-                    <span className="era-tag">{localized.year || chapter.year}</span>
+                    <span className="era-tag">{chapter.year}</span>
                     {chapter.mood && (
                       <span className="mood-tag">
                         {getMoodIcon(chapter.mood)} {chapter.mood}
                       </span>
                     )}
-                    <h3 className="chapter-title">{localized.era}</h3>
+                    <h3 className="chapter-title">{localized.title}</h3>
                     
                     {/* Audio Narration Button */}
                     <button
@@ -428,7 +442,7 @@ const Timeline = ({
                       onClick={(e) => {
                         handleAudioClick(chapter, index, e);
                       }}
-                      aria-label={`Listen to audio narration for ${localized.era}`}
+                      aria-label={`Listen to audio narration for ${localized.title}`}
                       title={isAudioAvailable ? "Play audio narration" : "Audio narration coming soon"}
                     >
                       <span className="audio-btn-icon">
@@ -489,9 +503,8 @@ const Timeline = ({
                   </div>
                 </div>
               </article>
-                );
-              })()
-            ))}
+              );
+            })}
           </div>
         </div>
 
