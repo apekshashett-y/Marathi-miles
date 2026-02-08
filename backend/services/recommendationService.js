@@ -16,6 +16,47 @@ class RecommendationService {
     }
   }
 
+  /**
+   * Check if a place matches the user's selected trip type (with synonyms for logical relevance).
+   * Spiritual ↔ Religious; Nature ↔ hill-station, wildlife; Heritage ↔ Historical, Cultural, etc.
+   */
+  placeMatchesTripType(place, tripType) {
+    if (!tripType) return true;
+    const typeLower = String(tripType).toLowerCase();
+    const tags = [...(place.tripTypeTags || []), ...(place.category || [])].map(t => String(t).toLowerCase());
+
+    const directMatch = tags.some(tag => tag.includes(typeLower) || typeLower.includes(tag));
+    if (directMatch) return true;
+
+    // Synonyms: so "Spiritual" shows Religious/temple places; "Nature" shows hill-station/wildlife
+    const synonyms = {
+      spiritual: ['religious', 'temple', 'pilgrimage'],
+      nature: ['hill-station', 'wildlife', 'trekking', 'forest', 'scenic'],
+      heritage: ['historical', 'cultural', 'educational', 'fort'],
+      adventure: ['water sports', 'rafting', 'backpacking', 'trekking'],
+      relaxing: ['peaceful', 'beach', 'peaceful'],
+      luxury: ['luxury', 'premium']
+    };
+    const keys = Object.keys(synonyms).filter(k => typeLower.includes(k) || typeLower === k);
+    for (const k of keys) {
+      if (tags.some(tag => synonyms[k].some(s => tag.includes(s)))) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Check if a place matches at least one of the user's selected interests.
+   */
+  placeMatchesInterests(place, interests) {
+    if (!interests || interests.length === 0) return true;
+    const placeInterests = (place.interests || []).map(i => String(i).toLowerCase());
+    const interestTags = (place.interestTags || []).map(i => String(i).toLowerCase());
+    const allPlace = [...placeInterests, ...interestTags];
+    return interests.some(interest =>
+      allPlace.some(pi => pi.includes(interest.toLowerCase()) || interest.toLowerCase().includes(pi))
+    );
+  }
+
   getRecommendations(mood, userProfile) {
     // Validate inputs
     if (!mood) {
@@ -75,13 +116,11 @@ class RecommendationService {
         reasons.push(`Great for ${mood} mood`);
       }
 
-      // 2. TRIP TYPE MATCHING (30 points) - fallback to place.category when tripTypeTags missing
+      // 2. TRIP TYPE MATCHING (30 points) - must be relevant to selected trip type
       const tripTypeRaw = place.tripTypeTags || place.category || [];
       const tripTypeTags = Array.isArray(tripTypeRaw) ? tripTypeRaw : (tripTypeRaw ? [tripTypeRaw] : []);
       if (tripType && tripTypeTags.length > 0) {
-        const matched = tripTypeTags.some(tag =>
-          String(tag).toLowerCase().includes(tripType.toLowerCase())
-        );
+        const matched = this.placeMatchesTripType(place, tripType);
         if (matched) {
           score += 30;
           reasons.push(`Great for ${tripType} trips`);
@@ -150,10 +189,27 @@ class RecommendationService {
     });
 
     // Filter out places with very low scores (less than 20)
-    const filteredPlaces = scoredPlaces.filter(place => place.matchScore >= 20);
+    let filteredPlaces = scoredPlaces.filter(place => place.matchScore >= 20);
+
+    // Logically correct: when user selected a trip type, only show places that match that trip type
+    if (tripType && tripType.trim()) {
+      const tripTypeMatches = filteredPlaces.filter(place => this.placeMatchesTripType(place, tripType));
+      if (tripTypeMatches.length > 0) {
+        filteredPlaces = tripTypeMatches;
+        console.log(`✅ Filtered to ${filteredPlaces.length} places matching trip type: ${tripType}`);
+      }
+    }
+
+    // Logically correct: when user selected interests, only show places that match at least one interest
+    if (interests.length > 0) {
+      const interestMatches = filteredPlaces.filter(place => this.placeMatchesInterests(place, interests));
+      if (interestMatches.length > 0) {
+        filteredPlaces = interestMatches;
+        console.log(`✅ Filtered to ${filteredPlaces.length} places matching interests: ${interests.join(', ')}`);
+      }
+    }
 
     // Sort by score (highest first), then by number of match reasons (more = better), then by place id for stable order
-    // This makes different inputs (mood, tripType, interests) produce different rankings
     filteredPlaces.sort((a, b) => {
       if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
       const aReasons = (a.matchReasons || []).length;
@@ -162,7 +218,7 @@ class RecommendationService {
       return (a.id || 0) - (b.id || 0);
     });
 
-    // If no matches, return top places by mood
+    // If no matches, return top places by mood (fallback)
     if (filteredPlaces.length === 0) {
       console.log('⚠️ No matches found, returning mood-based places');
       return uniquePlaces

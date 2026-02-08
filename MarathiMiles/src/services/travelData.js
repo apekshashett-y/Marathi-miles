@@ -133,6 +133,46 @@ export const moodBasedPlaces = {
       highlights: ["Water Slides", "Wave Pool", "Family Rides"],
       description: "Asia's largest water theme park for fun-filled day"
     }
+    ,
+    {
+      id: 31,
+      name: "Tarkarli Scuba & Beach",
+      location: "Sindhudurg, Maharashtra",
+      category: ["beach", "water-sports"],
+      interests: ["Beaches", "Scuba Diving", "Snorkeling"],
+      budget: "mid-range",
+      duration: "1-2 Days",
+      recommendedFor: ["Couple", "Friends"],
+      moodTags: ["happy", "excited"],
+      highlights: ["Scuba Diving", "Clear Waters", "Beach Camping"],
+      description: "Crystal clear waters ideal for scuba and snorkeling"
+    },
+    {
+      id: 32,
+      name: "Sanctuary City - SGNP",
+      location: "Mumbai, Maharashtra",
+      category: ["wildlife", "nature"],
+      interests: ["Nature", "Wildlife", "Short Treks"],
+      budget: "budget",
+      duration: "Half Day - 1 Day",
+      recommendedFor: ["Family", "Solo"],
+      moodTags: ["happy", "calm"],
+      highlights: ["Kanheri Caves", "Nature Trails", "Wildlife"],
+      description: "Urban forest reserve with easy trails and heritage caves"
+    },
+    {
+      id: 33,
+      name: "Dapoli Beach & Fishing Village",
+      location: "Ratnagiri, Maharashtra",
+      category: ["beach", "culture"],
+      interests: ["Beaches", "Local Culture", "Seafood"],
+      budget: "budget",
+      duration: "1-2 Days",
+      recommendedFor: ["Family", "Couple"],
+      moodTags: ["happy", "calm"],
+      highlights: ["Quiet Beaches", "Local Fish Markets", "Ayurvedic Stays"],
+      description: "Coastal town with secluded beaches and authentic cuisine"
+    }
   ],
 
   // 😔 SAD - Calm, Peaceful, Healing places
@@ -201,6 +241,20 @@ export const moodBasedPlaces = {
       moodTags: ["sad", "calm"],
       highlights: ["Table Land", "Sydney Point", "Strawberry Farms"],
       description: "Peaceful hill station with breathtaking valley views"
+    }
+    ,
+    {
+      id: 34,
+      name: "Lonar Crater Lake",
+      location: "Buldhana, Maharashtra",
+      category: ["nature", "geology"],
+      interests: ["Nature", "Photography", "Unique Landscapes"],
+      budget: "budget",
+      duration: "1 Day",
+      recommendedFor: ["Solo", "Family"],
+      moodTags: ["sad", "calm"],
+      highlights: ["Crater Lake", "Salt Lake", "Bird Watching"],
+      description: "A rare meteorite crater offering quiet, unusual landscapes"
     }
   ],
 
@@ -271,6 +325,20 @@ export const moodBasedPlaces = {
       highlights: ["Jet Skiing", "Banana Boat", "Parasailing"],
       description: "Thrilling water sports activities at beautiful beach"
     }
+    ,
+    {
+      id: 35,
+      name: "Panshet Water Sports",
+      location: "Pune, Maharashtra",
+      category: ["water-sports", "adventure"],
+      interests: ["Kayaking", "Jet Skiing", "Boating"],
+      budget: "mid-range",
+      duration: "1 Day",
+      recommendedFor: ["Friends", "Family"],
+      moodTags: ["excited", "happy"],
+      highlights: ["Reservoir Activities", "Speed Boating", "Picnic Spots"],
+      description: "Popular spot for reservoir-based water adventures"
+    }
   ],
 
   // 🧘 CALM - Relaxing, Spiritual places
@@ -340,6 +408,33 @@ export const moodBasedPlaces = {
       highlights: ["Beach Temple", "White Sand Beach", "Sunset Views"],
       description: "Peaceful beach with spiritual temple and calm waters"
     }
+    ,
+    {
+      id: 36,
+      name: "Alandi & Sant Dnyaneshwar Shrine",
+      location: "Pune, Maharashtra",
+      category: ["spiritual", "heritage"],
+      interests: ["Spiritual", "Pilgrimage", "History"],
+      budget: "budget",
+      duration: "Half Day - 1 Day",
+      recommendedFor: ["Solo", "Family", "Spiritual"],
+      moodTags: ["calm", "spiritual"],
+      highlights: ["Samadhi", "Daily Aartis", "Pilgrim Vibes"],
+      description: "Famous pilgrimage site associated with Sant Dnyaneshwar"
+    },
+    {
+      id: 37,
+      name: "Jejuri Khandoba Temple",
+      location: "Pune, Maharashtra",
+      category: ["spiritual", "heritage"],
+      interests: ["Spiritual", "Festival", "Culture"],
+      budget: "budget",
+      duration: "Half Day",
+      recommendedFor: ["Family", "Spiritual"],
+      moodTags: ["calm", "devotional"],
+      highlights: ["Hilltop Temple", "Vibrant Festivals", "Temple Views"],
+      description: "Historic hill temple known for its lively festivals and devotion"
+    }
   ],
 
   // 😥 STRESSED - Relaxing, Therapeutic places
@@ -408,6 +503,33 @@ export const moodBasedPlaces = {
       moodTags: ["stressed", "calm"],
       highlights: ["Beach Temple", "Rock Formations", "Sunset"],
       description: "Quiet beach town perfect for stress relief"
+    }
+    ,
+    {
+      id: 38,
+      name: "Art of Living Retreat - Regional Option",
+      location: "Weekend retreat (regional)",
+      category: ["wellness", "meditation"],
+      interests: ["Meditation", "Retreat", "Breathwork"],
+      budget: "mid-range",
+      duration: "2-4 Days",
+      recommendedFor: ["Solo", "Spiritual"],
+      moodTags: ["stressed", "calm"],
+      highlights: ["Retreat Courses", "Guided Meditation", "Pranayama"],
+      description: "Structured retreat option for deeper meditation and stress relief"
+    },
+    {
+      id: 39,
+      name: "Sudhagad Fort - Quiet Trek",
+      location: "Raigad, Maharashtra",
+      category: ["heritage", "trekking"],
+      interests: ["Trekking", "Heritage", "Nature"],
+      budget: "budget",
+      duration: "1 Day",
+      recommendedFor: ["Solo", "Friends"],
+      moodTags: ["stressed", "calm"],
+      highlights: ["Fort Views", "Monsoon Trails", "Quiet Campsites"],
+      description: "Less crowded fort trek offering solitude and nature therapy"
     }
   ]
 };
