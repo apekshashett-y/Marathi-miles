@@ -47,6 +47,50 @@
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
+.api-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  background: rgba(244, 67, 54, 0.25);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.api-error-banner i.fa-exclamation-triangle {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.api-error-banner span {
+  flex: 1;
+}
+
+.api-error-banner .retry-btn {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.api-error-banner .retry-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.api-error-banner .retry-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
 .header-content {
   flex: 1;
 }

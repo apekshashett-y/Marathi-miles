@@ -267,66 +267,7 @@
     ]
   },
   {
-    "id": 2,
-    "name": "Lonavala",
-    "location": "Pune, Maharashtra",
-    "category": ["hill-station", "nature"],
-    "interests": ["Hiking", "Waterfalls", "Photography", "Nature"],
-    "budget": "mid-range",
-    "duration": "1-2 days",
-    "recommendedFor": ["friends", "couple", "family"],
-    "suitableAgeGroups": ["18-30", "30-50", "50+"],
-    "suitableTravelGroups": ["Friends", "Couple", "Family"],
-    "tripTypeTags": ["Adventure", "Relaxing", "Nature"],
-    "interestTags": ["Hiking", "Waterfalls", "Photography", "Nature", "Food"],
-    "budgetCompatibility": "mid-range",
-    "durationCompatibility": ["1 Day", "2-3 Days"],
-    "moodCompatibility": ["calm", "excited", "stressed"],
-    "accessibility": ["road", "train"],
-    "bestSeason": "Oct–May",
-    "moodTags": ["calm", "excited"],
-    "highlights": ["Lonavala Lake", "Karla Caves", "Bushy Dam", "Strawberry farms"],
-    "description": "Popular hill station with lakes, caves and waterfalls.",
-    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
-    "coordinates": { "lat": 18.7541, "lng": 73.4057 },
-    "baseBudget": 7500,
-    "transportOptions": [
-      {
-        "mode": "Train",
-        "costPerKm": 2,
-        "durationPer100Km": 2.5,
-        "features": ["Scenic route", "Comfortable"]
-      },
-      {
-        "mode": "Bus",
-        "costPerKm": 1.2,
-        "durationPer100Km": 2.8,
-        "features": ["Direct service"]
-      },
-      {
-        "mode": "Car",
-        "costPerKm": 7,
-        "durationPer100Km": 2,
-        "features": ["Flexible", "Private"]
-      }
-    ],
-    "detailedHighlights": [
-      {
-        "name": "Lonavala Lake",
-        "duration": "1-2 hours",
-        "cost": 50,
-        "description": "Peaceful lake with boating facilities"
-      },
-      {
-        "name": "Karla Caves",
-        "duration": "2-3 hours",
-        "cost": 200,
-        "description": "Ancient Buddhist caves with stunning architecture"
-      }
-    ]
-  },
-  {
-    "id": 3,
+    "id": 4,
     "name": "Mahabaleshwar",
     "location": "Satara, Maharashtra",
     "category": ["hill-station", "nature"],
@@ -379,7 +320,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 5,
     "name": "Ajanta Caves",
     "location": "Aurangabad, Maharashtra",
     "category": ["historical", "cultural"],
@@ -426,7 +367,7 @@
     ]
   },
   {
-    "id": 5,
+    "id": 6,
     "name": "Tarkarli Beach",
     "location": "Sindhudurg, Maharashtra",
     "category": ["beach", "adventure"],
@@ -479,7 +420,7 @@
     ]
   },
   {
-    "id": 6,
+    "id": 7,
     "name": "Panchgani",
     "location": "Satara, Maharashtra",
     "category": ["hill-station", "nature"],
@@ -532,7 +473,7 @@
     ]
   },
   {
-    "id": 7,
+    "id": 8,
     "name": "Ellora Caves",
     "location": "Aurangabad, Maharashtra",
     "category": ["historical", "cultural"],
@@ -579,7 +520,7 @@
     ]
   },
   {
-    "id": 8,
+    "id": 9,
     "name": "Mumbai",
     "location": "Mumbai, Maharashtra",
     "category": ["city", "urban"],
@@ -632,7 +573,7 @@
     ]
   },
   {
-    "id": 9,
+    "id": 10,
     "name": "Nashik",
     "location": "Nashik, Maharashtra",
     "category": ["wine", "religious"],
@@ -685,7 +626,7 @@
     ]
   },
   {
-    "id": 10,
+    "id": 11,
     "name": "Ganpatipule",
     "location": "Ratnagiri, Maharashtra",
     "category": ["beach", "temple"],
@@ -735,6 +676,204 @@
         "cost": 0,
         "description": "Beautiful beach with clear waters"
       }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Kaas Plateau",
+    "location": "Satara, Maharashtra",
+    "category": ["nature", "photography"],
+    "interests": ["Nature", "Photography", "Wildflowers", "Trekking"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["solo", "couple", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Solo", "Couple", "Family"],
+    "tripTypeTags": ["Nature", "Photography", "Relaxing"],
+    "interestTags": ["Nature", "Photography", "Wildflowers", "Trekking"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["sad", "calm", "peaceful"],
+    "accessibility": ["road"],
+    "bestSeason": "Aug–Oct (flower season)",
+    "moodTags": ["sad", "calm"],
+    "highlights": ["Valley of Flowers", "Kaas Lake", "Wildflower meadows"],
+    "description": "UNESCO World Heritage site known for seasonal wildflowers and serene landscapes.",
+    "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 17.7190, "lng": 73.8204 },
+    "baseBudget": 5000,
+    "transportOptions": [
+      { "mode": "Car", "costPerKm": 7, "durationPer100Km": 2.5, "features": ["Scenic drive"] },
+      { "mode": "Bus", "costPerKm": 1.5, "durationPer100Km": 3, "features": ["Regular service"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Valley of Flowers", "duration": "3-4 hours", "cost": 0, "description": "Seasonal bloom meadows" },
+      { "name": "Kaas Lake", "duration": "1-2 hours", "cost": 0, "description": "Serene lake surrounded by hills" }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Kolad",
+    "location": "Raigad, Maharashtra",
+    "category": ["adventure", "nature"],
+    "interests": ["Rafting", "Adventure", "Water Sports", "Trekking"],
+    "budget": "mid-range",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "couple"],
+    "suitableAgeGroups": ["18-30", "30-50"],
+    "suitableTravelGroups": ["Friends", "Couple"],
+    "tripTypeTags": ["Adventure", "Water Sports", "Backpacking"],
+    "interestTags": ["Rafting", "Adventure", "Water Sports", "Trekking"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["excited", "happy", "adventurous"],
+    "accessibility": ["road"],
+    "bestSeason": "Jun–Sep (monsoon)",
+    "moodTags": ["excited", "adventurous"],
+    "highlights": ["Kundalika River Rafting", "Camping", "Rappelling"],
+    "description": "Adventure hub for white-water rafting and outdoor activities.",
+    "image": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.4330, "lng": 73.1116 },
+    "baseBudget": 8000,
+    "transportOptions": [
+      { "mode": "Car", "costPerKm": 8, "durationPer100Km": 2, "features": ["Flexible"] },
+      { "mode": "Bus", "costPerKm": 1.8, "durationPer100Km": 2.5, "features": ["Direct service"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Kundalika Rafting", "duration": "2-3 hours", "cost": 1500, "description": "Grade 2-3 white water rafting" },
+      { "name": "Camping", "duration": "Overnight", "cost": 1000, "description": "Riverside camping experience" }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Shirdi",
+    "location": "Ahmednagar, Maharashtra",
+    "category": ["spiritual", "religious"],
+    "interests": ["Temples", "Spiritual", "Yoga", "Festivals"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["family", "solo", "couple"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Family", "Solo", "Couple"],
+    "tripTypeTags": ["Spiritual", "Religious", "Cultural"],
+    "interestTags": ["Temples", "Spiritual", "Yoga", "Festivals"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "stressed", "sad"],
+    "accessibility": ["road", "train"],
+    "bestSeason": "Oct–Mar",
+    "moodTags": ["calm", "stressed"],
+    "highlights": ["Sai Baba Temple", "Dwarkamai", "Chavdi"],
+    "description": "Famous pilgrimage town of Sai Baba, offering peace and spiritual solace.",
+    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 19.7660, "lng": 74.4770 },
+    "baseBudget": 4000,
+    "transportOptions": [
+      { "mode": "Bus", "costPerKm": 1.5, "durationPer100Km": 2.2, "features": ["Pilgrim special"] },
+      { "mode": "Train", "costPerKm": 2, "durationPer100Km": 2, "features": ["Comfortable"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Sai Baba Samadhi Temple", "duration": "2-3 hours", "cost": 0, "description": "Main shrine and darshan" },
+      { "name": "Dwarkamai", "duration": "1 hour", "cost": 0, "description": "Historic mosque where Sai lived" }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Bhimashankar",
+    "location": "Pune, Maharashtra",
+    "category": ["spiritual", "nature", "trekking"],
+    "interests": ["Temples", "Trekking", "Nature", "Wildlife"],
+    "budget": "budget",
+    "duration": "1-2 days",
+    "recommendedFor": ["solo", "friends", "family"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Solo", "Friends", "Family"],
+    "tripTypeTags": ["Spiritual", "Nature", "Adventure"],
+    "interestTags": ["Temples", "Trekking", "Nature", "Wildlife"],
+    "budgetCompatibility": "budget",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["calm", "sad", "stressed"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–Feb",
+    "moodTags": ["calm", "sad"],
+    "highlights": ["Bhimashankar Temple", "Forest Trek", "Gupt Bhimashankar"],
+    "description": "One of the 12 Jyotirlingas with scenic forest treks and wildlife.",
+    "image": "https://images.unsplash.com/photo-1547996160-81dfd9c9a0c9?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 19.0700, "lng": 73.5330 },
+    "baseBudget": 5500,
+    "transportOptions": [
+      { "mode": "Car", "costPerKm": 7, "durationPer100Km": 2.2, "features": ["Ghat section"] },
+      { "mode": "Bus", "costPerKm": 1.5, "durationPer100Km": 2.8, "features": ["State transport"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Bhimashankar Jyotirlinga", "duration": "1-2 hours", "cost": 0, "description": "Sacred Shiva temple" },
+      { "name": "Forest Trek", "duration": "2-3 hours", "cost": 0, "description": "Scenic trail through sanctuary" }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Chikhaldara",
+    "location": "Amravati, Maharashtra",
+    "category": ["hill-station", "wildlife", "nature"],
+    "interests": ["Wildlife", "Nature", "Waterfalls", "Photography"],
+    "budget": "mid-range",
+    "duration": "2-3 days",
+    "recommendedFor": ["family", "couple", "friends"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Family", "Couple", "Friends"],
+    "tripTypeTags": ["Nature", "Relaxing", "Adventure"],
+    "interestTags": ["Wildlife", "Nature", "Waterfalls", "Photography"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["2-3 Days", "1 Week"],
+    "moodCompatibility": ["calm", "happy", "excited"],
+    "accessibility": ["road"],
+    "bestSeason": "Oct–Jun",
+    "moodTags": ["calm", "happy"],
+    "highlights": ["Melghat Tiger Reserve", "Semadoh Lake", "Panchbol Point"],
+    "description": "Only coffee-growing region in Maharashtra with wildlife sanctuary and misty hills.",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 21.3984, "lng": 77.2579 },
+    "baseBudget": 9000,
+    "transportOptions": [
+      { "mode": "Car", "costPerKm": 9, "durationPer100Km": 3, "features": ["Scenic"] },
+      { "mode": "Bus", "costPerKm": 2, "durationPer100Km": 3.5, "features": ["State transport"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Melghat Sanctuary", "duration": "3-4 hours", "cost": 500, "description": "Tiger reserve safari" },
+      { "name": "Semadoh Lake", "duration": "2 hours", "cost": 0, "description": "Picturesque lake" }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Murud-Janjira",
+    "location": "Raigad, Maharashtra",
+    "category": ["beach", "fort", "historical"],
+    "interests": ["Forts", "Beaches", "History", "Water Sports"],
+    "budget": "mid-range",
+    "duration": "1-2 days",
+    "recommendedFor": ["friends", "family", "couple"],
+    "suitableAgeGroups": ["18-30", "30-50", "50+"],
+    "suitableTravelGroups": ["Friends", "Family", "Couple"],
+    "tripTypeTags": ["Heritage", "Beach", "Adventure"],
+    "interestTags": ["Forts", "Beaches", "History", "Water Sports"],
+    "budgetCompatibility": "mid-range",
+    "durationCompatibility": ["1 Day", "2-3 Days"],
+    "moodCompatibility": ["happy", "excited", "calm"],
+    "accessibility": ["road", "ferry"],
+    "bestSeason": "Oct–May",
+    "moodTags": ["happy", "excited"],
+    "highlights": ["Janjira Fort", "Murud Beach", "Kasa Fort"],
+    "description": "Sea fort and beach destination with history and water activities.",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
+    "coordinates": { "lat": 18.2989, "lng": 72.9660 },
+    "baseBudget": 7500,
+    "transportOptions": [
+      { "mode": "Car", "costPerKm": 8, "durationPer100Km": 2.2, "features": ["Coastal drive"] },
+      { "mode": "Bus", "costPerKm": 1.8, "durationPer100Km": 2.8, "features": ["Direct"] }
+    ],
+    "detailedHighlights": [
+      { "name": "Janjira Fort", "duration": "2-3 hours", "cost": 50, "description": "Island fort by boat" },
+      { "name": "Murud Beach", "duration": "2-3 hours", "cost": 0, "description": "Pristine beach" }
     ]
   }
 ]

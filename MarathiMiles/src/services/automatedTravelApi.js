@@ -2,7 +2,7 @@
 
 import { getSmartRecommendations } from './recommendationEngine';
 
-export function getAutomatedTravelPlan(userProfile, topN = 5) {
+export function getAutomatedTravelPlan(userProfile, topN = 10) {
   return new Promise((resolve) => {
     setTimeout(() => {
       try {

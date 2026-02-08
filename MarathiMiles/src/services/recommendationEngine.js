@@ -4,7 +4,7 @@ import { maharashtraPlaces } from './maharashtraData';
 
 export class SmartRecommendationEngine {
   
-  recommendPlaces(userProfile, topN = 5) {
+  recommendPlaces(userProfile, topN = 10) {
     const {
       mood,
       tripType,
@@ -24,19 +24,19 @@ export class SmartRecommendationEngine {
 
     // Step 1: Score each place based on user preferences
     const scoredPlaces = maharashtraPlaces.map(place => {
-      let score = 0;
+      let rawScore = 0; // keep raw (float) score for better tie-breaking
       const reasons = [];
 
       // 1. MOOD MATCHING (Highest Priority - 40 points)
       if (place.moodTags && place.moodTags.includes(mood?.toLowerCase())) {
-        score += 40;
+        rawScore += 40;
         reasons.push(`Perfect for ${mood} mood`);
       }
 
       // 2. TRIP TYPE MATCHING (30 points)
       if (tripType && place.category?.some(cat => 
         cat.toLowerCase().includes(tripType.toLowerCase()))) {
-        score += 30;
+        rawScore += 30;
         reasons.push(`Great for ${tripType} trips`);
       }
 
@@ -47,7 +47,7 @@ export class SmartRecommendationEngine {
             placeInterest.toLowerCase().includes(interest.toLowerCase())
           )
         );
-        score += matchedInterests.length * 8;
+        rawScore += matchedInterests.length * 8;
         if (matchedInterests.length > 0) {
           reasons.push(`Matches interests: ${matchedInterests.join(', ')}`);
         }
@@ -55,57 +55,68 @@ export class SmartRecommendationEngine {
 
       // 4. BUDGET COMPATIBILITY (20 points)
       if (budget && this.isBudgetCompatible(place.budget, budget)) {
-        score += 20;
+        rawScore += 20;
         reasons.push(`Fits your ${budget} budget`);
       }
 
       // 5. DURATION MATCHING (15 points)
       if (duration && this.isDurationCompatible(place.duration, duration)) {
-        score += 15;
+        rawScore += 15;
         reasons.push(`Perfect for ${duration} trip`);
       }
 
       // 6. TRAVEL GROUP SUITABILITY (15 points)
       if (travelGroup && place.recommendedFor?.some(group =>
         group.toLowerCase().includes(travelGroup.toLowerCase()))) {
-        score += 15;
+        rawScore += 15;
         reasons.push(`Ideal for ${travelGroup} travel`);
       }
 
       // 7. PHYSICAL ACTIVITY MATCH (10 points)
       if (physicalActivity && this.isActivityCompatible(place, physicalActivity)) {
-        score += 10;
+        rawScore += 10;
         reasons.push(`Matches your ${physicalActivity} activity level`);
       }
 
       // 8. SEASON COMPATIBILITY (10 points)
       if (season && this.isSeasonGood(place.bestSeason, season)) {
-        score += 10;
+        rawScore += 10;
         reasons.push(`Great in ${season}`);
       }
 
       // 9. AGE GROUP SUITABILITY (5 points)
       if (ageGroup && this.isAgeSuitable(place, ageGroup)) {
-        score += 5;
+        rawScore += 5;
         reasons.push(`Suitable for ${ageGroup} age group`);
       }
 
       // 10. ADD RANDOMNESS FOR VARIETY (0-5 points)
-      score += Math.random() * 5;
+      rawScore += Math.random() * 5;
+
+      const rounded = Math.round(rawScore);
 
       return {
         place: {
           ...place,
-          matchScore: Math.round(score),
-          matchPercentage: Math.min(100, Math.round(score)),
-          recommendationReasons: reasons
+          matchScore: rounded,
+          matchPercentage: Math.min(100, rounded),
+          // expose reasons under both keys to keep compatibility
+          recommendationReasons: reasons,
+          matchReasons: reasons
         },
-        score: Math.round(score)
+        // keep raw score (not rounded) for sorting to reduce tied scores
+        score: rawScore
       };
     });
 
-    // Step 2: Sort by score (highest first)
-    scoredPlaces.sort((a, b) => b.score - a.score);
+    // Step 2: Sort by score (highest first). If scores tie, break ties randomly
+    scoredPlaces.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return Math.random() - 0.5;
+    });
+
+    // Debug: log top scores to help trace why the same places are returned
+    console.debug('🔢 Top scores snapshot:', scoredPlaces.slice(0, 10).map(p => ({ id: p.place.id, name: p.place.name, score: Math.round(p.score) })));
 
     // Step 3: Return top N with itineraries
     const topPlaces = scoredPlaces.slice(0, topN).map(item => ({
@@ -296,7 +307,7 @@ export class SmartRecommendationEngine {
 export const recommendationEngine = new SmartRecommendationEngine();
 
 // Main export
-export function getSmartRecommendations(userProfile, topN = 5) {
+export function getSmartRecommendations(userProfile, topN = 10) {
   return recommendationEngine.recommendPlaces(userProfile, topN);
 }
 

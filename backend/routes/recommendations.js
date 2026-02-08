@@ -8,7 +8,7 @@ const itineraryService = require('../services/itineraryService');
 // Body: { mood, userProfile: { ageGroup, travelGroup, tripType, duration, budget, interests }, userLocation: { lat, lng } }
 router.post('/mood-based', async (req, res) => {
   try {
-    const { mood, userProfile, userLocation } = req.body;
+    const { mood, userProfile, userLocation, multiDestination } = req.body;
 
     // Validate required fields
     if (!mood) {
@@ -64,8 +64,17 @@ router.post('/mood-based', async (req, res) => {
       }
     }
 
+    // Deduplicate by place id so the same place never appears twice (e.g. duplicate Lonavala in data)
+    const seenPlaceIds = new Set();
+    const deduped = recommendationsWithDistance.filter(place => {
+      const id = place.id;
+      if (id != null && seenPlaceIds.has(id)) return false;
+      if (id != null) seenPlaceIds.add(id);
+      return true;
+    });
+
     // Generate itineraries for each recommendation
-    const recommendationsWithItinerary = recommendationsWithDistance.map(place => {
+    const recommendationsWithItinerary = deduped.map(place => {
       const itinerary = itineraryService.generateItinerary(
         place,
         userProfile.duration,
@@ -84,8 +93,24 @@ router.post('/mood-based', async (req, res) => {
       };
     });
 
-    // Limit to top 5 recommendations
-    const topRecommendations = recommendationsWithItinerary.slice(0, 5);
+    // Limit to top 8 recommendations for better variety (already deduplicated)
+    const topRecommendations = recommendationsWithItinerary.slice(0, 8);
+
+    // Generate multi-destination itinerary when requested and duration supports it (1 Week or 2 Weeks)
+    let multiDestinationItinerary = null;
+    const duration = userProfile?.duration || '';
+    const durationLower = duration.toLowerCase();
+    const supportsMultiDest = durationLower.includes('1 week') || durationLower.includes('7 days') ||
+      durationLower.includes('2 week') || durationLower.includes('14 days');
+
+    if (multiDestination && supportsMultiDest && topRecommendations.length >= 2) {
+      const placeObjects = topRecommendations.map(r => r.place);
+      multiDestinationItinerary = itineraryService.generateMultiDestinationItinerary(
+        placeObjects,
+        duration,
+        userProfile
+      );
+    }
 
     res.json({
       success: true,
@@ -94,6 +119,7 @@ router.post('/mood-based', async (req, res) => {
         userProfile,
         recommendations: topRecommendations,
         totalRecommendations: topRecommendations.length,
+        multiDestinationItinerary: multiDestinationItinerary,
         generatedAt: new Date().toISOString()
       },
       message: `Found ${topRecommendations.length} perfect destinations for your ${mood} mood!`

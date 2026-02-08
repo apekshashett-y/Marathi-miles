@@ -261,14 +261,14 @@ class ItineraryService {
 
     // Main activity based on day number and interests
     const dayProgression = this.getDayProgression(dayNumber, totalDays);
-    const mainActivity = this.getMainActivityForDay(place, dayProgress, interests, placeInterests, dayNumber);
+    const mainActivity = this.getMainActivityForDay(place, dayProgression, interests, placeInterests, dayNumber);
     activities.push(mainActivity);
 
     // Lunch
     activities.push('Lunch featuring local specialties');
 
     // Afternoon activity
-    const afternoonActivity = this.getAfternoonActivityForDay(place, dayProgress, interests, placeInterests, dayNumber);
+    const afternoonActivity = this.getAfternoonActivityForDay(place, dayProgression, interests, placeInterests, dayNumber);
     if (afternoonActivity) {
       activities.push(afternoonActivity);
     }
@@ -278,7 +278,7 @@ class ItineraryService {
 
     return {
       day: dayNumber,
-      title: `Day ${dayNumber}: ${this.getDayTitle(dayProgress, place)}`,
+      title: `Day ${dayNumber}: ${this.getDayTitle(dayProgression, place)}`,
       activities
     };
   }
@@ -412,6 +412,83 @@ class ItineraryService {
     }
 
     return 2; // Default to 2 days
+  }
+
+  /**
+   * Generate multi-destination itinerary for 1 Week or 2 Weeks trips
+   * Splits days across 2-3 places (e.g., 7 days -> 2+2+3)
+   * @param {Array} places - Array of place objects (top 3 from recommendations)
+   * @param {string} duration - Trip duration (e.g., "1 Week", "2 Weeks")
+   * @param {Object} userProfile - User profile with preferences
+   * @returns {Object} Multi-destination itinerary with places and day-by-day plan
+   */
+  generateMultiDestinationItinerary(places, duration, userProfile = {}) {
+    const totalDays = this.getDaysFromDuration(duration);
+    const numPlaces = Math.min(3, Math.max(2, places.length));
+
+    if (totalDays < 5 || numPlaces < 2) {
+      return null;
+    }
+
+    // Deduplicate by place id and name so same place (e.g. Lonavala) never appears twice
+    const seenIds = new Set();
+    const seenNames = new Set();
+    const uniquePlaces = places.filter(p => {
+      const id = p.id;
+      const name = (p.name || '').toLowerCase().trim();
+      if (id != null && seenIds.has(id)) return false;
+      if (name && seenNames.has(name)) return false;
+      if (id != null) seenIds.add(id);
+      if (name) seenNames.add(name);
+      return true;
+    });
+
+    const selectedPlaces = uniquePlaces.slice(0, numPlaces);
+
+    // Split days across places (e.g., 7 days -> [2, 2, 3], 14 days -> [4, 5, 5])
+    const daySplits = [];
+    const baseDays = Math.floor(totalDays / numPlaces);
+    const remainder = totalDays % numPlaces;
+    for (let i = 0; i < numPlaces; i++) {
+      daySplits.push(baseDays + (i < remainder ? 1 : 0));
+    }
+
+    const itinerary = [];
+    let globalDay = 1;
+
+    for (let placeIdx = 0; placeIdx < selectedPlaces.length; placeIdx++) {
+      const place = selectedPlaces[placeIdx];
+      const daysAtPlace = daySplits[placeIdx];
+
+      for (let d = 1; d <= daysAtPlace; d++) {
+        let dayPlan;
+        if (d === 1) {
+          dayPlan = this.generateArrivalDay(place, userProfile);
+          dayPlan.day = globalDay;
+          dayPlan.placeName = place.name;
+          dayPlan.placeId = place.id;
+        } else if (d === daysAtPlace) {
+          dayPlan = this.generateDepartureDay(place, daysAtPlace, userProfile);
+          dayPlan.day = globalDay;
+          dayPlan.placeName = place.name;
+          dayPlan.placeId = place.id;
+        } else {
+          dayPlan = this.generateActivityDay(place, d, daysAtPlace, userProfile);
+          dayPlan.day = globalDay;
+          dayPlan.placeName = place.name;
+          dayPlan.placeId = place.id;
+        }
+        itinerary.push(dayPlan);
+        globalDay++;
+      }
+    }
+
+    return {
+      isMultiDestination: true,
+      places: selectedPlaces.map(p => ({ id: p.id, name: p.name, location: p.location })),
+      totalDays,
+      itinerary
+    };
   }
 }
 

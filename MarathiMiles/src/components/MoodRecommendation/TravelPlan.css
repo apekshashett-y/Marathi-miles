@@ -2040,6 +2040,17 @@
   font-size: 1.1rem;
 }
 
+.day-place-badge {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 4px 0 8px 0;
+}
+
 .day-budget {
   background: #e8f5e9;
   color: #2E7D32;

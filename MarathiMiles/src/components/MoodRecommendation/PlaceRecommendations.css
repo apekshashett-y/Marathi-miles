@@ -327,6 +327,40 @@
 }
 
 /* Footer */
+.multi-destination-cta {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.multi-destination-btn {
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.multi-destination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.multi-destination-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.multi-destination-hint {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+}
+
 .recommendations-footer {
   background: rgba(255, 255, 255, 0.1);
   padding: 20px;

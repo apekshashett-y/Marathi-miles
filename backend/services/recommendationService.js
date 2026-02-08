@@ -38,6 +38,9 @@ class RecommendationService {
       pace
     } = userProfile;
 
+    // Normalize mood to lowercase so matching is consistent (frontend may send "Happy", "Calm")
+    mood = (mood || 'happy').toLowerCase().trim();
+
     console.log('🔍 Generating recommendations for:', { mood, userProfile });
 
     // Ensure we have places loaded
@@ -46,24 +49,38 @@ class RecommendationService {
       return [];
     }
 
+    // Deduplicate places by id (and by name if id missing) so same place never appears twice
+    const seenIds = new Set();
+    const seenNames = new Set();
+    const uniquePlaces = this.places.filter(place => {
+      const id = place.id;
+      const name = (place.name || '').toLowerCase().trim();
+      if (seenIds.has(id) || seenNames.has(name)) return false;
+      if (id != null) seenIds.add(id);
+      if (name) seenNames.add(name);
+      return true;
+    });
+
     // Score each place based on user preferences
-    const scoredPlaces = this.places.map(place => {
+    const scoredPlaces = uniquePlaces.map(place => {
       let score = 0;
       const reasons = [];
 
-      // 1. MOOD MATCHING (Highest Priority - 40 points)
-      if (place.moodTags && place.moodTags.includes(mood?.toLowerCase())) {
+      // 1. MOOD MATCHING (Highest Priority - 40 points) - mood is already normalized to lowercase
+      if (place.moodTags && place.moodTags.some(t => String(t).toLowerCase() === mood)) {
         score += 40;
         reasons.push(`Perfect for ${mood} mood`);
-      } else if (place.moodCompatibility && place.moodCompatibility.includes(mood?.toLowerCase())) {
+      } else if (place.moodCompatibility && place.moodCompatibility.some(t => String(t).toLowerCase() === mood)) {
         score += 35;
         reasons.push(`Great for ${mood} mood`);
       }
 
-      // 2. TRIP TYPE MATCHING (30 points)
-      if (tripType && place.tripTypeTags) {
-        const matched = place.tripTypeTags.some(tag => 
-          tag.toLowerCase().includes(tripType.toLowerCase())
+      // 2. TRIP TYPE MATCHING (30 points) - fallback to place.category when tripTypeTags missing
+      const tripTypeRaw = place.tripTypeTags || place.category || [];
+      const tripTypeTags = Array.isArray(tripTypeRaw) ? tripTypeRaw : (tripTypeRaw ? [tripTypeRaw] : []);
+      if (tripType && tripTypeTags.length > 0) {
+        const matched = tripTypeTags.some(tag =>
+          String(tag).toLowerCase().includes(tripType.toLowerCase())
         );
         if (matched) {
           score += 30;
@@ -101,9 +118,16 @@ class RecommendationService {
         }
       }
 
-      // 6. TRAVEL GROUP MATCHING (10 points)
-      if (travelGroup && place.suitableTravelGroups) {
-        if (place.suitableTravelGroups.includes(travelGroup)) {
+      // 6. TRAVEL GROUP MATCHING (10 points) - fallback to place.recommendedFor, case-insensitive
+      const travelGroupsRaw = place.suitableTravelGroups || place.recommendedFor || [];
+      const travelGroups = Array.isArray(travelGroupsRaw) ? travelGroupsRaw : (travelGroupsRaw ? [travelGroupsRaw] : []);
+      if (travelGroup && travelGroups.length > 0) {
+        const travelGroupLower = travelGroup.toLowerCase();
+        const matched = travelGroups.some(g =>
+          String(g).toLowerCase() === travelGroupLower ||
+          String(g).toLowerCase().includes(travelGroupLower)
+        );
+        if (matched) {
           score += 10;
           reasons.push(`Ideal for ${travelGroup} travel`);
         }
@@ -128,17 +152,25 @@ class RecommendationService {
     // Filter out places with very low scores (less than 20)
     const filteredPlaces = scoredPlaces.filter(place => place.matchScore >= 20);
 
-    // Sort by score (highest first)
-    filteredPlaces.sort((a, b) => b.matchScore - a.matchScore);
+    // Sort by score (highest first), then by number of match reasons (more = better), then by place id for stable order
+    // This makes different inputs (mood, tripType, interests) produce different rankings
+    filteredPlaces.sort((a, b) => {
+      if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+      const aReasons = (a.matchReasons || []).length;
+      const bReasons = (b.matchReasons || []).length;
+      if (bReasons !== aReasons) return bReasons - aReasons;
+      return (a.id || 0) - (b.id || 0);
+    });
 
     // If no matches, return top places by mood
     if (filteredPlaces.length === 0) {
       console.log('⚠️ No matches found, returning mood-based places');
-      return this.places
-        .filter(place => 
-          place.moodTags && place.moodTags.includes(mood?.toLowerCase())
-        )
-        .slice(0, 5)
+      return uniquePlaces
+        .filter(place => {
+          const tags = place.moodTags || place.moodCompatibility || [];
+          return tags.some(t => String(t).toLowerCase() === mood);
+        })
+        .slice(0, 8)
         .map(place => ({
           ...place,
           matchScore: 50,

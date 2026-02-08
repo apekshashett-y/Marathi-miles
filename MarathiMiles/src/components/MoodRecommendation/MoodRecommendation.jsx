@@ -18,6 +18,9 @@ const MoodRecommendation = () => {
   const [userPreferences, setUserPreferences] = useState(null); // ✅ Store user preferences
   const [userLocation, setUserLocation] = useState(null); // ✅ Store user location
   const [locationPermissionGranted, setLocationPermissionGranted] = useState(false);
+  const [apiError, setApiError] = useState(null); // ✅ Backend error for retry UI
+  const [lastSubmittedProfile, setLastSubmittedProfile] = useState(null); // ✅ For retry
+  const [multiDestinationItinerary, setMultiDestinationItinerary] = useState(null);
 
   // ✅ STEP 1: Face detection
   const handleMoodDetected = useCallback((mood) => {
@@ -52,116 +55,115 @@ const MoodRecommendation = () => {
     }
   }, []);
 
-  // ✅ STEP 2: CRITICAL FIX - Handle questionnaire submit with PROPER user preferences storage
+  // ✅ Handle questionnaire submit - receive { userProfile } from TripQuestionnaire, call backend
   const handleQuestionnaireSubmit = async (questionnaireData) => {
-    console.log('📋 Raw questionnaire data received:', questionnaireData);
-    
+    console.log('📋 Questionnaire data received:', questionnaireData);
+
+    const userProfile = questionnaireData.userProfile || questionnaireData.profile || questionnaireData;
+    if (!userProfile) {
+      console.error('❌ No user profile in questionnaire data');
+      return;
+    }
+
+    const preferences = {
+      mood: userProfile.mood || detectedMood,
+      ageGroup: userProfile.ageGroup,
+      travelGroup: userProfile.travelGroup,
+      tripType: userProfile.tripType,
+      duration: userProfile.duration,
+      budget: userProfile.budget,
+      interests: userProfile.interests || []
+    };
+
+    setUserPreferences(preferences);
+    setLastSubmittedProfile({ userProfile: preferences });
+    setApiError(null);
+
     try {
       setIsLoading(true);
-      
-      // ✅ EXTRACT USER PROFILE PROPERLY
-      const userProfile = questionnaireData.userProfile || questionnaireData.profile || questionnaireData;
-      
-      console.log('👤 Extracted user profile:', userProfile);
-      
-      // ✅ CRITICAL: STORE USER PREFERENCES IMMEDIATELY
-      const preferences = {
-        mood: userProfile.mood || detectedMood,
-        ageGroup: userProfile.ageGroup,
-        travelGroup: userProfile.travelGroup,
-        tripType: userProfile.tripType,
-        duration: userProfile.duration, // ✅ Keep original format (e.g., "2 Weeks")
-        budget: userProfile.budget,
-        interests: userProfile.interests || []
-      };
-      
-      console.log('💾 Storing user preferences:', preferences);
-      setUserPreferences(preferences); // ✅ STORE HERE
-      
-      // ✅ Prepare API data
-      const apiData = {
-        mood: detectedMood,
-        userProfile: preferences
-      };
-      
-      console.log('📤 Sending to API:', apiData);
-      
-      // Try backend API first, fallback to local
-      let result;
-      try {
-        // Use stored user location (already fetched in location step)
-        console.log('📍 Using stored user location:', userLocation);
 
-        const backendData = {
-          mood: detectedMood,
-          userProfile: preferences,
-          userLocation: userLocation
-        };
+      const duration = preferences.duration || '';
+      const durationLower = duration.toLowerCase();
+      const supportsMultiDest = durationLower.includes('1 week') || durationLower.includes('7 days') ||
+        durationLower.includes('2 week') || durationLower.includes('14 days');
 
-        const backendResult = await getMoodRecommendations(backendData);
-        
-        if (backendResult.success && backendResult.data) {
-          console.log('✅ Backend API Success:', backendResult);
-          // Backend already returns the correct structure
-          result = backendResult;
-        } else {
-          throw new Error('Backend API failed - backend is required for recommendations');
-        }
-      } catch (backendError) {
-        console.error('❌ Backend API failed - no local fallback available:', backendError);
-        // COMMENTED OUT: Local fallback disabled to ensure backend-only operation
-        // result = await getAutomatedTravelPlan(apiData, 5);
-        throw new Error('Backend unavailable - please ensure backend server is running');
-      }
-      
+      const backendData = {
+        mood: detectedMood || preferences.mood,
+        userProfile: preferences,
+        userLocation: userLocation,
+        multiDestination: supportsMultiDest
+      };
+
+      console.log('📤 Calling backend API:', backendData);
+      const result = await getMoodRecommendations(backendData);
+
       if (result?.success && result.data) {
-        console.log('✅ API Success:', result.data);
-        
         const recommendations = result.data.recommendations || result.data.plan || [];
-        
-        // ✅ ENSURE DURATION & BUDGET ARE PROPAGATED TO ALL PLACES
-        // Backend already structures as { place, itinerary, matchScore, ... }
+        const multiDestinationItinerary = result.data.multiDestinationItinerary || null;
+
         const updatedRecommendations = recommendations.map(rec => {
-          // Handle both backend format (rec.place) and local format (rec.place or rec)
           const placeData = rec.place || rec;
           return {
             ...rec,
             place: {
               ...placeData,
-              duration: preferences.duration, // ✅ Force user's duration
-              budget: preferences.budget      // ✅ Force user's budget
+              duration: preferences.duration,
+              budget: preferences.budget
             },
-            userPreferences: preferences // ✅ Attach preferences to each recommendation
+            userPreferences: preferences
           };
         });
-        
-        console.log('📍 Updated recommendations with user preferences:', updatedRecommendations);
-        
+
         setRecommendedPlaces(updatedRecommendations);
+        setMultiDestinationItinerary(multiDestinationItinerary);
         setCurrentStep('recommendations');
       } else {
-        console.log('⚠️ API failed, no fallback available - backend only mode');
-        // const fallbackPlaces = generateFallbackPlaces(detectedMood, preferences);
-        // setRecommendedPlaces(fallbackPlaces);
-        setCurrentStep('recommendations');
+        throw new Error(result?.message || 'Backend returned invalid response');
       }
     } catch (error) {
-      console.error('❌ Error in handleQuestionnaireSubmit:', error);
-      
-      const userProfile = questionnaireData.userProfile || questionnaireData.profile || questionnaireData || {};
-      const preferences = {
-        mood: detectedMood,
-        duration: userProfile.duration || '2-3 Days',
-        budget: userProfile.budget || 'Medium',
-        ...userProfile
+      console.error('❌ Backend API failed:', error);
+      setApiError(error.message || 'Backend unavailable. Please ensure the server is running on port 5000.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetryRecommendations = () => {
+    if (lastSubmittedProfile) {
+      handleQuestionnaireSubmit(lastSubmittedProfile);
+    }
+  };
+
+  // Request multi-destination itinerary (1 Week / 2 Weeks): call backend with multiDestination: true
+  const handleRequestMultiDestination = async () => {
+    const profile = lastSubmittedProfile?.userProfile || userPreferences;
+    if (!profile) return;
+    setApiError(null);
+    try {
+      setIsLoading(true);
+      const backendData = {
+        mood: detectedMood || profile.mood,
+        userProfile: profile,
+        userLocation: userLocation,
+        multiDestination: true
       };
-      
-      setUserPreferences(preferences);
-      
-      // const emergencyPlaces = generateFallbackPlaces(detectedMood, preferences);
-      // setRecommendedPlaces(emergencyPlaces);
-      console.log('⚠️ Error occurred, no fallback available - backend only mode');
-      setCurrentStep('recommendations');
+      const result = await getMoodRecommendations(backendData);
+      if (result?.success && result.data?.multiDestinationItinerary) {
+        const multiDest = result.data.multiDestinationItinerary;
+        setMultiDestinationItinerary(multiDest);
+        setTravelPlan({
+          multiDestinationItinerary: multiDest,
+          userPreferences: profile,
+          isMultiDestination: true
+        });
+        setSelectedPlace(multiDest.places?.[0] || null);
+        setCurrentStep('plan');
+      } else {
+        setApiError('Multi-destination itinerary is only available for 1 Week or 2 Weeks trips.');
+      }
+    } catch (error) {
+      console.error('❌ Multi-destination request failed:', error);
+      setApiError(error.message || 'Could not generate multi-destination plan. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -503,6 +505,8 @@ const MoodRecommendation = () => {
     setSelectedPlace(null);
     setTravelPlan(null);
     setUserPreferences(null);
+    setApiError(null);
+    setMultiDestinationItinerary(null);
   };
 
   const backToRecommendations = () => {
@@ -513,6 +517,17 @@ const MoodRecommendation = () => {
     } else {
       setCurrentStep('questionnaire');
     }
+  };
+
+  const handleSelectMultiDestination = () => {
+    if (!multiDestinationItinerary) return;
+    setTravelPlan({
+      isMultiDestination: true,
+      multiDestinationItinerary,
+      userPreferences: userPreferences
+    });
+    setSelectedPlace(null);
+    setCurrentStep('plan');
   };
 
   return (
@@ -633,6 +648,8 @@ const MoodRecommendation = () => {
             detectedMood={detectedMood}
             isLoading={isLoading}
             onBack={() => setCurrentStep('camera')}
+            apiError={apiError}
+            onRetry={handleRetryRecommendations}
           />
         )}
 
@@ -640,9 +657,11 @@ const MoodRecommendation = () => {
           <PlaceRecommendations 
             places={recommendedPlaces}
             mood={detectedMood}
-            userPreferences={userPreferences} // ✅ PASS USER PREFERENCES
+            userPreferences={userPreferences}
             onPlaceSelect={handlePlaceSelect}
             onBack={() => setCurrentStep('questionnaire')}
+            multiDestinationItinerary={multiDestinationItinerary}
+            onSelectMultiDestination={handleSelectMultiDestination}
           />
         )}
 

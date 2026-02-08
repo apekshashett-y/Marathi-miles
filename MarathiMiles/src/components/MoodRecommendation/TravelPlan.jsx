@@ -266,6 +266,10 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences, u
 
   const days = getDaysFromDuration(userDuration);
 
+  // Multi-destination: plan has multiDestinationItinerary with places and day-by-day itinerary
+  const isMultiDestination = plan?.isMultiDestination || plan?.multiDestinationItinerary?.isMultiDestination;
+  const multiItinerary = plan?.multiDestinationItinerary;
+
   const calculateBaseBudget = (budget, duration) => {
     const dailyMap = {
       'Low': 2500, 'Budget': 2500,
@@ -275,8 +279,19 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences, u
     return (dailyMap[budget] || 2500) * getDaysFromDuration(duration);
   };
 
-  // ✅ Get place data with rich details
+  // ✅ Get place data with rich details (or multi-destination summary)
   const getPlaceData = () => {
+    if (isMultiDestination && multiItinerary?.places?.length) {
+      const placeNames = multiItinerary.places.map(p => p.name).join(', ');
+      return {
+        name: `Multi-destination: ${placeNames}`,
+        location: 'Maharashtra',
+        description: `${multiItinerary.totalDays}-day trip across ${multiItinerary.places.length} destinations`,
+        image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop',
+        bestSeason: 'October to March',
+        packingList: ['Comfortable shoes', 'Light layers', 'Camera', 'Water bottle']
+      };
+    }
     let place = selectedPlace || plan?.place || plan || {
       name: 'Matheran',
       location: 'Raigad, Maharashtra',
@@ -791,13 +806,30 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences, u
     return itinerary;
   };
 
-  const itineraryData = generateProfessionalItinerary(days);
-  
   const totalBudget = dynamicData.budget || calculateBaseBudget(userBudget, userDuration);
   const transportCost = dynamicData.transportCost || Math.round(totalBudget * 0.2);
   const stayAndFood = dynamicData.stayAndFood || Math.round(totalBudget * 0.7);
   const activityCost = dynamicData.activityCost || Math.round(totalBudget * 0.1);
   const perDayBudget = dynamicData.perDayBudget || Math.round(totalBudget / days);
+
+  const itineraryData = isMultiDestination && multiItinerary?.itinerary?.length
+    ? multiItinerary.itinerary.map(dayPlan => ({
+        day: dayPlan.day,
+        title: dayPlan.title || `Day ${dayPlan.day}`,
+        theme: dayPlan.placeName ? `At ${dayPlan.placeName}` : 'Exploration',
+        placeName: dayPlan.placeName,
+        activities: (dayPlan.activities || []).map((act, i) => ({
+          time: ['09:00', '12:00', '15:00', '18:00'][i % 4] + ' AM',
+          activity: typeof act === 'string' ? act : act?.activity || act,
+          type: 'sightseeing',
+          duration: '2 hours',
+          cost: 0,
+          icon: '📍'
+        })),
+        dayBudget: perDayBudget,
+        tips: []
+      }))
+    : generateProfessionalItinerary(days);
 
   // ✅ AI SUGGESTIONS GENERATOR
   const generateAISuggestions = () => {
@@ -1195,6 +1227,9 @@ const TravelPlan = ({ plan, selectedPlace, onRestart, onBack, userPreferences, u
                     <div className="day-info">
                       <h4>{day?.title || `Day ${idx + 1}: Exploration`}</h4>
                       <p className="day-theme">{day?.theme || "Day Adventure"}</p>
+                      {day?.placeName && (
+                        <span className="day-place-badge">📍 {day.placeName}</span>
+                      )}
                       <span className="day-budget">Budget: ₹{dayBudget.toLocaleString()}</span>
                     </div>
                   </div>

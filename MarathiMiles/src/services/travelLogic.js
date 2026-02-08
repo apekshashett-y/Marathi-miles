@@ -11,7 +11,7 @@ import places from "./maharashtraData";
 /**
  * Score each place against user profile and return top N
  */
-export function recommendPlaces(profile, topN = 5) {
+export function recommendPlaces(profile, topN = 10) {
   const { mood, tripType, budget, interests = [], duration } = profile;
 
   // normalize inputs
@@ -151,7 +151,7 @@ export function generateItineraryForPlace(place, durationLabel) {
 /**
  * Helper: generate full plan for profile: recommended places + itinerary per place
  */
-export function generatePlan(profile, topN = 5) {
+export function generatePlan(profile, topN = 10) {
   const recs = recommendPlaces(profile, topN);
   const plan = recs.map(place => {
     const itinerary = generateItineraryForPlace(place, profile.duration || place.duration);
