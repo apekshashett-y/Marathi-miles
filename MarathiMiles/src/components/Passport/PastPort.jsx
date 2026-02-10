@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { maharashtraForts } from "../../services/fortData";
 import { shivneriData } from "../../data/shivneriData";
 import DynamicItinerary from "./DynamicItinerary";
 import Timeline from "./Timeline";
+import SmartExplorationPreview from "./SmartExplorationPreview";
 import "./PastPort.css";
 
 
@@ -64,6 +65,7 @@ function buildItineraryPlan(fort, timeKey) {
 }
 
 const PastPort = ({ onBack }) => {
+  const navigate = useNavigate();
   const [selectedFort, setSelectedFort] = useState(null);
   const [expandedChapter, setExpandedChapter] = useState(null);
   const [selectedTimeKey, setSelectedTimeKey] = useState(null);
@@ -823,6 +825,12 @@ const PastPort = ({ onBack }) => {
               />
             </div>
 
+            {/* Smart Exploration Preview - Stage 1 */}
+            <SmartExplorationPreview
+              fortName={selectedFort.name}
+              onOpenExploration={() => navigate(`/pastport/${selectedFort.id || 'shivneri'}/smart-exploration`)}
+            />
+
           </div>
         </>
       )}
@@ -844,6 +852,7 @@ const PastPort = ({ onBack }) => {
         </p>
       </div>
     </div>
+
   );
 };
 

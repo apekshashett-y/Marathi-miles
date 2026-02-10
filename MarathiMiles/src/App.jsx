@@ -1,21 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MoodRecommendation from './components/MoodRecommendation/MoodRecommendation';
-import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer'; // Add this import
+import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
+import SmartExplorationPage from './components/Passport/SmartExplorationPage';
 
-const App = () => {
-  const [currentSection, setCurrentSection] = useState("home");
+const MainApp = () => {
+  const location = useLocation();
+  const [currentSection, setCurrentSection] = useState(location.state?.section || "home");
   const heroSectionRef = useRef(null);
   const moodRecommendationsRef = useRef(null);
   const passportRef = useRef(null);
-  const placeExplorerRef = useRef(null); // Add this ref
+  const placeExplorerRef = useRef(null);
 
   const scrollToSection = (section) => {
     setTimeout(() => {
       const navbarHeight = 80;
-      
+
       if (section === "home") {
         const heroElement = document.getElementById('home');
         if (heroElement) {
@@ -71,7 +74,7 @@ const App = () => {
   }, []);
 
   const renderCurrentSection = () => {
-    switch(currentSection) {
+    switch (currentSection) {
       case "mood-recommendations":
         return (
           <div ref={moodRecommendationsRef} id="mood-recommendations">
@@ -98,13 +101,22 @@ const App = () => {
 
   return (
     <>
-      <Header 
-        onSectionChange={setCurrentSection} 
+      <Header
+        onSectionChange={setCurrentSection}
         heroSectionRef={heroSectionRef}
       />
       {renderCurrentSection()}
       <Footer />
     </>
+  );
+};
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<MainApp />} />
+      <Route path="/pastport/:fortId/smart-exploration" element={<SmartExplorationPage />} />
+    </Routes>
   );
 };
 
