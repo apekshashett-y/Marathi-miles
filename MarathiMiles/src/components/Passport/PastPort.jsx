@@ -542,13 +542,7 @@ const PastPort = ({ onBack }) => {
             )}
 
             {/* "Drag to Explore" overlay - HIDES in full immersive mode */}
-            {!isFullImmersive && (
-              <div className="immersive-viewport-overlay">
-                <div className="immersive-drag-icon">↔️</div>
-                <div className="immersive-drag-text">Drag to Explore 360°</div>
-                <div className="immersive-drag-hint">Swipe left/right to rotate view</div>
-              </div>
-            )}
+            
 
             <div className="immersive-viewport-controls">
               {/* Auto-play toggle button - both modes */}

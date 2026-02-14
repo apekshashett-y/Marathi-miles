@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 import MoodRecommendation from './components/MoodRecommendation/MoodRecommendation';
 import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
-import SmartExplorationPage from './components/Passport/SmartExplorationPage';
+import SmartExplorationV2 from './components/Passport/SmartExplorationV2';
 
 const MainApp = () => {
   const location = useLocation();
@@ -115,7 +115,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<MainApp />} />
-      <Route path="/pastport/:fortId/smart-exploration" element={<SmartExplorationPage />} />
+      <Route path="/pastport/:fortId/smart-exploration" element={<SmartExplorationV2 />} />
     </Routes>
   );
 };

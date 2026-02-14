@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { computeOptimalPath } from "../../utils/pathOptimizer";
+import { computeAdaptiveOptimalPath } from "../../utils/adaptivePathOptimizer";
 import { fortGraphs } from "../../data/fortGraphData";
+import { initializeDatabase, getConfig, updateConfig } from "../../services/adaptiveDatabase";
+import { trackLocationClick } from "../../utils/behaviorTracking";
+import AdaptiveAnalytics from "./AdaptiveAnalytics";
 import "./SmartExplorationPage.css";
 
 const SmartExplorationPage = () => {
@@ -16,6 +20,8 @@ const SmartExplorationPage = () => {
     const [optimizedPlan, setOptimizedPlan] = useState(null);
     const [isComputing, setIsComputing] = useState(false);
     const [activeStrategyId, setActiveStrategyId] = useState("balanced");
+    const [adaptiveMode, setAdaptiveMode] = useState(true);
+    const [showAnalytics, setShowAnalytics] = useState(false);
 
     const timeOptions = [
         { value: "30min", label: "30 minutes", minutes: 30 },
@@ -35,12 +41,15 @@ const SmartExplorationPage = () => {
         const timeToUse = overrides.time || timeAvailable;
         const energyToUse = overrides.energy || energyLevel;
         const strategyToUse = overrides.strategy || activeStrategyId;
+        const useAdaptive = overrides.adaptive !== undefined ? overrides.adaptive : adaptiveMode;
 
         setActiveStrategyId(strategyToUse);
 
         setTimeout(() => {
             const selectedTime = timeOptions.find(opt => opt.value === timeToUse);
-            const result = computeOptimalPath(fortGraph, selectedTime.minutes, energyToUse);
+            // Use adaptive optimizer if enabled, otherwise use standard optimizer
+            const computeFunction = useAdaptive ? computeAdaptiveOptimalPath : computeOptimalPath;
+            const result = computeFunction(fortGraph, selectedTime.minutes, energyToUse, useAdaptive);
 
             const selectedPlan = result.allPlans?.find(p => p.id === strategyToUse) || result;
             const alts = result.allPlans?.filter(p => p.id !== selectedPlan.id) || [];
@@ -53,9 +62,34 @@ const SmartExplorationPage = () => {
         }, 800);
     };
 
+    // Initialize database on mount
     useEffect(() => {
+        initializeDatabase();
+        const config = getConfig();
+        setAdaptiveMode(config.enabled);
         handleComputePath();
     }, []);
+
+    // Recompute when adaptive mode changes
+    useEffect(() => {
+        if (optimizedPlan) {
+            handleComputePath({ adaptive: adaptiveMode });
+        }
+    }, [adaptiveMode]);
+
+    // Toggle adaptive mode
+    const toggleAdaptiveMode = () => {
+        const newMode = !adaptiveMode;
+        setAdaptiveMode(newMode);
+        updateConfig({ enabled: newMode });
+    };
+
+    // Track location clicks on the map
+    const handleNodeClick = (nodeId) => {
+        if (activeFortId && nodeId) {
+            trackLocationClick(activeFortId, nodeId);
+        }
+    };
 
     const handleAlternativeClick = (alt) => {
         if (alt.disabled) return;
@@ -73,11 +107,37 @@ const SmartExplorationPage = () => {
                     <div className="exploration-header-left">
                         <span className="exploration-page-brand">⚔️ PastPort</span>
                         <h1 className="exploration-page-title">{fortName} – Smart Exploration Map</h1>
-                        <p className="exploration-page-subtitle">Illustrated fort layout with optimized route</p>
+                        <p className="exploration-page-subtitle">
+                            {adaptiveMode ? 'Optimized using visitor patterns' : 'Illustrated fort layout with optimized route'}
+                        </p>
                     </div>
-                    <button className="exploration-close-btn" onClick={handleClose}>
-                        <span className="close-icon">✕</span> Back to Fort
-                    </button>
+                    <div className="exploration-header-controls">
+                        {/* Adaptive Mode Toggle */}
+                        <button
+                            className={`adaptive-toggle-btn ${adaptiveMode ? 'active' : ''}`}
+                            onClick={toggleAdaptiveMode}
+                            title={adaptiveMode ? 'Adaptive Mode ON' : 'Adaptive Mode OFF'}
+                        >
+                            <span className="toggle-icon">{adaptiveMode ? '🧠' : '📊'}</span>
+                            <span className="toggle-text">Adaptive Mode</span>
+                            <span className={`toggle-status ${adaptiveMode ? 'on' : 'off'}`}>
+                                {adaptiveMode ? 'ON' : 'OFF'}
+                            </span>
+                        </button>
+
+                        {/* Analytics Button */}
+                        <button
+                            className={`analytics-btn ${showAnalytics ? 'active' : ''}`}
+                            onClick={() => setShowAnalytics(!showAnalytics)}
+                            title="View Analytics"
+                        >
+                            <span className="btn-icon">📈</span>
+                        </button>
+
+                        <button className="exploration-close-btn" onClick={handleClose}>
+                            <span className="close-icon">✕</span> Back to Fort
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -211,6 +271,13 @@ const SmartExplorationPage = () => {
                     )}
                 </div>
             </div>
+
+            {/* Analytics Panel */}
+            {showAnalytics && (
+                <div className="analytics-panel-container">
+                    <AdaptiveAnalytics fortId={activeFortId} fortGraph={fortGraph} />
+                </div>
+            )}
         </div>
     );
 };

@@ -1,5 +1,6 @@
 export const fortGraphs = {
     shivneri: {
+        fortId: "shivneri",
         fortName: "Shivneri Fort",
         nodes: {
             mainGate: {
