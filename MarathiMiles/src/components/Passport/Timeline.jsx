@@ -109,19 +109,21 @@ const Timeline = ({
   chapters = [],
   expandedChapter,
   onToggleChapter,
-  language = "en"
+  language = "en",
+  onLanguageChange
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isAudioAvailable, setIsAudioAvailable] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [audioChapterIndex, setAudioChapterIndex] = useState(null);
-   const [isAudioPaused, setIsAudioPaused] = useState(false);
+  const [isAudioPaused, setIsAudioPaused] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const timelineRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const audioUtteranceRef = useRef(null);
-  
+  const localAudioRef = useRef(null);
+
   // Store scroll position to detect if user is scrolling
   const scrollTimeoutRef = useRef(null);
 
@@ -144,7 +146,7 @@ const Timeline = ({
   const handleManualScroll = useCallback(() => {
     setIsScrolling(true);
     clearTimeout(scrollTimeoutRef.current);
-    
+
     scrollTimeoutRef.current = setTimeout(() => {
       setIsScrolling(false);
     }, 300);
@@ -176,7 +178,7 @@ const Timeline = ({
     if (isFocusMode) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-      
+
       // Stop any playing audio
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
@@ -187,31 +189,31 @@ const Timeline = ({
       }
 
       setActiveIndex(0);
-      
-      // Scroll to active card
-       setTimeout(() => {
-      const firstCard = document.querySelector('[data-index="0"]');
-      if (firstCard && scrollContainerRef.current) {
-        const container = scrollContainerRef.current;
-        const cardRect = firstCard.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        
-        const scrollLeft = cardRect.left - containerRect.left + container.scrollLeft;
-        container.scrollTo({
-          left: scrollLeft - (containerRect.width - cardRect.width) / 2,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
-  } else {
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
-  }
 
-  return () => {
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
-    clearTimeout(scrollTimeoutRef.current);
+      // Scroll to active card
+      setTimeout(() => {
+        const firstCard = document.querySelector('[data-index="0"]');
+        if (firstCard && scrollContainerRef.current) {
+          const container = scrollContainerRef.current;
+          const cardRect = firstCard.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+
+          const scrollLeft = cardRect.left - containerRect.left + container.scrollLeft;
+          container.scrollTo({
+            left: scrollLeft - (containerRect.width - cardRect.width) / 2,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      clearTimeout(scrollTimeoutRef.current);
     };
   }, [isFocusMode]);
 
@@ -220,16 +222,16 @@ const Timeline = ({
     if (e) {
       e.stopPropagation(); // IMPORTANT: Prevent closing focus mode
     }
-    
+
     setActiveIndex(index);
-    
+
     // Scroll to clicked card
     const card = document.querySelector(`[data-index="${index}"]`);
     if (card && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const cardRect = card.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
-      
+
       const scrollLeft = cardRect.left - containerRect.left + container.scrollLeft;
       container.scrollTo({
         left: scrollLeft - (containerRect.width - cardRect.width) / 2,
@@ -243,7 +245,39 @@ const Timeline = ({
     if (e) {
       e.stopPropagation(); // Prevent closing focus mode
     }
-    
+
+    // Special handling for the first card ("Pre-13th Century") to play/pause local Marathi audio
+    if (index === 0) {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (localAudioRef.current) {
+        if (audioChapterIndex === index && isPlayingAudio && !isAudioPaused) {
+          // Pause local audio
+          localAudioRef.current.pause();
+          setIsPlayingAudio(false);
+          setIsAudioPaused(true);
+        } else if (audioChapterIndex === index && isAudioPaused) {
+          // Resume local audio
+          localAudioRef.current.play();
+          setIsPlayingAudio(true);
+          setIsAudioPaused(false);
+        } else {
+          // Start from beginning
+          localAudioRef.current.currentTime = 0;
+          localAudioRef.current.play();
+          setIsPlayingAudio(true);
+          setIsAudioPaused(false);
+          setAudioChapterIndex(index);
+        }
+      }
+      return;
+    }
+
+    // Stop local audio if playing when other cards are clicked
+    if (localAudioRef.current) {
+      localAudioRef.current.pause();
+      localAudioRef.current.currentTime = 0;
+    }
+
     if (!isAudioAvailable || !window.speechSynthesis) {
       alert(`🎧 Audio narration coming soon!\n\n"${chapter.era}"\n\nFull story available below.`);
       return;
@@ -280,11 +314,10 @@ const Timeline = ({
 
     const textToRead =
       expandedChapter === index
-        ? `${localizedChapter.title}. ${localizedChapter.fullStory || ""} ${
-            localizedChapter.significance
-              ? ` Historical Significance: ${localizedChapter.significance}`
-              : ""
-          }`
+        ? `${localizedChapter.title}. ${localizedChapter.fullStory || ""} ${localizedChapter.significance
+          ? ` Historical Significance: ${localizedChapter.significance}`
+          : ""
+        }`
         : `${localizedChapter.title}. ${localizedChapter.preview}`;
 
     speech.text = textToRead;
@@ -331,15 +364,15 @@ const Timeline = ({
     <>
       {/* Focus mode overlay - sirf outside click pe close hoga */}
       {isFocusMode && (
-        <div 
-          className="focus-mode-overlay" 
+        <div
+          className="focus-mode-overlay"
           onClick={() => setIsFocusMode(false)}
           aria-label="Click outside to exit focus mode"
           style={{ cursor: 'pointer' }}
         />
       )}
 
-      <div 
+      <div
         className={`historical-journey ${isFocusMode ? "focus-mode" : ""}`}
         ref={timelineRef}
       >
@@ -361,28 +394,36 @@ const Timeline = ({
 
         {/* Timeline Controls */}
         <div className="timeline-controls">
-          <button 
+          <button
             className="focus-mode-btn"
             onClick={() => setIsFocusMode(!isFocusMode)}
             aria-label={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
           >
             {isFocusMode ? "← Exit Focus Mode" : "🎬 Focus on Story"}
           </button>
-          
-          {isAudioAvailable && !isFocusMode && (
-            <div className="audio-availability-hint">
-              <span className="audio-icon">🔊</span>
-              <span className="audio-text">Audio narration available</span>
-            </div>
-          )}
+
+          <div className="language-switcher">
+            <button
+              className={`lang-btn ${language === 'en' ? 'active' : ''}`}
+              onClick={() => onLanguageChange?.('en')}
+            >
+              English
+            </button>
+            <button
+              className={`lang-btn ${language === 'mr' ? 'active' : ''}`}
+              onClick={() => onLanguageChange?.('mr')}
+            >
+              मराठी
+            </button>
+          </div>
         </div>
 
         {/* Progress indicator with rail - Hide in focus mode */}
         {!isFocusMode && (
           <div className="timeline-progress-container">
             <div className="timeline-rail">
-              <div 
-                className="timeline-progress" 
+              <div
+                className="timeline-progress"
                 style={{ width: `${((activeIndex + 1) / chapters.length) * 100}%` }}
               />
             </div>
@@ -402,107 +443,106 @@ const Timeline = ({
           </div>
         )}
 
-        <div 
-          className="timeline-scroll-wrapper" 
+        <div
+          className="timeline-scroll-wrapper"
           ref={scrollContainerRef}
           onScroll={handleManualScroll}
         >
           <div className="horizontal-timeline-track">
             {chapters.map((chapter, index) => {
-              const localized = getChapterContent(chapter, language);
+              const localized = getLocalizedChapter(getChapterContent(chapter, language), language);
               return (
-              <article
-                key={index}
-                data-index={index}
-                className={`timeline-chapter ${chapter.isMajor ? "major" : ""} ${
-                  activeIndex === index ? "is-active" : "is-dimmed"
-                } ${expandedChapter === index ? "expanded" : ""}`}
-                onClick={(e) => handleCardClick(index, e)}
-              >
-                <div className="chapter-marker">
-                  <span className="chapter-year">{chapter.year}</span>
-                  {activeIndex === index && (
-                    <div className="active-indicator"></div>
-                  )}
-                </div>
-
-                <div className="chapter-content">
-                  <div className="chapter-header">
-                    <span className="era-tag">{chapter.year}</span>
-                    {chapter.mood && (
-                      <span className="mood-tag">
-                        {getMoodIcon(chapter.mood)} {chapter.mood}
-                      </span>
+                <article
+                  key={index}
+                  data-index={index}
+                  className={`timeline-chapter ${chapter.isMajor ? "major" : ""} ${activeIndex === index ? "is-active" : "is-dimmed"
+                    } ${expandedChapter === index ? "expanded" : ""}`}
+                  onClick={(e) => handleCardClick(index, e)}
+                >
+                  <div className="chapter-marker">
+                    <span className="chapter-year">{chapter.year}</span>
+                    {activeIndex === index && (
+                      <div className="active-indicator"></div>
                     )}
-                    <h3 className="chapter-title">{localized.title}</h3>
-                    
-                    {/* Audio Narration Button */}
-                    <button
-                      className={`audio-narration-btn ${isPlayingAudio && audioChapterIndex === index ? "is-playing" : ""}`}
-                      onClick={(e) => {
-                        handleAudioClick(chapter, index, e);
-                      }}
-                      aria-label={`Listen to audio narration for ${localized.title}`}
-                      title={isAudioAvailable ? "Play audio narration" : "Audio narration coming soon"}
-                    >
-                      <span className="audio-btn-icon">
-                        {isPlayingAudio && audioChapterIndex === index ? "⏸️" : "🔊"}
-                      </span>
-                      <span className="audio-btn-text">
-                        {isPlayingAudio && audioChapterIndex === index ? "Playing..." : "Listen"}
-                      </span>
-                    </button>
                   </div>
 
-                  <div className="chapter-story">
-                    {expandedChapter === index ? (
-                      <div className="full-story">
-                        <div className="story-paragraphs">
-                          {localized.fullStory && (
-                            <p className="story-paragraph typewriter-text">
-                              {localized.fullStory}
-                            </p>
+                  <div className="chapter-content">
+                    <div className="chapter-header">
+                      <span className="era-tag">{chapter.year}</span>
+                      {chapter.mood && (
+                        <span className="mood-tag">
+                          {getMoodIcon(chapter.mood)} {chapter.mood}
+                        </span>
+                      )}
+                      <h3 className="chapter-title">{localized.title}</h3>
+
+                      {/* Audio Narration Button */}
+                      <button
+                        className={`audio-narration-btn ${isPlayingAudio && audioChapterIndex === index ? "is-playing" : ""}`}
+                        onClick={(e) => {
+                          handleAudioClick(chapter, index, e);
+                        }}
+                        aria-label={`Listen to audio narration for ${localized.title}`}
+                        title={isAudioAvailable ? "Play audio narration" : "Audio narration coming soon"}
+                      >
+                        <span className="audio-btn-icon">
+                          {isPlayingAudio && audioChapterIndex === index ? "⏸️" : "🔊"}
+                        </span>
+                        <span className="audio-btn-text">
+                          {isPlayingAudio && audioChapterIndex === index ? "Playing..." : "Listen"}
+                        </span>
+                      </button>
+                    </div>
+
+                    <div className="chapter-story">
+                      {expandedChapter === index ? (
+                        <div className="full-story">
+                          <div className="story-paragraphs">
+                            {localized.fullStory && (
+                              <p className="story-paragraph typewriter-text">
+                                {localized.fullStory}
+                              </p>
+                            )}
+                          </div>
+                          {localized.significance && (
+                            <div className="significance-box">
+                              <div className="significance-label">
+                                <span>📜</span>
+                                Historical Significance
+                              </div>
+                              <p className="significance-text">{localized.significance}</p>
+                            </div>
                           )}
                         </div>
-                        {localized.significance && (
-                          <div className="significance-box">
-                            <div className="significance-label">
-                              <span>📜</span>
-                              Historical Significance
-                            </div>
-                            <p className="significance-text">{localized.significance}</p>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="story-preview">{localized.preview}</p>
-                    )}
-                  </div>
+                      ) : (
+                        <p className="story-preview">{localized.preview}</p>
+                      )}
+                    </div>
 
-                  <div className="chapter-footer">
-                    <button
-                      className="read-more-btn"
-                      onClick={(e) => {
-                        e.stopPropagation(); // IMPORTANT: Prevent closing focus mode
-                        onToggleChapter(index);
-                      }}
-                    >
-                      {expandedChapter === index ? "Read Less" : "Read Full Story"}
-                      <span className="read-more-icon">
-                        {expandedChapter === index ? "↑" : "↓"}
-                      </span>
-                    </button>
-                    
-                    {/* Ambient sound indicator */}
-                    {isFocusMode && activeIndex === index && (
-                      <div className="ambient-sound-indicator">
-                        <span className="ambient-icon">🎵</span>
-                        <span className="ambient-text">Ambient sound on</span>
-                      </div>
-                    )}
+                    <div className="chapter-footer">
+                      <button
+                        className="read-more-btn"
+                        onClick={(e) => {
+                          e.stopPropagation(); // IMPORTANT: Prevent closing focus mode
+                          onToggleChapter(index);
+                        }}
+                      >
+                        {expandedChapter === index ? "Read Less" : "Read Full Story"}
+                        <span className="read-more-icon">
+                          {expandedChapter === index ? "↑" : "↓"}
+                        </span>
+                      </button>
+
+                      {/* Ambient sound indicator */}
+                      {isFocusMode && activeIndex === index && (
+                        <div className="ambient-sound-indicator">
+                          <span className="ambient-icon">🎵</span>
+                          <span className="ambient-text">Ambient sound on</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
               );
             })}
           </div>
@@ -519,6 +559,16 @@ const Timeline = ({
           </div>
         )}
       </div>
+      <audio
+        ref={localAudioRef}
+        src="/audio/1stcard.mp3"
+        onEnded={() => {
+          setIsPlayingAudio(false);
+          setAudioChapterIndex(null);
+          setIsAudioPaused(false);
+        }}
+        style={{ display: 'none' }}
+      />
     </>
   );
 };

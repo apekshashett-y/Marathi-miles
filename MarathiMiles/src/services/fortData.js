@@ -3,16 +3,17 @@ import heroImg from "../assets/forts/shivneri/hero.jpg";
 import pathImg from "../assets/forts/shivneri/path.jpg";
 import templeImg from "../assets/forts/shivneri/temple.jpg";
 import viewImg from "../assets/forts/shivneri/view.jpg";
+import mainHeroImg from "../assets/forts/shivneri/shivnerimain.jpg";
 
 export const maharashtraForts = [
   {
     id: 1,
     name: "Shivneri Fort",
-    location: "Junnar, Pune District",
+    location: "Junnar, Pune District, Maharashtra",
     era: "Birthplace of a Legend (1630 CE)",
-    subtitle: "The sacred ground where Chhatrapati Shivaji Maharaj was born.",
+    subtitle: "Where the lion of Maharashtra took his first breath",
     significance: "The sacred ground where Chhatrapati Shivaji Maharaj was born, marking the dawn of Maratha resistance.",
-    imageUrl: heroImg,
+    imageUrl: mainHeroImg,
 
     // DEEP HISTORICAL TIMELINE - Story Chapters with Mood Tags
     timeline: [
@@ -351,7 +352,7 @@ export const maharashtraForts = [
       },
       {
         name: "Maswadi",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8Xf2g0k3k92k2m2522222222222222222&s",
+        image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=1000&auto=format&fit=crop",
         description: "A delicacy from the Pune region, it's a stuffed gram flour roll with a spicy coconut-garlic-sesame filling, often served with curry.",
         culturalNote: "A special occasion dish",
         spiceLevel: "Medium",
