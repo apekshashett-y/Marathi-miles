@@ -1,3 +1,14 @@
+/**
+ * FORT GRAPH DATA - GIS UPGRADED
+ *
+ * PHASE 4 - All hardcoded pixel coordinates removed.
+ * Nodes now store geographic lat/lng instead of pixel x/y.
+ * The geoProjection utility converts these to SVG/CSS positions at render time.
+ *
+ * ⚠️ DO NOT MODIFY routing engine fields: edges, walkTime, difficulty, effortLevel,
+ *    historicalImportance, visitTime — only spatial data is changed here.
+ */
+
 export const fortGraphs = {
     shivneri: {
         fortId: "shivneri",
@@ -5,9 +16,11 @@ export const fortGraphs = {
         nodes: {
             mainGate: {
                 id: "mainGate",
-                name: "Main Entrance Gate",
-                description: "The historical seven-gate protected entrance to the fort.",
-                coordinates: { x: 300, y: 560 },
+                name: "Maha Darwaja",
+                description: "The massive spike-studded main gate — historical seven-gate protected entrance to the fort.",
+                // 🌍 Real lat/lng — no pixel values
+                lat: 19.2043,
+                lng: 73.8595,
                 historicalImportance: 6,
                 visitTime: 10,
                 effortLevel: 1,
@@ -17,7 +30,8 @@ export const fortGraphs = {
                 id: "shivJanmabhoomi",
                 name: "Shiv Janmabhoomi",
                 description: "The birthplace of Chhatrapati Shivaji Maharaj. Highly sacred.",
-                coordinates: { x: 380, y: 400 },
+                lat: 19.2068,
+                lng: 73.8617,
                 historicalImportance: 10,
                 visitTime: 30,
                 effortLevel: 2,
@@ -25,9 +39,10 @@ export const fortGraphs = {
             },
             ammunitionStorage: {
                 id: "ammunitionStorage",
-                name: "Ammunition Storage",
-                description: "Strategic storage rooms for the fort's defenses.",
-                coordinates: { x: 550, y: 240 },
+                name: "Ambarkhana (Storage)",
+                description: "Granary and ammunition storehouse. Strategic storage rooms for the fort's defenses.",
+                lat: 19.2088,
+                lng: 73.8668,
                 historicalImportance: 7,
                 visitTime: 15,
                 effortLevel: 3,
@@ -35,9 +50,10 @@ export const fortGraphs = {
             },
             templeArea: {
                 id: "templeArea",
-                name: "Temple Area",
-                description: "Shivai Devi Temple, the goddess after whom Shivaji was named.",
-                coordinates: { x: 680, y: 360 },
+                name: "Shivai Devi Temple",
+                description: "Ancient cave temple of the fort guardian deity — the goddess after whom Shivaji was named.",
+                lat: 19.2082,
+                lng: 73.8638,
                 historicalImportance: 8,
                 visitTime: 20,
                 effortLevel: 2,
@@ -45,9 +61,10 @@ export const fortGraphs = {
             },
             viewpoint: {
                 id: "viewpoint",
-                name: "Viewpoint / Bastion",
-                description: "Strategic overlook point offering 360-degree Sahyadri views.",
-                coordinates: { x: 740, y: 500 },
+                name: "Kadelot / Bastions",
+                description: "Strategic overlook and sheer cliff offering 360-degree Sahyadri views.",
+                lat: 19.2101,
+                lng: 73.8645,
                 historicalImportance: 5,
                 visitTime: 15,
                 effortLevel: 4,

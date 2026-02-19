@@ -1,12 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { computeOptimalPath } from "../../utils/pathOptimizer";
 import { computeAdaptiveOptimalPath } from "../../utils/adaptivePathOptimizer";
 import { fortGraphs } from "../../data/fortGraphData";
+import { SHIVNERI_MAP_BOUNDS } from "../../data/shivneriLocations";
+import { latLngToSVG, convertToMapPosition } from "../../utils/geoProjection";
 import { initializeDatabase, getConfig, updateConfig } from "../../services/adaptiveDatabase";
 import { trackLocationClick } from "../../utils/behaviorTracking";
 import AdaptiveAnalytics from "./AdaptiveAnalytics";
 import "./SmartExplorationPage.css";
+
+// Lazy-load Leaflet component to avoid SSR issues & reduce initial bundle
+const ShivneriLeafletMap = lazy(() => import("./ShivneriLeafletMap"));
+
+// SVG coordinate space dimensions
+const SVG_W = 1000;
+const SVG_H = 800;
 
 const SmartExplorationPage = () => {
     const { fortId } = useParams();
@@ -22,6 +31,9 @@ const SmartExplorationPage = () => {
     const [activeStrategyId, setActiveStrategyId] = useState("balanced");
     const [adaptiveMode, setAdaptiveMode] = useState(true);
     const [showAnalytics, setShowAnalytics] = useState(false);
+
+    // 🎨 Dual-mode: "illustrated" | "leaflet"
+    const [mapMode, setMapMode] = useState("illustrated");
 
     const timeOptions = [
         { value: "30min", label: "30 minutes", minutes: 30 },
@@ -47,7 +59,6 @@ const SmartExplorationPage = () => {
 
         setTimeout(() => {
             const selectedTime = timeOptions.find(opt => opt.value === timeToUse);
-            // Use adaptive optimizer if enabled, otherwise use standard optimizer
             const computeFunction = useAdaptive ? computeAdaptiveOptimalPath : computeOptimalPath;
             const result = computeFunction(fortGraph, selectedTime.minutes, energyToUse, useAdaptive);
 
@@ -62,7 +73,6 @@ const SmartExplorationPage = () => {
         }, 800);
     };
 
-    // Initialize database on mount
     useEffect(() => {
         initializeDatabase();
         const config = getConfig();
@@ -70,21 +80,18 @@ const SmartExplorationPage = () => {
         handleComputePath();
     }, []);
 
-    // Recompute when adaptive mode changes
     useEffect(() => {
         if (optimizedPlan) {
             handleComputePath({ adaptive: adaptiveMode });
         }
     }, [adaptiveMode]);
 
-    // Toggle adaptive mode
     const toggleAdaptiveMode = () => {
         const newMode = !adaptiveMode;
         setAdaptiveMode(newMode);
         updateConfig({ enabled: newMode });
     };
 
-    // Track location clicks on the map
     const handleNodeClick = (nodeId) => {
         if (activeFortId && nodeId) {
             trackLocationClick(activeFortId, nodeId);
@@ -183,19 +190,61 @@ const SmartExplorationPage = () => {
                     <button className="compute-path-btn" onClick={() => handleComputePath({ strategy: 'balanced' })} disabled={isComputing}>
                         {isComputing ? <><span className="spinner"></span> Computing...</> : <><span className="compute-icon">🎯</span> Compute Optimal Path</>}
                     </button>
+
+                    {/* 🎯 Dual Mode Toggle */}
+                    <div className="map-mode-toggle">
+                        <div className="map-mode-label">
+                            <span className="label-icon">🗺️</span> Map Mode
+                        </div>
+                        <div className="map-mode-buttons">
+                            <button
+                                className={`map-mode-btn ${mapMode === 'illustrated' ? 'active' : ''}`}
+                                onClick={() => setMapMode('illustrated')}
+                                title="Illustrated Fort View"
+                            >
+                                🎨 Illustrated
+                            </button>
+                            <button
+                                className={`map-mode-btn ${mapMode === 'leaflet' ? 'active' : ''}`}
+                                onClick={() => setMapMode('leaflet')}
+                                title="Real Map (GIS Mode)"
+                            >
+                                🌍 Real Map
+                            </button>
+                        </div>
+                        {mapMode === 'leaflet' && (
+                            <p className="map-mode-note">
+                                ✅ Professional GIS Mode — real OpenStreetMap tiles
+                            </p>
+                        )}
+                    </div>
                 </div>
 
                 <div className="exploration-center-map">
-                    <FortMapVisualization
-                        fortGraph={fortGraph}
-                        optimizedPath={optimizedPlan?.path || []}
-                    />
-                    <div className="map-legend">
-                        <div className="legend-item"><div className="legend-marker legend-marker-start"></div><span>Start/Entrance</span></div>
-                        <div className="legend-item"><div className="legend-marker legend-marker-high"></div><span>High Importance</span></div>
-                        <div className="legend-item"><div className="legend-marker legend-marker-normal"></div><span>Other Locations</span></div>
-                        <div className="legend-item"><div className="legend-line"></div><span>Optimized Route</span></div>
-                    </div>
+                    {mapMode === 'illustrated' ? (
+                        <FortMapVisualization
+                            fortGraph={fortGraph}
+                            optimizedPath={optimizedPlan?.path || []}
+                            onNodeClick={handleNodeClick}
+                        />
+                    ) : (
+                        <Suspense fallback={
+                            <div className="leaflet-loading">
+                                <div className="spinner"></div>
+                                <p>Loading GIS Map…</p>
+                            </div>
+                        }>
+                            <ShivneriLeafletMap optimizedPath={optimizedPlan?.path || []} />
+                        </Suspense>
+                    )}
+                    {mapMode === 'illustrated' && (
+                        <div className="map-legend">
+                            <div className="legend-item"><div className="legend-marker legend-marker-start"></div><span>Start/Entrance</span></div>
+                            <div className="legend-item"><div className="legend-marker legend-marker-high"></div><span>High Importance</span></div>
+                            <div className="legend-item"><div className="legend-marker legend-marker-normal"></div><span>Other Locations</span></div>
+                            <div className="legend-item"><div className="legend-line"></div><span>Optimized Route</span></div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="exploration-right-panel">
@@ -282,7 +331,13 @@ const SmartExplorationPage = () => {
     );
 };
 
-const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎨 ILLUSTRATED FORT MAP — Geo-projected SVG visualization
+// All node positions derived from lat/lng via geoProjection utility.
+// Zero hardcoded pixel values.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const FortMapVisualization = ({ fortGraph, optimizedPath, onNodeClick }) => {
     if (!fortGraph) return null;
     const { nodes, edges } = fortGraph;
     const [animationStep, setAnimationStep] = useState(-1);
@@ -303,22 +358,50 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
     const pathNodeIds = new Set(optimizedPath.map(stop => stop.node.id));
     const pathIndices = new Map(optimizedPath.map((stop, i) => [stop.node.id, i]));
 
+    // PHASE 3 — Convert all nodes from lat/lng to SVG coordinates
+    const nodePositions = {};
+    Object.values(nodes).forEach((node) => {
+        const { x, y } = latLngToSVG(
+            node.lat,
+            node.lng,
+            SHIVNERI_MAP_BOUNDS,
+            SVG_W,
+            SVG_H
+        );
+        nodePositions[node.id] = { x, y };
+
+        // PHASE 5 — Verification logging
+        const { xPercent, yPercent } = convertToMapPosition(node.lat, node.lng, SHIVNERI_MAP_BOUNDS);
+        console.log(`GeoPosition: ${node.name} → x: ${xPercent.toFixed(2)}%, y: ${yPercent.toFixed(2)}%`);
+    });
+
     return (
         <svg viewBox="0 0 1000 800" className="fort-map-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
             <defs>
                 <filter id="shadow"><feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.15" /></filter>
                 <filter id="card-shadow"><feDropShadow dx="0" dy="4" stdDeviation="12" floodOpacity="0.1" /></filter>
+                {/* Fort terrain gradient */}
+                <radialGradient id="terrainGrad" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stopColor="#d4c5a9" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#c4a882" stopOpacity="0.6" />
+                </radialGradient>
             </defs>
 
+            {/* Fort boundary silhouette - illustrative polygon scaled to SVG space */}
             <path
-                d="M 200,650 Q 80,450 250,250 Q 450,120 700,180 Q 950,250 900,550 Q 800,800 450,750 Q 250,700 200,650 Z"
-                fill="#e8d4b8" stroke="#d4c5a9" strokeWidth="2" opacity="0.8"
+                d="M 150,680 Q 60,460 220,240 Q 430,100 700,160 Q 960,240 910,540 Q 820,800 460,760 Q 240,710 150,680 Z"
+                fill="url(#terrainGrad)" stroke="#c4a882" strokeWidth="2.5" opacity="0.75"
             />
 
+            {/* Coordinate grid lines (subtle) for geo-reference */}
+            <line x1="0" y1={SVG_H / 2} x2={SVG_W} y2={SVG_H / 2} stroke="#c4b5a0" strokeWidth="0.5" strokeDasharray="4,8" opacity="0.3" />
+            <line x1={SVG_W / 2} y1="0" x2={SVG_W / 2} y2={SVG_H} stroke="#c4b5a0" strokeWidth="0.5" strokeDasharray="4,8" opacity="0.3" />
+
+            {/* Edges using geo-projected node positions */}
             {edges.map((edge, index) => {
-                const fromNode = nodes[edge.from];
-                const toNode = nodes[edge.to];
-                if (!fromNode || !toNode) return null;
+                const fromPos = nodePositions[edge.from];
+                const toPos = nodePositions[edge.to];
+                if (!fromPos || !toPos) return null;
 
                 const fromIdx = pathIndices.get(edge.from);
                 const toIdx = pathIndices.get(edge.to);
@@ -329,8 +412,8 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
 
                 const isActive = isPart && animationStep === edgeSequenceIndex;
                 const isFinished = isPart && animationStep > edgeSequenceIndex;
-                const dx = toNode.coordinates.x - fromNode.coordinates.x;
-                const dy = toNode.coordinates.y - fromNode.coordinates.y;
+                const dx = toPos.x - fromPos.x;
+                const dy = toPos.y - fromPos.y;
                 const len = Math.sqrt(dx * dx + dy * dy);
 
                 const isConnectedToHover = hoveredNodeId && (edge.from === hoveredNodeId || edge.to === hoveredNodeId);
@@ -339,8 +422,8 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                 return (
                     <g key={index}>
                         <line
-                            x1={fromNode.coordinates.x} y1={fromNode.coordinates.y}
-                            x2={toNode.coordinates.x} y2={toNode.coordinates.y}
+                            x1={fromPos.x} y1={fromPos.y}
+                            x2={toPos.x} y2={toPos.y}
                             stroke="#c4b5a0" strokeWidth="3" strokeDasharray="6,6" strokeLinecap="round"
                             opacity={isPart ? 0.3 : isFaded ? 0.2 : 1}
                             className={isFaded ? 'faded' : ''}
@@ -348,8 +431,8 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                         {isPart && (
                             <line
                                 className={`map-route-line ${isActive ? 'active-segment' : ''} ${isConnectedToHover ? 'highlight' : ''} ${isFaded ? 'faded' : ''}`}
-                                x1={fromNode.coordinates.x} y1={fromNode.coordinates.y}
-                                x2={toNode.coordinates.x} y2={toNode.coordinates.y}
+                                x1={fromPos.x} y1={fromPos.y}
+                                x2={toPos.x} y2={toPos.y}
                                 stroke={isActive ? "#fbbf24" : "#e08d55"}
                                 strokeWidth={isActive || isConnectedToHover ? "6" : "5"}
                                 strokeLinecap="round"
@@ -364,7 +447,11 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                 );
             })}
 
+            {/* Nodes using geo-projected positions */}
             {Object.values(nodes).map((node) => {
+                const pos = nodePositions[node.id];
+                if (!pos) return null;
+
                 const isInPath = pathNodeIds.has(node.id);
                 const pathIdx = pathIndices.get(node.id);
                 const isProjected = isInPath && animationStep < pathIdx;
@@ -383,25 +470,26 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                         data-type={nodeType}
                         onMouseEnter={() => setHoveredNodeId(node.id)}
                         onMouseLeave={() => setHoveredNodeId(null)}
+                        onClick={() => onNodeClick && onNodeClick(node.id)}
                         style={{
                             opacity: isProjected ? 0.4 : (hoveredNodeId && !isHovered ? 0.6 : 1),
                             transition: 'opacity 0.3s ease',
-                            zIndex: isHovered ? 50 : 1
+                            cursor: 'pointer'
                         }}
                     >
                         <circle
                             className={`map-node-circle ${isActivePulse ? 'pulse-active' : ''}`}
-                            cx={node.coordinates.x} cy={node.coordinates.y}
+                            cx={pos.x} cy={pos.y}
                             r={isInPath ? "16" : "10"}
                             fill={fillColor} stroke="white" strokeWidth={isHovered ? "5" : "3"}
                         />
                         {isInPath && (
-                            <text x={node.coordinates.x} y={node.coordinates.y + 5} fontSize="12" fontWeight="700" fill="white" textAnchor="middle" style={{ pointerEvents: 'none' }}>
+                            <text x={pos.x} y={pos.y + 5} fontSize="12" fontWeight="700" fill="white" textAnchor="middle" style={{ pointerEvents: 'none' }}>
                                 {pathIdx + 1}
                             </text>
                         )}
                         {!isInPath && (
-                            <text x={node.coordinates.x} y={node.coordinates.y + 20} fontSize="10" fill="#8b5a2b" textAnchor="middle" fontWeight="500">
+                            <text x={pos.x} y={pos.y + 22} fontSize="10" fill="#8b5a2b" textAnchor="middle" fontWeight="500">
                                 {node.name}
                             </text>
                         )}
@@ -409,19 +497,23 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                 );
             })}
 
+            {/* Info cards for path nodes */}
             {optimizedPath.map((stop, index) => {
                 const node = stop.node;
-                const { x, y } = node.coordinates;
-                const pos = node.cardPosition || 'right';
+                const pos = nodePositions[node.id];
+                if (!pos) return null;
+
+                const { x, y } = pos;
+                const cardPos = node.cardPosition || 'right';
                 const isHovered = hoveredNodeId === node.id;
                 const showCard = animationStep >= index || isHovered;
 
                 const cardWidth = 180; const cardHeight = 90;
                 let cardX = x, cardY = y; const offset = 30;
-                if (pos === 'right') { cardX = x + offset; cardY = y - cardHeight / 2; }
-                else if (pos === 'left') { cardX = x - cardWidth - offset; cardY = y - cardHeight / 2; }
-                else if (pos === 'top') { cardX = x - cardWidth / 2; cardY = y - cardHeight - offset; }
-                else if (pos === 'bottom') { cardX = x - cardWidth / 2; cardY = y + offset; }
+                if (cardPos === 'right') { cardX = x + offset; cardY = y - cardHeight / 2; }
+                else if (cardPos === 'left') { cardX = x - cardWidth - offset; cardY = y - cardHeight / 2; }
+                else if (cardPos === 'top') { cardX = x - cardWidth / 2; cardY = y - cardHeight - offset; }
+                else if (cardPos === 'bottom') { cardX = x - cardWidth / 2; cardY = y + offset; }
 
                 return (
                     <g
@@ -430,12 +522,11 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                         filter="url(#card-shadow)"
                         onMouseEnter={() => setHoveredNodeId(node.id)}
                         onMouseLeave={() => setHoveredNodeId(null)}
-                        style={{ zIndex: isHovered ? 60 : 2 }}
                     >
                         <line
                             x1={x} y1={y}
-                            x2={pos === 'right' ? cardX : pos === 'left' ? cardX + cardWidth : x}
-                            y2={pos === 'bottom' ? cardY : pos === 'top' ? cardY + cardHeight : y}
+                            x2={cardPos === 'right' ? cardX : cardPos === 'left' ? cardX + cardWidth : x}
+                            y2={cardPos === 'bottom' ? cardY : cardPos === 'top' ? cardY + cardHeight : y}
                             stroke="#d4a574" strokeWidth={isHovered ? "3" : "2"}
                             opacity={showCard ? 0.6 : 0} style={{ transition: 'all 0.3s ease' }}
                         />
@@ -450,6 +541,11 @@ const FortMapVisualization = ({ fortGraph, optimizedPath }) => {
                     </g>
                 );
             })}
+
+            {/* GIS Attribution */}
+            <text x={SVG_W - 10} y={SVG_H - 8} fontSize="9" fill="#c4b5a0" textAnchor="end" opacity="0.6">
+                Geo-projected from real lat/lng • Shivneri Fort
+            </text>
         </svg>
     );
 };

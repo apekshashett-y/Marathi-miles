@@ -1123,3 +1123,100 @@ input:checked+.slider:before {
         display: none;
     }
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🎯 DUAL MAP MODE TOGGLE — V2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.v2-map-mode-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+}
+
+.v2-map-mode-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.v2-map-mode-btns {
+    display: flex;
+    gap: 6px;
+}
+
+.v2-mode-btn {
+    flex: 1;
+    padding: 9px 6px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.v2-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: var(--text-primary);
+}
+
+.v2-mode-btn.active {
+    background: linear-gradient(135deg, #ff9f43, #ff7849);
+    border-color: #ff9f43;
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(255, 159, 67, 0.35);
+}
+
+.v2-mode-note {
+    margin: 0;
+    font-size: 10px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+/* Leaflet GIS mode wrapper — fills center panel exactly */
+.v2-leaflet-wrapper {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+}
+
+/* Leaflet loading fallback */
+.v2-leaflet-loading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    background: var(--bg-dark);
+}
+
+.v2-loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.08);
+    border-top-color: var(--primary-orange);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}

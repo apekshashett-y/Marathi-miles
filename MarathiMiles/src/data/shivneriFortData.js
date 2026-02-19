@@ -1,8 +1,17 @@
 /**
- * REAL SHIVNERI FORT DATA
+ * REAL SHIVNERI FORT DATA — GIS UPGRADED
+ *
  * Historically accurate locations with verified timestamps and attributes.
- * Timings adjusted to allow 3-5 locations in a 60-min tour for high-efficiency routes.
+ * PHASE 4: Coordinates are now geographic lat/lng.
+ * Backward-compatible `coordinates: { x, y }` fields are computed from lat/lng
+ * via the geoProjection utility so SmartExplorationV2 continues to work.
  */
+import { latLngToSVG } from '../utils/geoProjection.js';
+import { SHIVNERI_MAP_BOUNDS } from './shivneriLocations.js';
+
+// SVG canvas size used by SmartExplorationV2 (viewBox 900x800)
+const V2_SVG_W = 900;
+const V2_SVG_H = 800;
 
 export const shivneriFortLocations = {
     mahaDarwaja: {
@@ -13,7 +22,8 @@ export const shivneriFortLocations = {
         architecturalScore: 8,
         walkingEffort: 2,
         avgVisitTime: 8,   // Brief stop
-        coordinates: { x: 200, y: 650 },
+        lat: 19.2043,      // 🌍 Real geographic coordinates
+        lng: 73.8595,
         description: 'The massive spike-studded main gate of Shivneri.',
         connections: ['shivJanmasthan', 'badamiTalav']
     },
@@ -26,7 +36,8 @@ export const shivneriFortLocations = {
         architecturalScore: 9,
         walkingEffort: 3,
         avgVisitTime: 15,  // Optimized visit time
-        coordinates: { x: 350, y: 450 },
+        lat: 19.2068,
+        lng: 73.8617,
         description: 'The sacred building where Chhatrapati Shivaji Maharaj was born.',
         connections: ['mahaDarwaja', 'shivaiDeviTemple', 'badamiTalav']
     },
@@ -39,8 +50,9 @@ export const shivneriFortLocations = {
         architecturalScore: 7,
         walkingEffort: 2,
         avgVisitTime: 5,   // Quick photo stop
-        coordinates: { x: 500, y: 550 },
-        description: 'Ancient water reservoir integral to the fort\'s sustainability.',
+        lat: 19.2055,
+        lng: 73.8628,
+        description: "Ancient water reservoir integral to the fort's sustainability.",
         connections: ['mahaDarwaja', 'shivJanmasthan', 'gangaJamunaTanks']
     },
 
@@ -52,7 +64,8 @@ export const shivneriFortLocations = {
         architecturalScore: 6,
         walkingEffort: 4,
         avgVisitTime: 7,
-        coordinates: { x: 600, y: 400 },
+        lat: 19.2075,
+        lng: 73.8652,
         description: 'Rock-cut cisterns with fresh cool water year-round.',
         connections: ['badamiTalav', 'shivaiDeviTemple', 'bastions']
     },
@@ -65,7 +78,8 @@ export const shivneriFortLocations = {
         architecturalScore: 6,
         walkingEffort: 4,
         avgVisitTime: 10,
-        coordinates: { x: 450, y: 300 },
+        lat: 19.2082,
+        lng: 73.8638,
         description: 'Ancient cave temple of the fort guardian deity.',
         connections: ['shivJanmasthan', 'gangaJamunaTanks', 'kadelotPoint']
     },
@@ -78,7 +92,8 @@ export const shivneriFortLocations = {
         architecturalScore: 4,
         walkingEffort: 7, // High effort
         avgVisitTime: 8,
-        coordinates: { x: 350, y: 200 },
+        lat: 19.2101,
+        lng: 73.8645,
         description: 'Sheer cliff used for punishment in historical times.',
         connections: ['shivaiDeviTemple', 'bastions']
     },
@@ -91,24 +106,38 @@ export const shivneriFortLocations = {
         architecturalScore: 8,
         walkingEffort: 8, // High effort
         avgVisitTime: 10,
-        coordinates: { x: 700, y: 250 },
+        lat: 19.2095,
+        lng: 73.8660,
         description: 'Defensive structures offering panoramic views.',
         connections: ['gangaJamunaTanks', 'kadelotPoint', 'ammunitionStorage']
     },
 
     ammunitionStorage: {
         id: 'ammunitionStorage',
-        name: 'Amberkhana (Storage)',
+        name: 'Ambarkhana (Storage)',
         historicalScore: 6,
         spiritualScore: 1,
         architecturalScore: 7,
         walkingEffort: 3,
         avgVisitTime: 8,
-        coordinates: { x: 650, y: 150 },
+        lat: 19.2088,
+        lng: 73.8668,
         description: 'Granary and ammunition storehouse.',
         connections: ['bastions']
     }
 };
+
+/**
+ * Backward-compatible geo-projection:
+ * Inject `coordinates: { x, y }` into every location so SmartExplorationV2
+ * (and any other consumer using loc.coordinates.x/y) continues to work.
+ * Values are derived from real lat/lng via the geoProjection utility.
+ */
+Object.values(shivneriFortLocations).forEach((loc) => {
+    const { x, y } = latLngToSVG(loc.lat, loc.lng, SHIVNERI_MAP_BOUNDS, V2_SVG_W, V2_SVG_H);
+    loc.coordinates = { x, y };
+});
+
 
 /**
  * GRAPH EDGES WITH WALKING TIME

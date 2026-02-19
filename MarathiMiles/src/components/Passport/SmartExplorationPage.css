@@ -839,3 +839,117 @@
         padding: 1rem;
     }
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🎯 DUAL MAP MODE TOGGLE — Illustrated vs Real Map (GIS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.map-mode-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.map-mode-label {
+    color: #fbbf24;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.map-mode-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.map-mode-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.6rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.map-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.map-mode-btn.active {
+    background: linear-gradient(135deg, #8b5a2b 0%, #c4864a 100%);
+    border-color: #c4864a;
+    color: white;
+    box-shadow: 0 3px 10px rgba(139, 90, 43, 0.4);
+}
+
+.map-mode-note {
+    font-size: 0.75rem;
+    color: #86efac;
+    margin: 0;
+    padding: 0.4rem 0.6rem;
+    background: rgba(134, 239, 172, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(134, 239, 172, 0.2);
+}
+
+/* Leaflet loading fallback */
+.leaflet-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    background: #1a0f0a;
+}
+
+/* Alternative reason states */
+.alternative-reason {
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+
+.alternative-reason.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.alternative-reason.warning {
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.alternative-tradeoff {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: 0.25rem;
+}
+
+.alternative-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}

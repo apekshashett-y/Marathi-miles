@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { shivneriFortLocations, shivneriGraphEdges, shivneriFortMetadata } from '../../data/shivneriFortData.js';
@@ -15,6 +15,10 @@ import {
 import { getPredictionConfidence, trainModel } from '../../engines/behaviorPredictionEngine.js';
 import { updateQValue } from '../../engines/reinforcementEngine.js';
 import { interactionTracker } from '../../engines/interactionTracker.js';
+import { SHIVNERI_CENTER } from '../../data/shivneriLocations.js';
+
+// Lazy-load Leaflet map to avoid bundle bloat on first render
+const ShivneriLeafletMap = lazy(() => import('./ShivneriLeafletMap'));
 
 import './SmartExplorationV2.css';
 
@@ -58,6 +62,9 @@ const SmartExplorationV2 = () => {
     const [simStep, setSimStep] = useState(0);
     const [simPhase, setSimPhase] = useState('idle');
     const [simSpeed, setSimSpeed] = useState(1);
+
+    // 🎯 Dual Map Mode: 'illustrated' | 'leaflet'
+    const [mapMode, setMapMode] = useState('illustrated');
 
     useEffect(() => {
         initializeAdaptiveLearning();
@@ -279,21 +286,60 @@ const SmartExplorationV2 = () => {
                     </div>
 
                     <motion.button className="compute-btn" onClick={() => handleComputeRoute(forcedLocationId)} whileHover={{ scale: 1.02 }}>{isComputing ? 'Computing...' : '🔮 Compute Route'}</motion.button>
+
+                    {/* 🎯 Dual Map Mode Toggle */}
+                    <div className="v2-map-mode-toggle">
+                        <div className="v2-map-mode-label">🗺️ Map Mode</div>
+                        <div className="v2-map-mode-btns">
+                            <button
+                                className={`v2-mode-btn ${mapMode === 'illustrated' ? 'active' : ''}`}
+                                onClick={() => setMapMode('illustrated')}
+                                title="Illustrated Fort View"
+                            >
+                                🎨 Illustrated
+                            </button>
+                            <button
+                                className={`v2-mode-btn ${mapMode === 'leaflet' ? 'active' : ''}`}
+                                onClick={() => setMapMode('leaflet')}
+                                title="Real GIS Map"
+                            >
+                                🌍 Real Map
+                            </button>
+                        </div>
+                        {mapMode === 'leaflet' && (
+                            <p className="v2-mode-note">✅ Professional GIS — OpenStreetMap</p>
+                        )}
+                    </div>
                 </aside>
 
                 <section className="center-panel">
-                    <RouteVisualization
-                        locations={shivneriFortLocations}
-                        route={currentRoute}
-                        isComputing={isComputing}
-                        theme={theme}
-                        selectedId={selectedLocationId}
-                        simState={{ isSimulating, simStep, simPhase, simSpeed }}
-                        onLocationClick={handleLocationClick}
-                        interactionMode={interactionMode}
-                        startNodeId={lastLocationId}
-                    />
-                    <AnimatePresence>{isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={shivneriFortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={() => setIsSimulating(false)} />)}</AnimatePresence>
+                    {mapMode === 'illustrated' ? (
+                        <RouteVisualization
+                            locations={shivneriFortLocations}
+                            route={currentRoute}
+                            isComputing={isComputing}
+                            theme={theme}
+                            selectedId={selectedLocationId}
+                            simState={{ isSimulating, simStep, simPhase, simSpeed }}
+                            onLocationClick={handleLocationClick}
+                            interactionMode={interactionMode}
+                            startNodeId={lastLocationId}
+                        />
+                    ) : (
+                        <div className="v2-leaflet-wrapper">
+                            <Suspense fallback={
+                                <div className="v2-leaflet-loading">
+                                    <div className="v2-loading-spinner" />
+                                    <p>Loading GIS Map…</p>
+                                </div>
+                            }>
+                                <ShivneriLeafletMap
+                                    optimizedPath={currentRoute ? currentRoute.route.map(id => ({ node: { ...shivneriFortLocations[id], id } })) : []}
+                                />
+                            </Suspense>
+                        </div>
+                    )}
+                    <AnimatePresence>{mapMode === 'illustrated' && isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={shivneriFortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={() => setIsSimulating(false)} />)}</AnimatePresence>
                     <AnimatePresence>{isComputing && <LoadingOverlay />}</AnimatePresence>
                 </section>
 
