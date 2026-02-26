@@ -326,7 +326,8 @@ input:checked+.slider:before {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
     padding: 20px;
     padding-bottom: 30px;
-    z-index: 40;
+    z-index: 1000;
+    /* ensure sits above Leaflet map */
     display: flex;
     flex-direction: column;
     align-items: center;

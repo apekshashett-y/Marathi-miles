@@ -163,6 +163,24 @@ const Timeline = ({
     }
   }, [chapters, language]);
 
+  // stop any audio (speech or local) when language toggles, since Marathi recordings should
+  // only play while "mr" is active and speech synthesis should be cancelled on change.
+  useEffect(() => {
+    if (language !== "mr") {
+      if (localAudioRef.current) {
+        localAudioRef.current.pause();
+        localAudioRef.current.currentTime = 0;
+      }
+      setIsPlayingAudio(false);
+      setIsAudioPaused(false);
+      setAudioChapterIndex(null);
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      audioUtteranceRef.current = null;
+    }
+  }, [language]);
+
   // Also ensure initial mount starts at the first card
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -240,39 +258,80 @@ const Timeline = ({
     }
   };
 
-  // Handle audio narration
+  // Marathi audio filenames in public folder (1‑based order)
+  const MARATHI_AUDIO_FILES = [
+    "1stcard.mp3",
+    "2ndcard.mp3",
+    "3rdcard.mp3",
+    "4thcard.mp3",
+    "5thcard.mp3",
+    "6thcard.mp3",
+    "7thcard.mp3"
+  ];
+
+  // Handle audio narration for both speech synthesis and Marathi recordings
   const handleAudioClick = (chapter, index, e) => {
     if (e) {
       e.stopPropagation(); // Prevent closing focus mode
     }
 
-    // Special handling for the first card ("Pre-13th Century") to play/pause local Marathi audio
-    if (index === 0) {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      if (localAudioRef.current) {
-        if (audioChapterIndex === index && isPlayingAudio && !isAudioPaused) {
-          // Pause local audio
-          localAudioRef.current.pause();
+    // If Marathi language is active, play pre‑recorded audio from public folder
+    if (language === "mr") {
+      // stop any speech that might be ongoing
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        audioUtteranceRef.current = null;
+      }
+
+      const audioEl = localAudioRef.current;
+      const fileName = MARATHI_AUDIO_FILES[index];
+
+      // nothing to play for this index?
+      if (!fileName || !audioEl) {
+        return;
+      }
+
+      const src = `/audio/shivneri/${fileName}`;
+
+      // if clicking the same card that's already playing
+      if (audioChapterIndex === index) {
+        if (isPlayingAudio && !isAudioPaused) {
+          audioEl.pause();
           setIsPlayingAudio(false);
           setIsAudioPaused(true);
-        } else if (audioChapterIndex === index && isAudioPaused) {
-          // Resume local audio
-          localAudioRef.current.play();
+        } else if (isAudioPaused) {
+          audioEl.play();
           setIsPlayingAudio(true);
           setIsAudioPaused(false);
         } else {
-          // Start from beginning
-          localAudioRef.current.currentTime = 0;
-          localAudioRef.current.play();
+          // start fresh
+          audioEl.currentTime = 0;
+          audioEl.play();
           setIsPlayingAudio(true);
           setIsAudioPaused(false);
           setAudioChapterIndex(index);
         }
+        return;
       }
+
+      // switching to a different card: stop previous audio and begin new
+      if (audioEl) {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+        audioEl.src = src;
+        audioEl.play().catch(() => {
+          /* ignore play errors */
+        });
+      }
+
+      setIsPlayingAudio(true);
+      setAudioChapterIndex(index);
+      setIsAudioPaused(false);
       return;
     }
 
-    // Stop local audio if playing when other cards are clicked
+    // Not Marathi: fall back to the original speech-synthesis logic
+    // also ensure any local audio is halted
     if (localAudioRef.current) {
       localAudioRef.current.pause();
       localAudioRef.current.currentTime = 0;
@@ -561,7 +620,7 @@ const Timeline = ({
       </div>
       <audio
         ref={localAudioRef}
-        src="/audio/1stcard.mp3"
+        // src is set dynamically when Marathi playback begins
         onEnded={() => {
           setIsPlayingAudio(false);
           setAudioChapterIndex(null);

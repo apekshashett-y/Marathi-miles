@@ -5,7 +5,10 @@ import { shivneriData } from "../../data/shivneriData";
 import Timeline from "./Timeline";
 import Shivneri360Gallery from "../Shivneri360Gallery";
 import SmartExplorationPreview from "./SmartExplorationPreview";
-import DynamicItinerary from "./DynamicItinerary";
+import FlavorsSection from "./FlavorsSection";
+import BazaarSection from "./BazaarSection";
+import ItineraryPlanner from "./ItineraryPlanner";
+import SpiritSection from "./SpiritSection";
 import "./PastPort.css";
 
 const HOUR_OPTIONS = [2, 3, 4, 6];
@@ -34,17 +37,6 @@ const PastPort = ({ onBack }) => {
   const [selectedHours, setSelectedHours] = useState(null);
   const [timelineLanguage, setTimelineLanguage] = useState("en");
   const [scrollProgress, setScrollProgress] = useState(0);
-
-  const cuisineRef = useRef(null);
-  const shoppingRef = useRef(null);
-  const cultureRef = useRef(null);
-  const itineraryRef = useRef(null);
-
-  const scrollToSection = (ref) => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const [active360Index, setActive360Index] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -606,175 +598,12 @@ const PastPort = ({ onBack }) => {
         />
       )}
 
-      {/* EXPLORE MORE NAVIGATION */}
-      <div className="explore-more-section">
-        <h2 className="section-title">Explore More</h2>
-        <div className="explore-cards-grid">
-          <div className="explore-card" onClick={() => scrollToSection(cuisineRef)}>
-            <div className="card-icon">🍴</div>
-            <h3>Famous Cuisine</h3>
-            <p>Taste the authentic flavors of Sahyadri</p>
-          </div>
-          <div className="explore-card" onClick={() => scrollToSection(shoppingRef)}>
-            <div className="card-icon">🛍️</div>
-            <h3>Shopping Areas</h3>
-            <p>Local markets & authentic artifacts</p>
-          </div>
-          <div className="explore-card" onClick={() => scrollToSection(cultureRef)}>
-            <div className="card-icon">🎭</div>
-            <h3>Cultural Experiences</h3>
-            <p>Festivals, art forms & history</p>
-          </div>
-          <div className="explore-card" onClick={() => scrollToSection(itineraryRef)}>
-            <div className="card-icon">📝</div>
-            <h3>Travel Itinerary</h3>
-            <p>Plan your perfect visit</p>
-          </div>
-        </div>
-      </div>
+      {/* IMMERSIVE EXPLORE SECTIONS */}
+      <FlavorsSection />
+      <BazaarSection />
+      <ItineraryPlanner />
+      <SpiritSection />
 
-      {/* DETAILED MAGAZINE SECTIONS */}
-      <div className="detailed-sections-container">
-        {/* Cuisine Section */}
-        <div ref={cuisineRef} className="detailed-section cuisine-section">
-          <div className="section-hero">
-            <div className="hero-content">
-              <span className="hero-eyebrow">TASTE THE HERITAGE</span>
-              <h2 className="hero-title">Flavors of the Sahyadris</h2>
-              <p className="hero-tagline">Where mountain air meets ancestral recipes</p>
-              <p className="hero-description">
-                Maratha cuisine was fuel for warriors. Nutritious, portable, and full of the bold flavors
-                that sustained soldiers during long campaigns across the Sahyadri mountains.
-              </p>
-            </div>
-            <div className="hero-image-container">
-              <img
-                src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop"
-                alt="Traditional Marathi Cuisine"
-                className="hero-image"
-              />
-            </div>
-          </div>
-
-          <div className="cuisine-list">
-            {(selectedFort.cuisine || []).map((dish, index) => (
-              <div key={index} className="cuisine-item-card">
-                <div className="cuisine-item-header">
-                  <h4 className="cuisine-item-name">{dish.name}</h4>
-                  {index === 0 && <span className="badge-must-try">MUST TRY</span>}
-                </div>
-                <p className="cuisine-item-description">{dish.description}</p>
-                <div className="cuisine-tip-box">
-                  <span className="tip-icon">💡</span>
-                  <span className="tip-text">{dish.heritageTip || dish.culturalNote}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Shopping Section */}
-        <div ref={shoppingRef} className="detailed-section shopping-section">
-          <div className="section-hero" style={{ direction: 'rtl' }}>
-            <div className="hero-content" style={{ direction: 'ltr' }}>
-              <span className="hero-eyebrow">SHOP LIKE A LOCAL</span>
-              <h2 className="hero-title">Trading Routes of Empire</h2>
-              <p className="hero-tagline">Where commerce met conquest</p>
-              <p className="hero-description">
-                The Maratha Empire was as much about trade as territory. These markets prospered under
-                Shivaji's policies that protected merchants of all faiths.
-              </p>
-            </div>
-            <div className="hero-image-container" style={{ direction: 'ltr' }}>
-              <img
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop"
-                alt="Local Markets"
-                className="hero-image"
-              />
-            </div>
-          </div>
-
-          <div className="shopping-list">
-            {(selectedFort.shopping || []).map((market, index) => (
-              <div key={index} className="shopping-item-card">
-                <h4 className="shopping-item-name">{market.name}</h4>
-                <p style={{ color: '#e67e22', fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem' }}>
-                  {market.highlights?.join(", ")}
-                </p>
-                <p className="shopping-item-description">{market.description}</p>
-                <div className="shopping-tip-box">
-                  <span className="tip-icon">💡</span>
-                  <span className="tip-text">{market.timing} | {market.bestFor}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Culture Section */}
-        <div ref={cultureRef} className="detailed-section culture-section">
-          <div className="section-hero">
-            <div className="hero-content">
-              <span className="hero-eyebrow">LIVING TRADITIONS</span>
-              <h2 className="hero-title">Spirit of Swarajya</h2>
-              <p className="hero-tagline">Where history breathes in daily life</p>
-              <p className="hero-description">
-                The culture of the forts is not just in the stones, but in the songs,
-                festivals, and martial arts that have been passed down for generations.
-              </p>
-            </div>
-            <div className="hero-image-container">
-              <img
-                src="https://images.unsplash.com/photo-1590050752117-23a9d7f2819a?q=80&w=800&auto=format&fit=crop"
-                alt="Cultural Performance"
-                className="hero-image"
-              />
-            </div>
-          </div>
-
-          <div className="culture-list">
-            {(selectedFort.experiences || []).map((exp, index) => (
-              <div key={index} className="culture-card">
-                <div className="culture-card-header">
-                  <h4>{exp.name}</h4>
-                  <span className="badge-significance">{exp.duration}</span>
-                </div>
-                <p>{exp.description}</p>
-                <div className="culture-meta">
-                  <span>✨ Best for: {exp.bestFor}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Itinerary Section - Dynamic Planner */}
-      <div ref={itineraryRef} className="detailed-section itinerary-section">
-        <div className="section-hero">
-          <div className="hero-content">
-            <span className="hero-eyebrow">PLAN YOUR VISIT</span>
-            <h2 className="hero-title">Smart Itinerary Planner</h2>
-            <p className="hero-tagline">Your personalized fort exploration schedule</p>
-            <p className="hero-description">
-              Tell us when you're arriving and how long you can stay. We'll create a
-              realistic, time-optimized itinerary that ensures you don't miss the essentials.
-            </p>
-          </div>
-          <div className="hero-image-container">
-            <img
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop"
-              alt="Fort Pathway"
-              className="hero-image"
-            />
-          </div>
-        </div>
-
-        <DynamicItinerary
-          activities={shivneriData.activities}
-          rules={shivneriData.itineraryRules}
-        />
-      </div>
 
       <SmartExplorationPreview
         fortName={selectedFort.name}

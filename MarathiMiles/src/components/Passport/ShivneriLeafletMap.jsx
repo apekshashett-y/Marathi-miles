@@ -4,7 +4,7 @@
  * Uses real lat/lng from shivneriLocations.js — no pixel values.
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -61,40 +61,143 @@ function createCustomIcon(importance, isHighlighted) {
 }
 
 /**
+ * Show moving marker during simulation, mimics illustrated map behavior
+ */
+function SimulationMarker({ optimizedPath, simState }) {
+    const map = useMap();
+    const markerRef = useRef(null);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const updateMarker = () => {
+            if (!simState.isSimulating || !optimizedPath || optimizedPath.length === 0) {
+                if (markerRef.current) {
+                    map.removeLayer(markerRef.current);
+                    markerRef.current = null;
+                }
+                return;
+            }
+
+            const idx = Math.min(simState.step, optimizedPath.length - 1);
+            const stop = optimizedPath[idx];
+            if (!stop) return; // safety
+            let pos = null;
+            if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
+                pos = [stop.node.lat, stop.node.lng];
+            } else if (stop.node && stop.node.id) {
+                const loc = shivneriLocations.find(l => l.id === stop.node.id);
+                if (loc) pos = [loc.lat, loc.lng];
+            }
+            if (!pos) return;
+
+            if (!markerRef.current) {
+                markerRef.current = L.circleMarker(pos, {
+                    radius: 8,
+                    color: '#e08d55', // match route color
+                    weight: 3,
+                    fillColor: '#fff',
+                    fillOpacity: 1
+                }).addTo(map);
+            } else {
+                markerRef.current.setLatLng(pos);
+            }
+        };
+
+        updateMarker();
+    }, [simState, optimizedPath, map]);
+
+    return null;
+}
+
+/**
  * Inner component to draw route polylines when a path is given.
  */
 function RoutePolyline({ optimizedPath }) {
     const map = useMap();
+    const polyRef = React.useRef(null);
 
     useEffect(() => {
-        if (!optimizedPath || optimizedPath.length < 2) return;
+        if (!optimizedPath || optimizedPath.length < 2 || !map) return;
 
-        const latlngs = optimizedPath.map((stop) => {
-            const loc = shivneriLocations.find((l) => l.id === stop.node.id);
-            return loc ? [loc.lat, loc.lng] : null;
-        }).filter(Boolean);
+        // ensure map is ready before drawing
+        const draw = () => {
+            // remove any existing line first
+            if (polyRef.current) {
+                map.removeLayer(polyRef.current);
+                polyRef.current = null;
+            }
 
-        if (latlngs.length < 2) return;
+            // build lat/lngs directly from the route data (routeEngine should supply them)
+            const latlngs = optimizedPath
+                .map((stop) => {
+                    if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
+                        return [stop.node.lat, stop.node.lng];
+                    }
+                    // fallback lookup in case data is missing
+                    const loc = shivneriLocations.find((l) => l.id === stop.node?.id);
+                    return loc ? [loc.lat, loc.lng] : null;
+                })
+                .filter(Boolean);
 
-        const polyline = L.polyline(latlngs, {
-            color: "#e08d55",
-            weight: 5,
-            opacity: 0.85,
-            dashArray: "10, 8",
-            lineCap: "round",
-            lineJoin: "round",
-        }).addTo(map);
+            if (latlngs.length !== optimizedPath.length) {
+                console.warn('RoutePolyline: some stops missing coordinates, result may be incomplete', {
+                    expected: optimizedPath.length,
+                    got: latlngs.length,
+                    path: optimizedPath
+                });
+            }
 
-        // Animate route drawing
-        const totalLength = polyline.getElement()?.getTotalLength?.() || 0;
-        if (totalLength > 0) {
-            polyline.getElement().style.strokeDasharray = totalLength;
-            polyline.getElement().style.strokeDashoffset = totalLength;
-            polyline.getElement().style.animation = "drawRoute 2s ease forwards";
+            if (latlngs.length < 2) return; // nothing to draw
+
+            // single polyline for the entire route
+            const polyline = L.polyline(latlngs, {
+                color: "#e08d55",
+                weight: 6, /* slightly thicker for better visibility */
+                opacity: 0.85,
+                dashArray: "10, 8",
+                lineCap: "round",
+                lineJoin: "round",
+            }).addTo(map);
+
+            polyRef.current = polyline;
+
+            // animate drawing if possible
+            const totalLength = polyline.getElement()?.getTotalLength?.() || 0;
+            if (totalLength > 0) {
+                const el = polyline.getElement();
+                el.style.strokeDasharray = totalLength;
+                el.style.strokeDashoffset = totalLength;
+                el.style.animation = "drawRoute 2s ease forwards";
+            }
+        };
+
+        if (map.whenReady) {
+            // Leaflet guarantees this callback runs after initialization
+            map.whenReady(draw);
+        } else {
+            draw();
         }
 
+        // when zooming/moving we need to adjust dash lengths so the stroke stays continuous
+        const updateDash = () => {
+            if (polyRef.current) {
+                const totalLength = polyRef.current.getElement()?.getTotalLength?.() || 0;
+                const el = polyRef.current.getElement();
+                el.style.strokeDasharray = totalLength;
+                el.style.strokeDashoffset = totalLength;
+            }
+        };
+        map.on('zoomend', updateDash);
+        map.on('moveend', updateDash);
+
         return () => {
-            map.removeLayer(polyline);
+            if (polyRef.current) {
+                map.removeLayer(polyRef.current);
+                polyRef.current = null;
+            }
+            map.off('zoomend', updateDash);
+            map.off('moveend', updateDash);
         };
     }, [optimizedPath, map]);
 
@@ -102,9 +205,64 @@ function RoutePolyline({ optimizedPath }) {
 }
 
 /**
+ * Polyline showing progress up to current simulation step.
+ */
+function ProgressPolyline({ optimizedPath, simState }) {
+    const map = useMap();
+    const progressRef = useRef(null);
+
+    useEffect(() => {
+        if (!map || !optimizedPath || optimizedPath.length < 2) return;
+
+        const coords = optimizedPath
+            .map((stop) => {
+                if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
+                    return [stop.node.lat, stop.node.lng];
+                }
+                const loc = shivneriLocations.find((l) => l.id === stop.node?.id);
+                return loc ? [loc.lat, loc.lng] : null;
+            })
+            .filter(Boolean);
+
+        const maxIdx = Math.min(simState.step, coords.length - 1);
+        const segment = coords.slice(0, maxIdx + 1);
+        if (segment.length < 2) {
+            if (progressRef.current) {
+                map.removeLayer(progressRef.current);
+                progressRef.current = null;
+            }
+            return;
+        }
+
+        if (!progressRef.current) {
+            progressRef.current = L.polyline(segment, {
+                color: '#e08d55',
+                weight: 6,
+                opacity: 1,
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(map);
+        } else {
+            progressRef.current.setLatLngs(segment);
+        }
+
+        return () => {
+            if (progressRef.current) {
+                map.removeLayer(progressRef.current);
+                progressRef.current = null;
+            }
+        };
+    }, [optimizedPath, simState.step, map]);
+
+    return null;
+}
+
+
+
+/**
  * Main Leaflet Map Component
  */
-export default function ShivneriLeafletMap({ optimizedPath = [] }) {
+export default function ShivneriLeafletMap({ optimizedPath = [], simState = {} }) {
     const pathNodeIds = new Set((optimizedPath || []).map((s) => s.node.id));
     const pathIndices = new Map((optimizedPath || []).map((s, i) => [s.node.id, i]));
 
@@ -182,6 +340,10 @@ export default function ShivneriLeafletMap({ optimizedPath = [] }) {
 
                 {/* Route Polyline */}
                 <RoutePolyline optimizedPath={optimizedPath} />
+                {/* Highlight traveled portion during simulation */}
+                <ProgressPolyline optimizedPath={optimizedPath} simState={simState} />
+                {/* Simulation marker moves along route during simulation */}
+                <SimulationMarker optimizedPath={optimizedPath} simState={simState} />
 
                 {/* Location Markers */}
                 {shivneriLocations.map((loc) => {

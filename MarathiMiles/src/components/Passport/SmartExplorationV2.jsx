@@ -81,7 +81,7 @@ const SmartExplorationV2 = () => {
 
     const handleComputeRoute = (forceId = null, deviationStart = null, isReroute = false, callback = null, explicitStrategy = null) => {
         setIsComputing(true);
-        if (isReroute) { setIsSimulating(false); setSimStep(0); }
+        if (isReroute) { handleSimulationComplete(); }
 
         setTimeout(() => {
             // Use explicit strategy if provided, otherwise use current state
@@ -186,40 +186,73 @@ const SmartExplorationV2 = () => {
     const handleSimulationComplete = () => {
         setIsSimulating(false);
         setSimStep(0);
+        if (simTimerRef.current) {
+            clearTimeout(simTimerRef.current);
+            simTimerRef.current = null;
+        }
     };
+
+    // useRef to hold current timeout id so we can clear it from anywhere
+    const simTimerRef = useRef(null);
 
     useEffect(() => {
         if (!isSimulating || !optimizationResult) return;
         const routeIds = optimizationResult.route;
-        if (simStep >= routeIds.length) { setSimPhase('finished'); handleSimulationComplete(); return; }
+        if (simStep >= routeIds.length) {
+            setSimPhase('finished');
+            handleSimulationComplete();
+            return;
+        }
+
         const currentLocationId = routeIds[simStep];
         const nextLocationId = routeIds[simStep + 1];
         const location = shivneriFortLocations[currentLocationId];
-        if (!location) { setIsSimulating(false); return; }
+        if (!location) {
+            handleSimulationComplete();
+            return;
+        }
+
         const BASE_SCALE = 200;
-        let timer;
-        const runStep = async () => {
+        let visitTimer = null;
+        let walkTimer = null;
+
+        const startTimers = () => {
             setSimPhase('visiting');
             const visitDuration = (location.avgVisitTime * BASE_SCALE) / simSpeed;
-            timer = setTimeout(() => {
+            visitTimer = setTimeout(() => {
                 if (nextLocationId) {
                     setSimPhase('walking');
                     const walkTime = estimateTravelTime(currentLocationId, nextLocationId);
                     const walkDuration = (walkTime * BASE_SCALE) / simSpeed;
-                    timer = setTimeout(() => { setSimStep(prev => prev + 1); }, walkDuration);
+                    walkTimer = setTimeout(() => {
+                        setSimStep(prev => prev + 1);
+                    }, walkDuration);
                 } else {
-                    setSimPhase('finished'); handleSimulationComplete();
+                    setSimPhase('finished');
+                    handleSimulationComplete();
                 }
             }, visitDuration);
         };
-        runStep();
-        return () => clearTimeout(timer);
+
+        startTimers();
+
+        return () => {
+            if (visitTimer) clearTimeout(visitTimer);
+            if (walkTimer) clearTimeout(walkTimer);
+        };
     }, [isSimulating, simStep, simSpeed, optimizationResult]);
 
     const currentRoute = optimizationResult;
     const theme = STRATEGY_THEMES[selectedStrategy] || STRATEGY_THEMES['balanced'];
 
-    const handleSimulateJourney = () => { setSimStep(0); setSimPhase('idle'); setIsSimulating(true); setSelectedLocationId(null); };
+    const handleSimulateJourney = () => {
+        // ensure previous simulation is cleared
+        if (simTimerRef.current) clearTimeout(simTimerRef.current);
+        setSimStep(0);
+        setSimPhase('idle');
+        setIsSimulating(true);
+        setSelectedLocationId(null);
+    };
 
     const handleLocationClick = (id) => {
         if (!shivneriFortLocations[id]) return;
@@ -227,6 +260,12 @@ const SmartExplorationV2 = () => {
         setSelectedLocationId(id);
     };
 
+    // whenever map mode switches away from illustrated we should stop any running simulation
+    useEffect(() => {
+        if (mapMode !== 'illustrated' && isSimulating) {
+            handleSimulationComplete();
+        }
+    }, [mapMode]);
     return (
         <div className={`smart-exploration-v2 theme-${selectedStrategy}`}>
             <header className="exploration-header">
@@ -335,11 +374,12 @@ const SmartExplorationV2 = () => {
                             }>
                                 <ShivneriLeafletMap
                                     optimizedPath={currentRoute ? currentRoute.route.map(id => ({ node: { ...shivneriFortLocations[id], id } })) : []}
+                                    simState={{ isSimulating, simStep, simPhase, simSpeed }}
                                 />
                             </Suspense>
                         </div>
                     )}
-                    <AnimatePresence>{mapMode === 'illustrated' && isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={shivneriFortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={() => setIsSimulating(false)} />)}</AnimatePresence>
+                    <AnimatePresence>{isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={shivneriFortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={handleSimulationComplete} />)}</AnimatePresence>
                     <AnimatePresence>{isComputing && <LoadingOverlay />}</AnimatePresence>
                 </section>
 
@@ -355,6 +395,11 @@ const SmartExplorationV2 = () => {
                                 </div>
                             </div>
                             {!isSimulating && <motion.button className="simulate-journ-btn" onClick={handleSimulateJourney} whileHover={{ scale: 1.02 }}>▶ Simulate Journey</motion.button>}
+                            {isSimulating && mapMode === 'leaflet' && (
+                                <motion.button className="simulate-journ-btn" onClick={handleSimulationComplete} whileHover={{ scale: 1.02 }} style={{ marginTop: '8px' }}>
+                                    ⏹ Stop Simulation
+                                </motion.button>
+                            )}
                             <div className="glass-panel timeline">
                                 {currentRoute.route.map((id, idx) => {
                                     const loc = shivneriFortLocations[id];
@@ -396,7 +441,21 @@ const SmartExplorationV2 = () => {
 
 const RouteVisualization = ({ locations, route, isComputing, theme, selectedId, simState, onLocationClick, interactionMode, startNodeId }) => {
     const { isSimulating, simStep, simPhase, simSpeed } = simState;
-    const getTravelerPos = () => { if (!route || !route.route || simStep >= route.route.length) return { x: 0, y: 0 }; const c = route.route[simStep]; const n = route.route[simStep + 1]; const cLoc = locations[c]; if (!cLoc) return { x: 0, y: 0 }; const nLoc = locations[n]; if (simPhase === 'visiting' || !n || !nLoc) return cLoc.coordinates; return nLoc.coordinates; };
+    const getTravelerPos = () => {
+        if (!route || !route.route || simStep >= route.route.length) return { x: 0, y: 0 };
+        const c = route.route[simStep];
+        const n = route.route[simStep + 1];
+        const cLoc = locations[c];
+        const nLoc = locations[n];
+        const safeCoord = (loc) => {
+            if (loc && loc.coordinates && typeof loc.coordinates.x === 'number' && typeof loc.coordinates.y === 'number') {
+                return loc.coordinates;
+            }
+            return { x: 0, y: 0 };
+        };
+        if (simPhase === 'visiting' || !n || !nLoc) return safeCoord(cLoc);
+        return safeCoord(nLoc);
+    };
     const travelerPos = isSimulating ? getTravelerPos() : null;
 
     return (

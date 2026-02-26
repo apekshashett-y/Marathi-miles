@@ -1,0 +1,1134 @@
+/* ═══════════════════════════════════════════════════════════════
+   BazaarSection.css – Shivneri Heritage Bazaar
+   Warm heritage palette: saffron ochre, terracotta, parchment
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── CSS Variables ─────────────────────────────────────────────── */
+:root {
+    --baz-bg: #fdf6e3;
+    --baz-surface: #fffbf2;
+    --baz-border: #e8d9c5;
+    --baz-brown: #2c1810;
+    --baz-mid: #5a4a3a;
+    --baz-muted: #8b6e5a;
+    --baz-accent: #c0622a;
+    --baz-accent2: #e67e22;
+    --baz-gold: #d4a017;
+    --baz-green: #27ae60;
+    --baz-radius: 16px;
+    --baz-shadow: 0 4px 20px rgba(44, 24, 16, 0.08);
+    --baz-shadow-lg: 0 12px 40px rgba(44, 24, 16, 0.14);
+}
+
+/* ── Section Wrapper ─────────────────────────────────────────────── */
+.bazaar-section {
+    background: var(--baz-bg);
+    padding: 80px 24px 60px;
+    font-family: 'Inter', sans-serif;
+    color: var(--baz-brown);
+    overflow: hidden;
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.bazaar-header {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.bazaar-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--baz-accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.bazaar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--baz-brown);
+    margin: 0 0 14px;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #c0622a 0%, #d4a017 60%, #c0622a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bazaar-subtitle {
+    font-size: 1.05rem;
+    color: var(--baz-mid);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ── Category Filters ────────────────────────────────────────────── */
+.bazaar-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 44px;
+}
+
+.filter-btn {
+    padding: 8px 20px;
+    border: 1.5px solid var(--baz-border);
+    border-radius: 30px;
+    background: var(--baz-surface);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--baz-mid);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover {
+    border-color: var(--baz-accent2);
+    color: var(--baz-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(198, 98, 42, 0.15);
+}
+
+.filter-btn--active {
+    background: linear-gradient(135deg, var(--baz-accent), var(--baz-accent2));
+    border-color: transparent;
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(198, 98, 42, 0.35);
+    transform: translateY(-2px);
+}
+
+/* ── Body: grid + map ─────────────────────────────────────────────── */
+.bazaar-body {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto 60px;
+    align-items: start;
+}
+
+/* ── Product Grid ────────────────────────────────────────────────── */
+.bazaar-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--baz-muted);
+    padding: 40px 0;
+    font-style: italic;
+}
+
+.tap-hint-global {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--baz-muted);
+    margin-top: 4px;
+}
+
+/* ── Product Card ────────────────────────────────────────────────── */
+.bazaar-card {
+    background: var(--baz-surface);
+    border-radius: var(--baz-radius);
+    border: 1.5px solid var(--baz-border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.bazaar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--baz-shadow-lg);
+    border-color: var(--baz-accent2);
+}
+
+.bazaar-card--active {
+    border: 2px solid var(--baz-accent);
+    box-shadow: 0 0 0 4px rgba(198, 98, 42, 0.12), var(--baz-shadow-lg);
+    transform: translateY(-4px);
+}
+
+.bazaar-card-img-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.bazaar-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.bazaar-card:hover .bazaar-card-img {
+    transform: scale(1.06);
+}
+
+.price-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(44, 24, 16, 0.82);
+    backdrop-filter: blur(6px);
+    color: #f5d79e;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+}
+
+.active-ring {
+    position: absolute;
+    inset: 0;
+    border: 3px solid var(--baz-accent);
+    border-radius: 0;
+    pointer-events: none;
+    animation: ringPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.bazaar-card-body {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.bazaar-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--baz-brown);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.bazaar-card-desc {
+    font-size: 0.83rem;
+    color: var(--baz-mid);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.bazaar-card-market {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--baz-accent);
+}
+
+.market-pin {
+    font-size: 0.9rem;
+}
+
+.bazaar-card-tap-hint {
+    font-size: 0.72rem;
+    color: var(--baz-muted);
+    font-style: italic;
+    margin-top: auto;
+}
+
+/* ── Map Sidebar ──────────────────────────────────────────────────── */
+.bazaar-map-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.map-toggle-btn {
+    display: none;
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--baz-accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.bazaar-map-container {
+    background: white;
+    border-radius: var(--baz-radius);
+    box-shadow: var(--baz-shadow-lg);
+    border: 1px solid var(--baz-border);
+    overflow: hidden;
+}
+
+.bazaar-map-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--baz-brown);
+    background: linear-gradient(135deg, #c0622a 0%, #e67e22 100%);
+    color: white;
+}
+
+.active-market-chip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #fff8f0;
+    border-bottom: 1px solid var(--baz-border);
+    font-size: 0.82rem;
+    color: var(--baz-brown);
+    gap: 8px;
+}
+
+.active-market-chip strong {
+    color: var(--baz-accent);
+    font-size: 0.85rem;
+}
+
+.active-market-chip span {
+    color: var(--baz-muted);
+    font-size: 0.78rem;
+}
+
+/* ── Card hover state ────────────────────────────────────────────── */
+.bazaar-card--hovered {
+    border-color: var(--baz-gold);
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2), var(--baz-shadow);
+    transform: translateY(-3px);
+}
+
+/* ── Route live badge ────────────────────────────────────────────── */
+.route-live-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, #c0622a, #e67e22);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+}
+
+/* ── Map action panel ────────────────────────────────────────────── */
+.map-action-panel {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px;
+    background: #fdf9f4;
+    border-top: 1px solid var(--baz-border);
+    flex-wrap: wrap;
+}
+
+.map-action-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1.5px solid var(--baz-border);
+    border-radius: 8px;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--baz-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.map-action-btn:hover:not(:disabled) {
+    border-color: var(--baz-accent2);
+    color: var(--baz-accent);
+    background: #fff8f0;
+    transform: translateY(-1px);
+}
+
+.map-action-btn--active {
+    background: linear-gradient(135deg, var(--baz-accent), var(--baz-accent2));
+    border-color: transparent;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(198, 98, 42, 0.3);
+}
+
+.map-action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ── GMaps button tooltip wrapper ─────────────────────────────────── */
+.gmaps-btn-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.gmaps-tooltip {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 10, 5, 0.88);
+    color: #f5d79e;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    z-index: 9999;
+    pointer-events: none;
+    animation: tooltipFadeIn 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.gmaps-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(20, 10, 5, 0.88);
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ── Route polyline dash animation ──────────────────────────────── */
+@keyframes dashMove {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -36;
+    }
+}
+
+.leaflet-overlay-pane path.leaflet-interactive {
+    animation: dashMove 0.9s linear infinite;
+}
+
+/* ── Legend dash (route line swatch) ─────────────────────────────── */
+.legend-dash {
+    display: inline-block;
+    width: 22px;
+    height: 3px;
+    border-top: 3px dashed var(--baz-accent);
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.dot-red {
+    background: #e74c3c;
+    box-shadow: 0 0 6px rgba(231, 76, 60, 0.5);
+}
+
+.bazaar-leaflet-map {
+    border-radius: 0 !important;
+}
+
+/* Leaflet popup override */
+.bazaar-popup .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--baz-border);
+}
+
+.popup-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 180px;
+}
+
+.popup-inner strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--baz-brown);
+}
+
+.popup-dist {
+    font-size: 0.78rem;
+    color: var(--baz-muted);
+}
+
+.popup-gmaps {
+    display: inline-block;
+    margin-top: 4px;
+    background: var(--baz-accent);
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.popup-gmaps:hover {
+    background: var(--baz-brown);
+}
+
+/* Market legend */
+.market-legend {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--baz-border);
+    background: #fdf9f4;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--baz-mid);
+    transition: color 0.2s;
+}
+
+.legend-item--active {
+    color: var(--baz-accent);
+    font-weight: 700;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-orange {
+    background: var(--baz-accent2);
+    box-shadow: 0 0 6px rgba(230, 126, 34, 0.5);
+    animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.dot-grey {
+    background: #aaa;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.5);
+    }
+}
+
+/* ── Product Detail Overlay ──────────────────────────────────────── */
+.product-detail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 10, 5, 0.72);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    animation: fadeInOverlay 0.25s ease;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.product-detail-panel {
+    background: var(--baz-surface);
+    border-radius: 20px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+    animation: slideUpPanel 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUpPanel {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.detail-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    background: rgba(44, 24, 16, 0.7);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.detail-close:hover {
+    background: var(--baz-accent);
+}
+
+.detail-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+}
+
+.detail-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-category {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--baz-accent);
+    background: rgba(198, 98, 42, 0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.detail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--baz-brown);
+    margin: 0;
+    line-height: 1.25;
+}
+
+.detail-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--baz-gold);
+    margin: 0;
+}
+
+.detail-desc {
+    font-size: 0.9rem;
+    color: var(--baz-mid);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.detail-divider {
+    border: none;
+    border-top: 1px dashed var(--baz-border);
+    margin: 4px 0;
+}
+
+.detail-market-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-market-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--baz-mid);
+}
+
+.detail-market-row strong {
+    color: var(--baz-brown);
+}
+
+.detail-gmaps-btn {
+    display: inline-block;
+    margin-top: 4px;
+    background: linear-gradient(135deg, var(--baz-accent), var(--baz-accent2));
+    color: white;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: all 0.3s;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(198, 98, 42, 0.3);
+}
+
+.detail-gmaps-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(198, 98, 42, 0.4);
+}
+
+.detail-artisan {
+    background: #fff9f0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(198, 98, 42, 0.15);
+}
+
+.artisan-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--baz-accent);
+    margin-bottom: 6px;
+}
+
+.detail-artisan p {
+    font-size: 0.84rem;
+    color: var(--baz-mid);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Meet the Makers ──────────────────────────────────────────────── */
+.makers-section {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 8px;
+}
+
+.makers-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.makers-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--baz-accent);
+    margin: 0 0 8px;
+}
+
+.makers-subtitle {
+    font-size: 0.95rem;
+    color: var(--baz-muted);
+}
+
+.makers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.artisan-card {
+    background: var(--baz-surface);
+    border-radius: var(--baz-radius);
+    border: 1.5px solid var(--baz-border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.3s;
+}
+
+.artisan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--baz-shadow-lg);
+    border-color: var(--baz-accent2);
+}
+
+.artisan-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.artisan-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--baz-brown);
+    margin: 0;
+}
+
+.artisan-craft {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--baz-muted);
+    background: var(--baz-border);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.artisan-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: var(--baz-muted);
+}
+
+.artisan-desc {
+    font-size: 0.84rem;
+    color: var(--baz-mid);
+    line-height: 1.65;
+    margin: 0;
+    font-style: italic;
+}
+
+/* ── Budget Planner ───────────────────────────────────────────────── */
+.budget-planner {
+    max-width: 680px;
+    margin: 0 auto 20px;
+    background: white;
+    border-radius: 20px;
+    padding: 36px 40px;
+    box-shadow: var(--baz-shadow-lg);
+    border: 1px solid var(--baz-border);
+}
+
+.budget-planner-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.budget-icon {
+    font-size: 2rem;
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--baz-accent), var(--baz-accent2));
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+}
+
+.budget-planner-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--baz-brown);
+    margin: 0 0 4px;
+}
+
+.budget-planner-header p {
+    font-size: 0.85rem;
+    color: var(--baz-muted);
+    margin: 0;
+}
+
+.budget-slider-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--baz-mid);
+    font-weight: 600;
+}
+
+.budget-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--baz-accent);
+    font-family: 'Inter', sans-serif;
+}
+
+.budget-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--baz-accent) 0%, var(--baz-accent2) 100%);
+    outline: none;
+    cursor: pointer;
+}
+
+.budget-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--baz-accent);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(198, 98, 42, 0.5);
+    transition: transform 0.15s;
+}
+
+.budget-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.budget-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--baz-accent);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(198, 98, 42, 0.5);
+}
+
+.budget-range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--baz-muted);
+    margin-top: 4px;
+    margin-bottom: 24px;
+}
+
+.budget-results {
+    background: #fdf9f4;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--baz-border);
+}
+
+.budget-results-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--baz-brown);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.budget-results-title::before {
+    content: "🛒";
+    font-size: 1rem;
+}
+
+.no-items-msg {
+    font-size: 0.85rem;
+    color: var(--baz-muted);
+    text-align: center;
+    padding: 10px 0;
+    font-style: italic;
+}
+
+.budget-item-list {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.budget-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--baz-border);
+    transition: all 0.2s;
+}
+
+.budget-item-row:hover {
+    border-color: var(--baz-accent2);
+    transform: translateX(4px);
+}
+
+.budget-item-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--baz-brown);
+    display: block;
+}
+
+.budget-item-cat {
+    font-size: 0.72rem;
+    color: var(--baz-muted);
+    display: block;
+    margin-top: 2px;
+}
+
+.budget-item-price {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--baz-accent);
+    flex-shrink: 0;
+}
+
+.budget-summary {
+    border-top: 1px dashed var(--baz-border);
+    padding-top: 14px;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.budget-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--baz-mid);
+}
+
+.total-val {
+    font-weight: 800;
+    color: var(--baz-brown);
+}
+
+.remaining-val {
+    font-weight: 800;
+    color: var(--baz-green);
+}
+
+.budget-tip {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e8449;
+    text-align: center;
+    border: 1px solid #a9dfbf;
+}
+
+/* ── Leaflet pulse marker override ───────────────────────────────── */
+.leaflet-marker-icon[src*="orange"] {
+    filter: drop-shadow(0 0 6px rgba(230, 126, 34, 0.7));
+    animation: markerBounce 1.8s ease-in-out infinite;
+}
+
+@keyframes markerBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .bazaar-body {
+        grid-template-columns: 1fr;
+    }
+
+    .bazaar-map-sidebar {
+        position: static;
+        order: -1;
+        /* Show map before grid on tablet */
+    }
+
+    .map-toggle-btn {
+        display: block;
+    }
+}
+
+@media (max-width: 900px) {
+    .makers-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+@media (max-width: 680px) {
+    .bazaar-section {
+        padding: 50px 16px 40px;
+    }
+
+    .bazaar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .budget-planner {
+        padding: 24px 20px;
+    }
+
+    .bazaar-body {
+        gap: 20px;
+    }
+}
