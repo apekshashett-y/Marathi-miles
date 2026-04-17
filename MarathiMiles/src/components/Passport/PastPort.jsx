@@ -9,6 +9,8 @@ import FlavorsSection from "./FlavorsSection";
 import BazaarSection from "./BazaarSection";
 import ItineraryPlanner from "./ItineraryPlanner";
 import SpiritSection from "./SpiritSection";
+import ExploreMore from "./ExploreMore";
+// routed pages are handled via App routes now
 import "./PastPort.css";
 
 const HOUR_OPTIONS = [2, 3, 4, 6];
@@ -33,11 +35,33 @@ function getItineraryForHours(fort, hours) {
 const PastPort = ({ onBack }) => {
   const navigate = useNavigate();
   const [selectedFort, setSelectedFort] = useState(null);
+  const resolveCuisineFortKey = (fortLike) => {
+    // Accepts: numeric fort id, fort object, fort name, or already-normalized key.
+    const raw =
+      typeof fortLike === "object" && fortLike
+        ? fortLike.cuisineKey ?? fortLike.key ?? fortLike.slug ?? fortLike.id ?? fortLike.name
+        : fortLike;
+
+    // Known mapping for current fortData ids
+    if (raw === 1 || raw === "1") return "shivneri";
+    if (raw === 2 || raw === "2") return "raigad";
+    if (raw === 3 || raw === "3") return "pratapgad";
+    if (raw === 4 || raw === "4") return "sinhagad";
+
+    if (typeof raw === "string") {
+      const s = raw.trim().toLowerCase();
+      if (["shivneri", "raigad", "pratapgad", "sinhagad"].includes(s)) return s;
+      return s.replace(/fort$/i, "").replace(/[^a-z0-9]+/g, "").trim();
+    }
+
+    return "shivneri";
+  };
   const [expandedChapter, setExpandedChapter] = useState(null);
   const [selectedHours, setSelectedHours] = useState(null);
   const [timelineLanguage, setTimelineLanguage] = useState("en");
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // ExploreMore cards now navigate to dedicated routes (new pages)
   const [active360Index, setActive360Index] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isFullImmersive, setIsFullImmersive] = useState(false);
@@ -282,6 +306,7 @@ const PastPort = ({ onBack }) => {
     setSelectedHours(null);
     setActive360Index(0);
     setIsFullImmersive(false);
+    setActiveSection(null);
     stopAutoPlay();
   };
 
@@ -598,11 +623,20 @@ const PastPort = ({ onBack }) => {
         />
       )}
 
-      {/* IMMERSIVE EXPLORE SECTIONS */}
-      <FlavorsSection />
-      <BazaarSection />
-      <ItineraryPlanner />
-      <SpiritSection />
+      {/* EXPLORE MORE GATEWAY */}
+      <>
+        <FlavorsSection />
+        <BazaarSection />
+        <ItineraryPlanner />
+        <SpiritSection />
+        <ExploreMore
+          fort={{
+            ...selectedFort,
+            cuisineKey: resolveCuisineFortKey(selectedFort),
+          }}
+          openInNewPage={true}
+        />
+      </>
 
 
       <SmartExplorationPreview

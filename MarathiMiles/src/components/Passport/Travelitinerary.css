@@ -1,0 +1,227 @@
+/* TravelItinerary.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.ti-page { background: #faf5ec; min-height: 100vh; font-family: 'DM Sans', sans-serif; color: #1e120a; }
+
+/* ── Hero ── */
+.ti-hero {
+  position: relative; padding: 32px 52px 56px;
+  background: linear-gradient(118deg, #8b3a00 0%, #c0622a 55%, #e8956d 100%);
+  overflow: hidden; isolation: isolate;
+}
+.ti-hero__bg { position: absolute; inset: 0; background-image: var(--hero-img,none); background-size:cover; background-position:center; opacity:0.1; z-index:0; }
+.ti-hero::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(-48deg,rgba(255,255,255,0.025) 0px,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 22px); pointer-events:none; z-index:1; }
+.ti-back-btn { position:relative; z-index:10; display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.35); color:#fff; padding:8px 20px; border-radius:100px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.22s; margin-bottom:36px; }
+.ti-back-btn:hover { background:rgba(255,255,255,0.27); transform:translateX(-4px); }
+.ti-hero__content { position:relative; z-index:10; }
+.ti-hero__eyebrow { display:block; font-size:0.72rem; letter-spacing:0.24em; color:rgba(255,255,255,0.75); font-weight:600; text-transform:uppercase; margin-bottom:10px; }
+.ti-hero__title { font-family:'Playfair Display',serif; font-size:clamp(2.4rem,5vw,4rem); font-weight:800; color:#fff; margin-bottom:12px; }
+.ti-hero__sub { font-size:1rem; color:rgba(255,255,255,0.88); }
+.ti-hero__sub strong { font-weight:600; color:#fff; }
+.ti-hero__dots { position:absolute; bottom:24px; right:52px; display:flex; align-items:center; gap:8px; z-index:10; }
+.ti-hero__dots span { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3); }
+.ti-hero__dots span:nth-child(2) { width:13px; height:13px; background:rgba(255,255,255,0.55); }
+
+/* ── Tabs ── */
+.ti-tabs { display:flex; background:#fff; border-bottom:2px solid #f0e0c8; padding:0 52px; gap:0; }
+.ti-tab {
+  display:flex; align-items:center; gap:8px; padding:18px 28px;
+  font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:500; color:#7a5a40;
+  border:none; background:none; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px;
+  transition:color 0.22s, border-color 0.22s;
+}
+.ti-tab__icon { font-size:1.1rem; }
+.ti-tab--active { color:#c0622a; border-bottom-color:#c0622a; font-weight:600; }
+.ti-tab:hover:not(.ti-tab--active) { color:#5a3a1a; }
+@media(max-width:640px) { .ti-tabs { padding:0 16px; } .ti-tab { padding:14px 14px; font-size:0.78rem; } }
+
+/* ── Body ── */
+.ti-body { padding:50px 52px 80px; max-width:1340px; margin:0 auto; }
+@media(max-width:768px) { .ti-body { padding:36px 18px 60px; } }
+
+/* ── Section header ── */
+.ti-section-header { margin-bottom:40px; opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.ti-section-header--visible { opacity:1; transform:translateY(0); }
+.ti-section-eyebrow { display:block; font-size:0.7rem; letter-spacing:0.22em; color:#c0622a; font-weight:700; text-transform:uppercase; margin-bottom:8px; }
+.ti-section-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800; color:#1e120a; margin-bottom:10px; }
+.ti-section-sub { font-size:0.95rem; color:#7a5a40; line-height:1.6; max-width:560px; }
+
+/* ════════════ GUIDES ════════════ */
+.ti-guides-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+@media(max-width:1000px) { .ti-guides-grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:620px)  { .ti-guides-grid { grid-template-columns:1fr; } }
+
+.ti-guide-card {
+  background:#fff; border-radius:22px; overflow:hidden;
+  border:1px solid rgba(200,170,130,0.35); box-shadow:0 4px 18px rgba(0,0,0,0.06);
+  display:flex; flex-direction:column;
+  opacity:0; transform:translateY(36px);
+  transition:opacity 0.55s cubic-bezier(0.22,0.61,0.36,1) var(--delay,0s), transform 0.55s cubic-bezier(0.22,0.61,0.36,1) var(--delay,0s), box-shadow 0.3s ease;
+}
+.ti-guide-card--visible { opacity:1; transform:translateY(0); }
+.ti-guide-card--visible:hover, .ti-guide-card--hovered {
+  transform:translateY(-8px) scale(1.01);
+  box-shadow:0 18px 46px rgba(0,0,0,0.1);
+}
+
+.ti-guide-card__img-wrap { position:relative; height:180px; overflow:hidden; }
+.ti-guide-card__img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+.ti-guide-card--visible:hover .ti-guide-card__img { transform:scale(1.08); }
+.ti-guide-card__img-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.4) 0%,transparent 60%); }
+.ti-guide-card__avatar { position:absolute; bottom:14px; left:16px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; border:3px solid rgba(255,255,255,0.8); }
+
+.ti-guide-card__body { padding:18px 18px 20px; display:flex; flex-direction:column; gap:10px; flex:1; }
+.ti-guide-card__top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.ti-guide-card__name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#1e120a; margin:0; }
+.ti-guide-card__role { font-size:0.75rem; color:#9b7a5a; font-weight:500; }
+.ti-guide-card__rating { display:flex; align-items:center; gap:3px; flex-shrink:0; }
+.ti-guide-card__star { color:#f5a623; font-size:0.9rem; }
+.ti-guide-card__rating-num { font-size:0.88rem; font-weight:700; color:#1e120a; }
+.ti-guide-card__reviews { font-size:0.75rem; color:#9b7a5a; }
+.ti-guide-card__meta { display:flex; flex-direction:column; gap:4px; }
+.ti-guide-card__meta-item { font-size:0.76rem; color:#6b5040; }
+.ti-guide-card__specialty { font-size:0.76rem; font-weight:600; border:1px solid; padding:4px 12px; border-radius:100px; width:fit-content; }
+.ti-guide-card__langs { display:flex; flex-wrap:wrap; gap:5px; }
+.ti-guide-card__lang-chip { background:#f5f0e8; border:1px solid #e0cba8; color:#6b5040; font-size:0.72rem; padding:2px 10px; border-radius:100px; }
+.ti-guide-card__bio { font-size:0.82rem; color:#6b5040; line-height:1.6; }
+.ti-guide-card__btn {
+  margin-top:auto; padding:10px 16px; border-radius:10px; color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
+  border:none; cursor:pointer; transition:opacity 0.22s, transform 0.22s;
+}
+.ti-guide-card__btn:hover { opacity:0.88; transform:translateY(-2px); }
+
+/* Guide modal */
+.ti-modal-overlay { position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:20px; animation:tiOverlayIn 0.25s ease; }
+@keyframes tiOverlayIn { from{opacity:0} to{opacity:1} }
+.ti-modal { background:#fff; border-radius:24px; overflow:hidden; max-width:600px; width:100%; max-height:88vh; overflow-y:auto; position:relative; animation:tiSlideUp 0.3s cubic-bezier(0.22,0.61,0.36,1); box-shadow:0 24px 80px rgba(0,0,0,0.35); }
+@keyframes tiSlideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+.ti-modal__close { position:absolute; top:16px; right:16px; z-index:10; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,0.5); color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition:background 0.2s; }
+.ti-modal__close:hover { background:rgba(0,0,0,0.8); }
+.ti-modal__hero { height:220px; position:relative; overflow:hidden; }
+.ti-modal__hero-img { width:100%; height:100%; object-fit:cover; }
+.ti-modal__hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 60%); }
+.ti-modal__hero-content { position:absolute; bottom:20px; left:22px; z-index:2; display:flex; flex-direction:column; gap:5px; }
+.ti-modal__avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:4px; }
+.ti-modal__name { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:#fff; margin:0; }
+.ti-modal__role { font-size:0.78rem; color:rgba(255,255,255,0.8); }
+.ti-modal__rating { display:flex; gap:8px; font-size:0.82rem; color:rgba(255,215,100,0.95); font-weight:600; }
+.ti-modal__body { padding:24px; display:flex; flex-direction:column; gap:20px; }
+.ti-modal__meta-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.ti-modal__meta-item { background:#f8f3ea; border-radius:10px; padding:12px 14px; }
+.ti-modal__meta-label { display:block; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:#9b7a5a; font-weight:600; margin-bottom:3px; }
+.ti-modal__meta-val { font-size:0.88rem; color:#1e120a; font-weight:500; }
+.ti-modal__bio { font-size:0.9rem; color:#4a3020; line-height:1.7; }
+.ti-modal__section { display:flex; flex-direction:column; gap:10px; }
+.ti-modal__section-title { font-family:'Playfair Display',serif; font-size:1rem; color:#1e120a; margin:0; }
+.ti-modal__list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+.ti-modal__list li { font-size:0.88rem; color:#4a3020; padding-left:16px; position:relative; }
+.ti-modal__list li::before { content:'✓'; position:absolute; left:0; color:#c0622a; font-weight:700; }
+.ti-modal__tours { display:flex; flex-wrap:wrap; gap:8px; }
+.ti-modal__tour-chip { border:1.5px solid; padding:5px 14px; border-radius:100px; font-size:0.8rem; font-weight:500; }
+
+/* ════════════ BUDGET ════════════ */
+.ti-budget { opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.ti-budget--visible { opacity:1; transform:translateY(0); }
+.ti-budget__card { background:#fff; border-radius:20px; border:1px solid rgba(200,170,130,0.35); box-shadow:0 4px 18px rgba(0,0,0,0.06); padding:32px; max-width:680px; }
+.ti-budget__slider-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.ti-budget__label { font-size:0.9rem; color:#6b5040; font-weight:500; }
+.ti-budget__value { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:#c0622a; }
+.ti-budget__slider { width:100%; appearance:none; height:6px; border-radius:3px; background:linear-gradient(to right,#c0622a 0%,#c0622a calc(var(--val,50%)),#e5d0b8 calc(var(--val,50%)),#e5d0b8 100%); outline:none; cursor:pointer; }
+.ti-budget__slider::-webkit-slider-thumb { appearance:none; width:20px; height:20px; border-radius:50%; background:#c0622a; box-shadow:0 2px 8px rgba(192,98,42,0.4); cursor:pointer; }
+.ti-budget__range-labels { display:flex; justify-content:space-between; font-size:0.75rem; color:#9b7a5a; margin-top:4px; margin-bottom:20px; }
+.ti-budget__results { margin-top:4px; }
+.ti-budget__results-title { font-family:'Playfair Display',serif; font-size:1rem; color:#1e120a; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+.ti-budget__count { background:#c0622a; color:#fff; font-size:0.72rem; font-family:'DM Sans',sans-serif; font-weight:700; padding:2px 9px; border-radius:100px; }
+.ti-budget__empty { font-size:0.88rem; color:#9b7a5a; }
+.ti-budget__list { list-style:none; padding:0; margin:0 0 16px; display:flex; flex-direction:column; gap:1px; }
+.ti-budget__item { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:8px; background:#fdf8f2; border:1px solid #f0e0c8; }
+.ti-budget__item:hover { background:#f5ece0; }
+.ti-budget__item-name { display:block; font-size:0.88rem; color:#1e120a; font-weight:500; }
+.ti-budget__item-cat { font-size:0.73rem; color:#9b7a5a; }
+.ti-budget__item-price { font-size:0.9rem; font-weight:700; color:#c0622a; flex-shrink:0; }
+.ti-budget__summary { border-top:2px dashed #e5d0b8; padding-top:14px; display:flex; flex-direction:column; gap:8px; }
+.ti-budget__summary-row { display:flex; justify-content:space-between; font-size:0.9rem; color:#6b5040; }
+.ti-budget__total { color:#1e120a; font-size:1rem; }
+.ti-budget__remaining { color:#27ae60; font-size:1rem; }
+.ti-budget__tip { background:#f0faf4; border:1px solid #c8e8d0; border-radius:10px; padding:12px 16px; font-size:0.85rem; color:#1a5e38; margin-top:12px; }
+
+/* ════════════ PLANNER ════════════ */
+.ti-planner { opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.ti-planner--visible { opacity:1; transform:translateY(0); }
+.ti-planner__steps { display:flex; align-items:center; gap:0; margin-bottom:36px; }
+.ti-planner__step { width:36px; height:36px; border-radius:50%; background:#e5d0b8; color:#9b7a5a; font-weight:700; font-size:0.88rem; display:flex; align-items:center; justify-content:center; transition:background 0.3s, color 0.3s; }
+.ti-planner__step--active { background:#c0622a; color:#fff; }
+.ti-planner__step-line { flex:1; height:2px; background:#e5d0b8; max-width:60px; }
+
+.ti-planner__form, .ti-planner__result { display:flex; flex-direction:column; gap:28px; }
+
+.ti-planner__section { background:#fff; border-radius:16px; padding:22px 24px; border:1px solid rgba(200,170,130,0.35); box-shadow:0 2px 10px rgba(0,0,0,0.04); }
+.ti-planner__section-label { font-size:0.88rem; font-weight:600; color:#1e120a; margin-bottom:14px; display:block; }
+.ti-planner__section-label small { font-size:0.78rem; color:#9b7a5a; font-weight:400; }
+
+.ti-planner__row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:680px) { .ti-planner__row { grid-template-columns:1fr; } }
+
+.ti-planner__mode-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+@media(max-width:580px) { .ti-planner__mode-grid { grid-template-columns:1fr; } }
+.ti-planner__mode-btn {
+  display:flex; flex-direction:column; gap:4px; padding:14px 16px; border-radius:12px;
+  border:2px solid #e5d0b8; background:#fdf8f2; cursor:pointer; text-align:left;
+  transition:border-color 0.22s, background 0.22s;
+}
+.ti-planner__mode-btn--active { border-color:#c0622a; background:#fff5ee; }
+.ti-planner__mode-icon { font-size:1.4rem; }
+.ti-planner__mode-label { font-size:0.86rem; font-weight:600; color:#1e120a; }
+.ti-planner__mode-desc { font-size:0.75rem; color:#7a5a40; }
+
+.ti-planner__chips { display:flex; flex-wrap:wrap; gap:8px; }
+.ti-planner__chip {
+  padding:7px 18px; border-radius:100px; border:1.5px solid #dac8a8;
+  background:#fff; color:#6b5040; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:500;
+  cursor:pointer; transition:all 0.22s;
+}
+.ti-planner__chip--active { background:#c0622a; border-color:#c0622a; color:#fff; font-weight:600; }
+.ti-planner__chip:hover:not(.ti-planner__chip--active) { border-color:#c0622a; color:#8b3a00; }
+
+.ti-planner__time-input { padding:10px 14px; border:1.5px solid #dac8a8; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:#1e120a; background:#fff; width:fit-content; outline:none; }
+.ti-planner__time-input:focus { border-color:#c0622a; }
+.ti-planner__time-hint { font-size:0.78rem; color:#9b7a5a; margin-top:6px; }
+
+.ti-planner__budget-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.88rem; color:#6b5040; }
+.ti-planner__budget-val { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#c0622a; }
+.ti-planner__budget-slider { width:100%; appearance:none; height:6px; border-radius:3px; background:linear-gradient(to right,#c0622a 0%,#c0622a 30%,#e5d0b8 30%,#e5d0b8 100%); outline:none; cursor:pointer; }
+.ti-planner__budget-slider::-webkit-slider-thumb { appearance:none; width:20px; height:20px; border-radius:50%; background:#c0622a; box-shadow:0 2px 8px rgba(192,98,42,0.4); cursor:pointer; }
+.ti-planner__budget-labels { display:flex; justify-content:space-between; font-size:0.73rem; color:#9b7a5a; margin-top:4px; }
+
+.ti-planner__generate-btn {
+  padding:16px 32px; border-radius:14px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,#c0622a,#8b3a00); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700;
+  box-shadow:0 6px 24px rgba(192,98,42,0.35);
+  transition:transform 0.22s, box-shadow 0.22s; width:100%;
+}
+.ti-planner__generate-btn:hover { transform:translateY(-3px); box-shadow:0 10px 32px rgba(192,98,42,0.45); }
+
+/* Result */
+.ti-planner__result-header { background:#fff; border-radius:16px; padding:22px 24px; border:1px solid rgba(200,170,130,0.35); }
+.ti-planner__result-title { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:#1e120a; margin-bottom:12px; }
+.ti-planner__result-meta { display:flex; flex-wrap:wrap; gap:12px; }
+.ti-planner__result-meta span { background:#f5ece0; border:1px solid #e5d0b8; color:#6b5040; font-size:0.8rem; font-weight:500; padding:5px 14px; border-radius:100px; }
+
+/* Route visualization */
+.ti-planner__route { display:flex; flex-direction:column; gap:0; background:#fff; border-radius:16px; padding:24px; border:1px solid rgba(200,170,130,0.35); }
+.ti-planner__stop { display:grid; grid-template-columns:40px 1fr; gap:16px; position:relative; }
+.ti-planner__stop-marker { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+.ti-planner__stop-label { width:36px; height:36px; border-radius:50%; background:#c0622a; color:#fff; font-size:0.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ti-planner__stop--transit .ti-planner__stop-label { background:#6b5040; }
+.ti-planner__stop--nature .ti-planner__stop-label { background:#27ae60; }
+.ti-planner__stop--spiritual .ti-planner__stop-label { background:#8e44ad; }
+.ti-planner__stop-line { flex:1; width:2px; background:#f0d5b0; margin:4px 0; min-height:20px; }
+.ti-planner__stop-content { padding-bottom:24px; }
+.ti-planner__stop-time { font-size:0.72rem; font-weight:700; color:#c0622a; letter-spacing:0.08em; text-transform:uppercase; }
+.ti-planner__stop-name { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:#1e120a; margin:2px 0 4px; }
+.ti-planner__stop-desc { font-size:0.83rem; color:#6b5040; line-height:1.55; margin:0; }
+
+.ti-planner__restart-btn { padding:12px 24px; border-radius:100px; border:1.5px solid #c0622a; background:transparent; color:#c0622a; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.22s; width:fit-content; }
+.ti-planner__restart-btn:hover { background:#c0622a; color:#fff; }

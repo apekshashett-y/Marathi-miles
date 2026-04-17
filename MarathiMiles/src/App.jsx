@@ -6,6 +6,10 @@ import MoodRecommendation from './components/MoodRecommendation/MoodRecommendati
 import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
 import SmartExplorationV2 from './components/Passport/SmartExplorationV2';
+import FamousCuisine from "./components/Passport/FamousCuisine";
+import ShoppingSection from "./components/Passport/ShoppingSection";
+import ExperienceSection from "./components/Passport/Experiencesection";
+import TravelItinerary from "./components/Passport/Travelitinerary";
 
 const MainApp = () => {
   const location = useLocation();
@@ -24,10 +28,7 @@ const MainApp = () => {
         if (heroElement) {
           const elementPosition = heroElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -36,30 +37,21 @@ const MainApp = () => {
         if (moodElement) {
           const elementPosition = moodElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
       } else if (section === "passport") {
         const passportElement = document.getElementById('passport');
         if (passportElement) {
           const elementPosition = passportElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
       } else if (section === "place-explorer") {
         const placeElement = document.getElementById('place-explorer');
         if (placeElement) {
           const elementPosition = placeElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - navbarHeight;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
       }
     }, 100);
@@ -116,6 +108,11 @@ const App = () => {
     <Routes>
       <Route path="/" element={<MainApp />} />
       <Route path="/pastport/:fortId/smart-exploration" element={<SmartExplorationV2 />} />
+      <Route path="/famous-cuisine" element={<FamousCuisine />} />
+      <Route path="/shopping-areas" element={<ShoppingSection />} />
+      <Route path="/cultural-experience" element={<ExperienceSection />} />
+      <Route path="/travel-itinerary" element={<TravelItinerary />} />
+      <Route path="/cuisine/:fort" element={<FamousCuisine />} />
     </Routes>
   );
 };
