@@ -13,7 +13,7 @@ export const maharashtraForts = [
     era: "Birthplace of a Legend (1630 CE)",
     subtitle: "Where the lion of Maharashtra took his first breath",
     significance: "The sacred ground where Chhatrapati Shivaji Maharaj was born, marking the dawn of Maratha resistance.",
-    imageUrl: mainHeroImg,
+    imageUrl: "/shivneri_fort.png",
 
     // DEEP HISTORICAL TIMELINE - Story Chapters with Mood Tags
     timeline: [
@@ -659,7 +659,7 @@ export const maharashtraForts = [
     era: "Capital of the Maratha Empire",
     subtitle: "Where the crown of Swarajya was first consecrated.",
     significance: "The seat of Chhatrapati Shivaji Maharaj's coronation and the capital of the Maratha Empire.",
-    imageUrl: "https://images.unsplash.com/photo-1548013146-72479768bada?w=1200&auto=format&fit=crop&q=80",
+    imageUrl: "/raigad_fort.png",
     timeline: [
       {
         year: "1674",
@@ -798,7 +798,7 @@ export const maharashtraForts = [
     era: "The Lion Fort",
     subtitle: "Where Tanaji fought for the glory of Swarajya.",
     significance: "Site of the legendary Battle of Sinhagad and a symbol of Maratha valour.",
-    imageUrl: "/assets/forts/shivneri/hero.jpg",
+    imageUrl: "/sinhagad_fort.png",
     timeline: [
       {
         year: "1670",
@@ -901,7 +901,7 @@ export const maharashtraForts = [
     era: "Where Afzal Khan Fell",
     subtitle: "The fort that witnessed the encounter that changed the Deccan.",
     significance: "Site of Shivaji Maharaj's historic encounter with Afzal Khan in 1659.",
-    imageUrl: "https://images.unsplash.com/photo-1548013146-72479768bada?w=1200&auto=format&fit=crop&q=80",
+    imageUrl: "/pratapgad_fort.png",
     timeline: [
       {
         year: "1656",
@@ -1039,7 +1039,7 @@ export const maharashtraForts = [
     era: "The Iron Fort",
     subtitle: "Where the Sahyadris meet the sky.",
     significance: "A well-preserved fort near Lonavala, popular for treks and monsoon views.",
-    imageUrl: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=1200&auto=format&fit=crop&q=80",
+    imageUrl: "/lohagad_fort.png",
     timeline: [
       {
         year: "Medieval",
@@ -1169,5 +1169,21 @@ export const maharashtraForts = [
         { time: "2:00 PM", activity: "Descent & Lunch", description: "Down and lunch at Lonavala", tip: "Try chikki" }
       ]
     }
+  },
+  {
+    id: 6,
+    name: "Rajgad Fort",
+    location: "Pune District",
+    era: "The King of Forts",
+    subtitle: "The first capital of the Maratha Empire.",
+    significance: "Served as the capital of the Maratha Empire under Shivaji Maharaj for nearly 26 years.",
+    imageUrl: "/rajgad_fort.png",
+    timeline: [],
+    vrExperience: "Explore the massive Suvela Machi and Padmavati Machi in 360°.",
+    images360: [],
+    cuisine: [],
+    shopping: [],
+    experiences: [],
+    itineraries: {}
   }
 ];

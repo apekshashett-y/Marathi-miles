@@ -3512,4 +3512,23 @@
   background: linear-gradient(90deg, #d4a574, #b37a4e);
   transform-origin: 0%;
   z-index: 1001;
+}/* Expanded Card Layout for Mobile */
+@media screen and (max-width: 768px) {
+  .fort-card.active-card {
+    flex-direction: column !important;
+  }
+  .fort-card.active-card .fort-card-image {
+    min-height: 200px !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+  .fort-card.active-card .fort-card-overlay {
+    border-radius: 16px 16px 0 0 !important;
+  }
+  .fort-card.active-card .fort-card-content {
+    border-radius: 0 0 16px 16px !important;
+    padding: 2rem !important;
+  }
+  .fort-card.active-card .fort-card-name {
+    font-size: 2rem !important;
+  }
 }
