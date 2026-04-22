@@ -28,13 +28,21 @@ const STRATEGY_THEMES = {
     min_walking: { color: '#10b981', label: 'Minimum Walk', summary: 'Low Effort Route (Shortest Path Priority)', icon: '🌿' }
 };
 
-const SmartExplorationV2 = () => {
+const SmartExplorationV2 = ({ onBack }) => {
     const navigate = useNavigate();
 
     // User Inputs
     const [timeAvailable, setTimeAvailable] = useState(60);
     const [energyLevel, setEnergyLevel] = useState('medium');
     const [adaptiveMode, setAdaptiveMode] = useState(true);
+
+    const handleBack = () => {
+        if (onBack) {
+            onBack();
+        } else {
+            navigate('/');
+        }
+    };
 
     // Engine State
     const [sessionWeights, setSessionWeights] = useState({ h: 0.4, s: 0.2, a: 0.2, e: 0.2 });
@@ -44,10 +52,17 @@ const SmartExplorationV2 = () => {
     const [predictionConfidence, setPredictionConfidence] = useState(0);
     const [interactionMode, setInteractionMode] = useState('normal'); // 'normal' | 'soft_include' | 'reroute'
 
-    // System State
     const [isComputing, setIsComputing] = useState(false);
     const [optimizationResult, setOptimizationResult] = useState(null);
     const [alternatives, setAlternatives] = useState(null);
+
+    // Hide Navbar/Footer when active using a robust body class
+    useEffect(() => {
+        document.body.classList.add('hide-site-nav');
+        return () => {
+            document.body.classList.remove('hide-site-nav');
+        };
+    }, []);
     const [selectedStrategy, setSelectedStrategy] = useState('balanced');
     const [showDebug, setShowDebug] = useState(false);
     const [rerouteBanner, setRerouteBanner] = useState(null);
@@ -286,7 +301,7 @@ const SmartExplorationV2 = () => {
                         <span className="text">Learning Active</span>
                         {adaptiveMode && <div className="learning-dot" />}
                     </motion.button>
-                    <motion.button className="option-btn" onClick={() => navigate('/')}>✕</motion.button>
+                    <motion.button className="v2-back-btn" onClick={handleBack}>← Back to Options</motion.button>
                 </div>
             </header>
 

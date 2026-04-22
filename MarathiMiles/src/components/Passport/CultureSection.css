@@ -1,0 +1,244 @@
+.culture-section-container {
+    background-color: #fdfaf3;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    color: #2c1810;
+    padding-bottom: 80px;
+}
+
+.culture-hero {
+    background: linear-gradient(to right, rgba(230, 126, 34, 0.9), rgba(192, 57, 43, 0.9)), url('https://images.unsplash.com/photo-1622308644420-b201428271e8?w=1600&auto=format&fit=crop&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 140px 40px 80px; /* high padding to accommodate the absolute back button */
+    color: white;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+}
+
+.culture-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.culture-eyebrow {
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.culture-title {
+    font-size: 4rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    margin: 0 0 20px 0;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.culture-subtitle {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    margin: 0;
+}
+
+.culture-body {
+    max-width: 1200px;
+    margin: 60px auto 0;
+    padding: 0 40px;
+}
+
+.culture-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.culture-text-content {
+    position: relative;
+}
+
+.date-badge {
+    background: #e67e22;
+    color: white;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+}
+
+.date-day {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.culture-text-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin: 0 0 20px 0;
+    color: #2c1810;
+}
+
+.culture-desc {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.culture-highlights {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.highlight-item {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(230, 126, 34, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.highlight-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(230, 126, 34, 0.1);
+    border-color: rgba(230, 126, 34, 0.3);
+}
+
+.highlight-img {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.highlight-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.highlight-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.highlight-item h4 {
+    margin: 0 0 12px 0;
+    font-size: 1.5rem;
+    color: #d35400;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+}
+
+.highlight-item p {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.culture-image-content {
+    position: relative;
+    padding-top: 40px;
+}
+
+.culture-img-wrapper {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.main-img {
+    height: 500px;
+    width: 100%;
+}
+
+.main-img img, .secondary-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.culture-img-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+.secondary-img {
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    width: 250px;
+    height: 250px;
+    border: 8px solid #fdfaf3;
+    z-index: 2;
+}
+
+.img-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 30px 20px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    font-style: italic;
+}
+
+.secondary-img .img-caption {
+    padding: 10px;
+    font-size: 0.8rem;
+    background: rgba(0,0,0,0.6);
+}
+
+@media (max-width: 1024px) {
+    .culture-split {
+        grid-template-columns: 1fr;
+    }
+    
+    .secondary-img {
+        display: none;
+    }
+    
+    .culture-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .culture-hero {
+        padding: 120px 20px 60px;
+    }
+    
+    .culture-title {
+        font-size: 2.2rem;
+    }
+}

@@ -4,11 +4,10 @@ import { maharashtraForts } from "../../services/fortData";
 import { shivneriData } from "../../data/shivneriData";
 import Timeline from "./Timeline";
 import Shivneri360Gallery from "../Shivneri360Gallery";
-import SmartExplorationPreview from "./SmartExplorationPreview";
 import FlavorsSection from "./FlavorsSection";
 import BazaarSection from "./BazaarSection";
+import CultureSection from "./CultureSection";
 import ItineraryPlanner from "./ItineraryPlanner";
-import SpiritSection from "./SpiritSection";
 import "./PastPort.css";
 
 const HOUR_OPTIONS = [2, 3, 4, 6];
@@ -37,6 +36,7 @@ const PastPort = () => {
   const [timelineLanguage, setTimelineLanguage] = useState("en");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeCardId, setActiveCardId] = useState(null);
+  const [activeFacet, setActiveFacet] = useState(null);
 
   const [active360Index, setActive360Index] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -86,6 +86,7 @@ const PastPort = () => {
       setSelectedFort(null);
       setExpandedChapter(null);
       setActiveCardId(null);
+      setActiveFacet(null);
       setActive360Index(0);
       setIsFullImmersive(false);
       stopAutoPlay();
@@ -227,6 +228,7 @@ const PastPort = () => {
     setSelectedFort(null);
     setExpandedChapter(null);
     setActiveCardId(null);
+    setActiveFacet(null);
     setSelectedHours(null);
     setActive360Index(0);
     setIsFullImmersive(false);
@@ -420,6 +422,40 @@ const PastPort = () => {
   }
 
   // ─── FORT DETAIL VIEW ─────────────────────────────────────────────────────
+  if (activeFacet) {
+    return (
+      <div className="facet-page-container" style={{ minHeight: '100vh', background: '#fdfaf3', fontFamily: "'DM Sans', sans-serif", position: 'relative' }}>
+        <button 
+          onClick={() => { 
+            setActiveFacet(null); 
+            setTimeout(() => {
+              const el = document.getElementById('explore-facets');
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+              }
+            }, 10);
+          }}
+          style={{ 
+            margin: '0', padding: '8px 20px', background: 'rgba(0, 0, 0, 0.6)', color: '#fff', 
+            border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', borderRadius: '30px',
+            fontSize: '0.95rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px',
+            transition: 'all 0.3s ease', zIndex: 100, position: 'absolute', top: '100px', left: '40px',
+            backdropFilter: 'blur(4px)'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateX(-4px)'; e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'; }}
+        >
+          ← Back to {selectedFort?.name || "Fort"}
+        </button>
+        {activeFacet === 'cuisine' && <FlavorsSection />}
+        {activeFacet === 'bazaar' && <BazaarSection />}
+        {activeFacet === 'culture' && <CultureSection />}
+        {activeFacet === 'itinerary' && <ItineraryPlanner />}
+      </div>
+    );
+  }
+
   const images360 = selectedFort.images360 || [];
   const has360Images = images360.length > 0;
 
@@ -673,18 +709,287 @@ const PastPort = () => {
       {/* 360° Interactive Viewer Modal */}
       {show360 && <Shivneri360Gallery onClose={() => setShow360(false)} />}
 
-      {/* Immersive Explore Sections */}
-      <FlavorsSection />
-      <BazaarSection />
-      <ItineraryPlanner />
-      <SpiritSection />
+      {/* Explore Every Facet - 4 Cards UI */}
+      <div id="explore-facets" style={{
+        padding: '80px 40px',
+        maxWidth: '1400px',
+        margin: '0 auto',
+        fontFamily: "'DM Sans', sans-serif"
+      }}>
+        <div style={{ textAlign: 'center', margin: '60px 0 50px' }}>
+          <span style={{ display: 'block', fontSize: '0.8rem', letterSpacing: '0.24em', color: '#c0622a', fontWeight: '700', textTransform: 'uppercase', marginBottom: '12px' }}>DISCOVER MORE</span>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.4rem, 4vw, 3.2rem)', fontWeight: '800', color: '#2c1810', margin: '0 0 16px' }}>Explore Every Facet</h2>
+          <p style={{ fontSize: '1.1rem', color: '#666666', fontWeight: '400', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Delve deeper into the rich heritage, culinary wonders, and vibrant culture of {selectedFort.name}.</p>
+        </div>
 
-      <SmartExplorationPreview
-        fortName={selectedFort.name}
-        onOpenExploration={() =>
-          navigate(`/pastport/${selectedFort.id}/smart-exploration`)
-        }
-      />
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '30px'
+        }}>
+          {/* Card 1: Famous Cuisine */}
+          <div 
+            onClick={() => { setActiveFacet('cuisine'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            style={{
+              background: '#ffffff', borderRadius: '24px', cursor: 'pointer',
+              position: 'relative', overflow: 'hidden',
+              transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+              border: '1px solid rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.transform = 'translateY(-12px)'; 
+              e.currentTarget.style.boxShadow = '0 30px 60px rgba(192,98,42,0.15)'; 
+              e.currentTarget.style.borderColor = 'rgba(192,98,42,0.2)';
+              e.currentTarget.querySelector('.facet-img-1').style.transform = 'scale(1.1)';
+              e.currentTarget.querySelector('.facet-icon-1').style.transform = 'scale(1.1) rotate(8deg)';
+              e.currentTarget.querySelector('.facet-icon-1').style.color = '#fff';
+              e.currentTarget.querySelector('.facet-icon-1').style.background = '#c0622a';
+              e.currentTarget.querySelector('.facet-arrow-1').style.transform = 'translateX(8px)';
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.06)'; 
+              e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
+              e.currentTarget.querySelector('.facet-img-1').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('.facet-icon-1').style.transform = 'scale(1) rotate(0)';
+              e.currentTarget.querySelector('.facet-icon-1').style.color = '#c0622a';
+              e.currentTarget.querySelector('.facet-icon-1').style.background = '#ffffff';
+              e.currentTarget.querySelector('.facet-arrow-1').style.transform = 'translateX(0)';
+            }}
+          >
+            {/* Image Section */}
+            <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+              <img 
+                className="facet-img-1"
+                src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=600&auto=format&fit=crop" 
+                alt="Cuisine" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
+              <div 
+                className="facet-icon-1"
+                style={{ 
+                  position: 'absolute', bottom: '-20px', right: '24px', 
+                  width: '56px', height: '56px', borderRadius: '50%', 
+                  background: '#ffffff', color: '#c0622a', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontSize: '1.6rem', boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', zIndex: 2
+                }}>
+                🍽️
+              </div>
+            </div>
+
+            {/* Content Section */}
+            <div style={{ padding: '36px 30px 30px', display: 'flex', flexDirection: 'column', flex: 1, position: 'relative', zIndex: 1 }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', color: '#2c1810', margin: '0 0 12px' }}>Famous Cuisine</h3>
+              <p style={{ color: '#666666', fontSize: '0.95rem', lineHeight: '1.6', margin: '0 0 24px', flex: 1, fontWeight: '400' }}>
+                Taste the heritage. Discover local delicacies, traditional recipes, and where to find the best food around the fort.
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', color: '#c0622a', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Explore <span className="facet-arrow-1" style={{ marginLeft: '8px', transition: 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)' }}>→</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2: Heritage Bazaar */}
+          <div 
+            onClick={() => { setActiveFacet('bazaar'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            style={{
+              background: '#ffffff', borderRadius: '24px', cursor: 'pointer',
+              position: 'relative', overflow: 'hidden',
+              transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+              border: '1px solid rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.transform = 'translateY(-12px)'; 
+              e.currentTarget.style.boxShadow = '0 30px 60px rgba(46,204,113,0.15)'; 
+              e.currentTarget.style.borderColor = 'rgba(46,204,113,0.2)';
+              e.currentTarget.querySelector('.facet-img-2').style.transform = 'scale(1.1)';
+              e.currentTarget.querySelector('.facet-icon-2').style.transform = 'scale(1.1) rotate(8deg)';
+              e.currentTarget.querySelector('.facet-icon-2').style.color = '#fff';
+              e.currentTarget.querySelector('.facet-icon-2').style.background = '#2ecc71';
+              e.currentTarget.querySelector('.facet-arrow-2').style.transform = 'translateX(8px)';
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.06)'; 
+              e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
+              e.currentTarget.querySelector('.facet-img-2').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('.facet-icon-2').style.transform = 'scale(1) rotate(0)';
+              e.currentTarget.querySelector('.facet-icon-2').style.color = '#2ecc71';
+              e.currentTarget.querySelector('.facet-icon-2').style.background = '#ffffff';
+              e.currentTarget.querySelector('.facet-arrow-2').style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+              <img 
+                className="facet-img-2"
+                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop"
+                alt="Bazaar" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
+              <div 
+                className="facet-icon-2"
+                style={{ 
+                  position: 'absolute', bottom: '-20px', right: '24px', 
+                  width: '56px', height: '56px', borderRadius: '50%', 
+                  background: '#ffffff', color: '#2ecc71', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontSize: '1.6rem', boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', zIndex: 2
+                }}>
+                🛍️
+              </div>
+            </div>
+
+            <div style={{ padding: '36px 30px 30px', display: 'flex', flexDirection: 'column', flex: 1, position: 'relative', zIndex: 1 }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', color: '#2c1810', margin: '0 0 12px' }}>Heritage Bazaar</h3>
+              <p style={{ color: '#666666', fontSize: '0.95rem', lineHeight: '1.6', margin: '0 0 24px', flex: 1, fontWeight: '400' }}>
+                Take a piece of history home. Shop for traditional handicrafts, souvenirs, and local artifacts.
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', color: '#2ecc71', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Explore <span className="facet-arrow-2" style={{ marginLeft: '8px', transition: 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)' }}>→</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Cultural Experience */}
+          <div 
+            onClick={() => { setActiveFacet('culture'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            style={{
+              background: '#ffffff', borderRadius: '24px', cursor: 'pointer',
+              position: 'relative', overflow: 'hidden',
+              transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+              border: '1px solid rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.transform = 'translateY(-12px)'; 
+              e.currentTarget.style.boxShadow = '0 30px 60px rgba(155,89,182,0.15)'; 
+              e.currentTarget.style.borderColor = 'rgba(155,89,182,0.2)';
+              e.currentTarget.querySelector('.facet-img-3').style.transform = 'scale(1.1)';
+              e.currentTarget.querySelector('.facet-icon-3').style.transform = 'scale(1.1) rotate(8deg)';
+              e.currentTarget.querySelector('.facet-icon-3').style.color = '#fff';
+              e.currentTarget.querySelector('.facet-icon-3').style.background = '#9b59b6';
+              e.currentTarget.querySelector('.facet-arrow-3').style.transform = 'translateX(8px)';
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.06)'; 
+              e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
+              e.currentTarget.querySelector('.facet-img-3').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('.facet-icon-3').style.transform = 'scale(1) rotate(0)';
+              e.currentTarget.querySelector('.facet-icon-3').style.color = '#9b59b6';
+              e.currentTarget.querySelector('.facet-icon-3').style.background = '#ffffff';
+              e.currentTarget.querySelector('.facet-arrow-3').style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+              <img 
+                className="facet-img-3"
+                src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=600&auto=format&fit=crop" 
+                alt="Culture" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
+              <div 
+                className="facet-icon-3"
+                style={{ 
+                  position: 'absolute', bottom: '-20px', right: '24px', 
+                  width: '56px', height: '56px', borderRadius: '50%', 
+                  background: '#ffffff', color: '#9b59b6', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontSize: '1.6rem', boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', zIndex: 2
+                }}>
+                🎭
+              </div>
+            </div>
+
+            <div style={{ padding: '36px 30px 30px', display: 'flex', flexDirection: 'column', flex: 1, position: 'relative', zIndex: 1 }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', color: '#2c1810', margin: '0 0 12px' }}>Cultural Experience</h3>
+              <p style={{ color: '#666666', fontSize: '0.95rem', lineHeight: '1.6', margin: '0 0 24px', flex: 1, fontWeight: '400' }}>
+                Immerse yourself in local traditions, art forms, and cultural festivals unique to this region.
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', color: '#9b59b6', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Explore <span className="facet-arrow-3" style={{ marginLeft: '8px', transition: 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)' }}>→</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 4: Travel Itinerary */}
+          <div 
+            onClick={() => { setActiveFacet('itinerary'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            style={{
+              background: '#ffffff', borderRadius: '24px', cursor: 'pointer',
+              position: 'relative', overflow: 'hidden',
+              transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+              border: '1px solid rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.transform = 'translateY(-12px)'; 
+              e.currentTarget.style.boxShadow = '0 30px 60px rgba(52,152,219,0.15)'; 
+              e.currentTarget.style.borderColor = 'rgba(52,152,219,0.2)';
+              e.currentTarget.querySelector('.facet-img-4').style.transform = 'scale(1.1)';
+              e.currentTarget.querySelector('.facet-icon-4').style.transform = 'scale(1.1) rotate(8deg)';
+              e.currentTarget.querySelector('.facet-icon-4').style.color = '#fff';
+              e.currentTarget.querySelector('.facet-icon-4').style.background = '#3498db';
+              e.currentTarget.querySelector('.facet-arrow-4').style.transform = 'translateX(8px)';
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.06)'; 
+              e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
+              e.currentTarget.querySelector('.facet-img-4').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('.facet-icon-4').style.transform = 'scale(1) rotate(0)';
+              e.currentTarget.querySelector('.facet-icon-4').style.color = '#3498db';
+              e.currentTarget.querySelector('.facet-icon-4').style.background = '#ffffff';
+              e.currentTarget.querySelector('.facet-arrow-4').style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+              <img 
+                className="facet-img-4"
+                src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800&auto=format&fit=crop"
+                alt="Itinerary" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
+              <div 
+                className="facet-icon-4"
+                style={{ 
+                  position: 'absolute', bottom: '-20px', right: '24px', 
+                  width: '56px', height: '56px', borderRadius: '50%', 
+                  background: '#ffffff', color: '#3498db', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontSize: '1.6rem', boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', zIndex: 2
+                }}>
+                🗺️
+              </div>
+            </div>
+
+            <div style={{ padding: '36px 30px 30px', display: 'flex', flexDirection: 'column', flex: 1, position: 'relative', zIndex: 1 }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', color: '#2c1810', margin: '0 0 12px' }}>Travel Itinerary</h3>
+              <p style={{ color: '#666666', fontSize: '0.95rem', lineHeight: '1.6', margin: '0 0 24px', flex: 1, fontWeight: '400' }}>
+                Plan your perfect visit with expert guides, smart exploration routes, and budget planners.
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', color: '#3498db', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Explore <span className="facet-arrow-4" style={{ marginLeft: '8px', transition: 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)' }}>→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Footer is rendered by App.jsx — no duplicate footer needed here */}
     </div>

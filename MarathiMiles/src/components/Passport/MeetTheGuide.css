@@ -1,0 +1,237 @@
+.guide-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.guide-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.guide-eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #c0622a;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.guide-title {
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    color: #2c1810;
+    margin: 0 0 20px 0;
+}
+
+.guide-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+.guide-card {
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.guide-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(192, 98, 42, 0.1);
+    border-color: rgba(192, 98, 42, 0.2);
+}
+
+.guide-img-container {
+    height: 250px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.guide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.guide-card:hover .guide-img {
+    transform: scale(1.1);
+}
+
+.guide-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.guide-card:hover .guide-overlay {
+    opacity: 1;
+}
+
+.book-guide-btn {
+    background: #c0622a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.guide-card:hover .book-guide-btn {
+    transform: translateY(0);
+}
+
+.guide-info {
+    padding: 30px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.guide-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.guide-experience {
+    background: #fff5e6;
+    color: #d35400;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.guide-rating {
+    font-size: 0.9rem;
+    color: #444;
+    font-weight: 600;
+}
+
+.guide-name {
+    font-size: 1.6rem;
+    color: #2c1810;
+    margin: 0 0 5px 0;
+    font-family: 'Playfair Display', serif;
+}
+
+.guide-role {
+    font-size: 0.95rem;
+    color: #c0622a;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.guide-specialty {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.guide-bio {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.guide-footer {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.guide-languages {
+    display: flex;
+    gap: 10px;
+}
+
+.guide-languages span {
+    font-size: 0.8rem;
+    color: #888;
+    background: #f8f8f8;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+.guide-cta-banner {
+    background: linear-gradient(135deg, #2c1810, #3e2c1c);
+    color: white;
+    padding: 40px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.cta-content h3 {
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    font-family: 'Playfair Display', serif;
+}
+
+.cta-content p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.cta-button {
+    background: #fff;
+    color: #2c1810;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.cta-button:hover {
+    background: #c0622a;
+    color: white;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .guide-cta-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .guide-title {
+        font-size: 2.2rem;
+    }
+}
