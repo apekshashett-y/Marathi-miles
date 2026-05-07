@@ -8,6 +8,7 @@ import FlavorsSection from "./FlavorsSection";
 import BazaarSection from "./BazaarSection";
 import CultureSection from "./CultureSection";
 import ItineraryPlanner from "./ItineraryPlanner";
+
 import "./PastPort.css";
 
 const HOUR_OPTIONS = [2, 3, 4, 6];
@@ -43,6 +44,7 @@ const PastPort = () => {
   const [isFullImmersive, setIsFullImmersive] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [show360, setShow360] = useState(false);
+
   const dragStartX = useRef(null);
   const immersiveRef = useRef(null);
   const autoPlayRef = useRef(null);
@@ -440,7 +442,7 @@ const PastPort = () => {
             margin: '0', padding: '8px 20px', background: 'rgba(0, 0, 0, 0.6)', color: '#fff', 
             border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', borderRadius: '30px',
             fontSize: '0.95rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px',
-            transition: 'all 0.3s ease', zIndex: 100, position: 'absolute', top: '100px', left: '40px',
+            transition: 'all 0.3s ease', zIndex: 1000, position: 'fixed', top: '88px', left: '40px',
             backdropFilter: 'blur(4px)'
           }}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateX(-4px)'; e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'; }}
@@ -451,7 +453,7 @@ const PastPort = () => {
         {activeFacet === 'cuisine' && <FlavorsSection />}
         {activeFacet === 'bazaar' && <BazaarSection />}
         {activeFacet === 'culture' && <CultureSection />}
-        {activeFacet === 'itinerary' && <ItineraryPlanner />}
+        {activeFacet === 'itinerary' && <ItineraryPlanner fort={selectedFort} />}
       </div>
     );
   }
@@ -471,10 +473,10 @@ const PastPort = () => {
         className="back-to-forts" 
         onClick={handleBackToForts}
         style={{
-          position: 'absolute',
-          top: '100px',
+          position: 'fixed',
+          top: '88px',
           right: '2rem',
-          zIndex: 100,
+          zIndex: 1000,
           background: 'rgba(255, 255, 255, 0.2)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.3)',
@@ -829,8 +831,8 @@ const PastPort = () => {
             <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
               <img 
                 className="facet-img-2"
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop"
-                alt="Bazaar" 
+                src="/heritage_bazaar_maharashtra.png"
+                alt="Maharashtrian Heritage Bazaar - Kolhapuri crafts, Paithani sarees and traditional handicrafts" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
               />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
@@ -894,8 +896,8 @@ const PastPort = () => {
             <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
               <img 
                 className="facet-img-3"
-                src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=600&auto=format&fit=crop" 
-                alt="Culture" 
+                src="/cultural_dhol_tasha_maharashtra.png" 
+                alt="Maharashtrian Cultural Experience - Dhol Tasha Pathak during Ganesh festival" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
               />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
@@ -959,8 +961,8 @@ const PastPort = () => {
             <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
               <img 
                 className="facet-img-4"
-                src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800&auto=format&fit=crop"
-                alt="Itinerary" 
+                src="/travel_itinerary_maharashtra.png"
+                alt="Travel Itinerary - Sahyadri Western Ghats winding roads and Maratha fort hilltop" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }} 
               />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3))' }}></div>
@@ -988,6 +990,8 @@ const PastPort = () => {
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
 

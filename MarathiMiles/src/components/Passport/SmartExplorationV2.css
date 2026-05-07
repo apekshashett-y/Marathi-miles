@@ -1242,6 +1242,32 @@ input:checked+.slider:before {
     border-top-color: var(--primary-orange);
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
-}@ m e d i a   ( m a x - w i d t h :   1 2 0 0 p x )   {   . s m a r t - e x p l o r a t i o n - v 2   {   h e i g h t :   a u t o ;   m i n - h e i g h t :   1 0 0 0 p x ;   }   . e x p l o r a t i o n - m a i n   {   g r i d - t e m p l a t e - c o l u m n s :   1 f r ;   g r i d - t e m p l a t e - r o w s :   a u t o   5 0 0 p x   a u t o ;   h e i g h t :   a u t o ;   o v e r f l o w :   v i s i b l e ;   }   . g l a s s - p a n e l   {   h e i g h t :   a u t o ;   m a x - h e i g h t :   4 0 0 p x ;   }   . c e n t e r - p a n e l   {   h e i g h t :   5 0 0 p x ;   }   }  
- b o d y . h i d e - s i t e - n a v   . n a v b a r ,   b o d y . h i d e - s i t e - n a v   f o o t e r   {   d i s p l a y :   n o n e   ! i m p o r t a n t ;   }  
- 
+}
+
+@media (max-width: 1200px) {
+    .smart-exploration-v2 {
+        height: auto;
+        min-height: 1000px;
+    }
+
+    .exploration-main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 500px auto;
+        height: auto;
+        overflow: visible;
+    }
+
+    .glass-panel {
+        height: auto;
+        max-height: 400px;
+    }
+
+    .center-panel {
+        height: 500px;
+    }
+}
+
+body.hide-site-nav .navbar,
+body.hide-site-nav footer {
+    display: none !important;
+}

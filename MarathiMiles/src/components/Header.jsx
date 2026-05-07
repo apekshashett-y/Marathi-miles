@@ -71,15 +71,7 @@ const Header = () => {
               </span>
             </li>
 
-            <li className="nav-item">
-              <span
-                className={`nav-link ${activeSection === "/place-explorer" ? "active" : ""}`}
-                onClick={() => handleNavClick("/place-explorer")}
-              >
-                <i className="fas fa-camera"></i>
-                Place Explorer
-              </span>
-            </li>
+
           </ul>
 
           <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>

@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import MeetTheGuide from "./MeetTheGuide";
 import SmartItineraryPlanner from "./SmartItineraryPlanner";
 import SmartExplorationV2 from "./SmartExplorationV2";
+import { generateFortPDF } from "../../utils/generateFortPDF";
 import "./ItineraryPlanner.css";
 
-const ItineraryPlanner = () => {
+const ItineraryPlanner = ({ fort }) => {
     const [subView, setSubView] = useState(null); // 'guide' | 'planner' | 'exploration'
+    const [pdfLoading, setPdfLoading] = useState(false);
     const contentRef = useRef(null);
 
     // Scroll to content when a subview is selected
@@ -14,6 +16,20 @@ const ItineraryPlanner = () => {
             contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [subView]);
+
+    const handlePdfDownload = async () => {
+        if (!fort || pdfLoading) return;
+        setPdfLoading(true);
+        try {
+            await new Promise(r => setTimeout(r, 80)); // let UI repaint
+            generateFortPDF(fort);
+        } catch (err) {
+            console.error('PDF generation failed:', err);
+            alert('Could not generate PDF. Please try again.');
+        } finally {
+            setPdfLoading(false);
+        }
+    };
 
     const renderSubView = () => {
         if (!subView) return null;
@@ -43,7 +59,7 @@ const ItineraryPlanner = () => {
                     </p>
                 </div>
 
-                <div className="itin-selection-grid">
+                <div className="itin-selection-grid itin-four-col">
                     <div 
                         className={`itin-selection-card ${subView === 'guide' ? 'active' : ''}`} 
                         onClick={() => setSubView('guide')}
@@ -73,6 +89,30 @@ const ItineraryPlanner = () => {
                         <p>Optimize your movement inside the fort with AI-powered routes based on your energy.</p>
                         <button className="selection-cta">{subView === 'exploration' ? 'Viewing' : 'Start Navigation →'}</button>
                     </div>
+
+                    {/* PDF Download Card */}
+                    {fort && (
+                        <div
+                            className="itin-selection-card"
+                            onClick={handlePdfDownload}
+                            style={{ cursor: pdfLoading ? 'wait' : 'pointer', position: 'relative' }}
+                        >
+                            {/* Free Download badge */}
+                            <span className="itin-pdf-badge">Free Download</span>
+
+                            <div className="selection-icon">
+                                {pdfLoading ? '⏳' : '📄'}
+                            </div>
+                            <h3>{pdfLoading ? 'Generating…' : 'Get your PDF'}</h3>
+                            <p>
+                                Download your complete <strong>{fort.name}</strong> journey guide — timings, food, shopping &amp; insider tips.
+                            </p>
+
+                            <button className="selection-cta" disabled={pdfLoading}>
+                                {pdfLoading ? 'Please wait…' : 'Download PDF →'}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 

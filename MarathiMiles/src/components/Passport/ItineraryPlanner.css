@@ -51,8 +51,12 @@
     color: white;
 }
 
+.itin-wrapper-section {
+    padding-top: 80px; /* clear the fixed navbar */
+}
+
 .itin-selection-menu {
-    padding: 60px 40px 20px 40px;
+    padding: 20px 40px 20px 40px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -62,6 +66,36 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     margin-top: 50px;
+}
+
+.itin-four-col {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1100px) {
+    .itin-four-col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .itin-four-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+.itin-pdf-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #c0622a;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .itin-selection-card {
