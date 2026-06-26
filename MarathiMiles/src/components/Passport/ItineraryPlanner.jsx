@@ -50,7 +50,7 @@ const ItineraryPlanner = ({ fort }) => {
                         ✕ Close Section
                     </button>
                 </div>
-                {subView === 'guide' && <MeetTheGuide />}
+                {subView === 'guide' && <MeetTheGuide fort={fort} />}
                 {subView === 'planner' && fort?.id === 2 && <RaigadSmartItineraryPlanner />}
                 {subView === 'planner' && fort?.id === 3 && <SinhagadSmartItineraryPlanner />}
                 {subView === 'planner' && fort?.id === 4 && <PratapgadSmartItineraryPlanner />}
@@ -84,7 +84,7 @@ const ItineraryPlanner = ({ fort }) => {
                     >
                         <div className="selection-icon">🧔</div>
                         <h3>Meet the Guide</h3>
-                        <p>Connect with local experts and historians for a personalized tour of Shivneri.</p>
+                        <p>Connect with local experts and historians for a personalized tour of {fort?.name || "the fort"}.</p>
                         <button className="selection-cta">{subView === 'guide' ? 'Viewing' : 'Browse Guides →'}</button>
                     </div>
 

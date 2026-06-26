@@ -1,3 +1,4 @@
+/* Core Layout & Headers */
 .guide-section {
     padding: 30px 40px;
     max-width: 1200px;
@@ -35,6 +36,108 @@
     line-height: 1.6;
 }
 
+/* Active Bookings Section */
+.active-bookings-section {
+    background: #fffbf5;
+    border: 1px dashed rgba(192, 98, 42, 0.4);
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin-bottom: 35px;
+}
+
+.active-bookings-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #2c1810;
+    margin: 0 0 15px 0;
+}
+
+.active-bookings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.active-booking-mini-card {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.mini-card-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.mini-card-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.mini-card-info h4 {
+    margin: 0 0 3px 0;
+    font-size: 0.95rem;
+    color: #2c1810;
+}
+
+.mini-card-info p {
+    margin: 0 0 4px 0;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.ticket-id-badge {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #888;
+}
+
+.mini-card-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mini-price {
+    font-weight: 700;
+    color: #c0622a;
+    font-size: 1.1rem;
+}
+
+.mini-cancel-btn {
+    background: transparent;
+    border: 1px solid #eb5757;
+    color: #eb5757;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mini-cancel-btn:hover {
+    background: #eb5757;
+    color: white;
+}
+
+/* Guides Grid */
 .guide-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -72,11 +175,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0;
+    position: relative;
+}
+
+.guide-booked-overlay {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27ae60;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .guide-initials {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 800;
     font-family: 'Playfair Display', serif;
     color: rgba(255, 255, 255, 0.95);
@@ -85,21 +202,10 @@
     user-select: none;
 }
 
-.guide-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.guide-card:hover .guide-img {
-    transform: scale(1.1);
-}
-
 .guide-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(44, 24, 16, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,6 +227,12 @@
     cursor: pointer;
     transform: translateY(20px);
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.book-guide-btn:hover {
+    background: #a04e1f;
+    transform: scale(1.05) translateY(0);
 }
 
 .guide-card:hover .book-guide-btn {
@@ -128,7 +240,7 @@
 }
 
 .guide-info {
-    padding: 16px 20px;
+    padding: 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -138,7 +250,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .guide-experience {
@@ -146,7 +258,7 @@
     color: #d35400;
     padding: 4px 12px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
 }
 
@@ -157,9 +269,9 @@
 }
 
 .guide-name {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #2c1810;
-    margin: 0 0 3px 0;
+    margin: 0 0 4px 0;
     font-family: 'Playfair Display', serif;
 }
 
@@ -167,14 +279,14 @@
     font-size: 0.85rem;
     color: #c0622a;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: block;
 }
 
 .guide-specialty {
     font-size: 0.9rem;
     color: #555;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     line-height: 1.4;
 }
 
@@ -182,48 +294,74 @@
     font-size: 0.85rem;
     color: #666;
     line-height: 1.5;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     flex-grow: 1;
 }
 
 .guide-footer {
     border-top: 1px solid #eee;
-    padding-top: 12px;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .guide-languages {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .guide-languages span {
-    font-size: 0.8rem;
-    color: #888;
-    background: #f8f8f8;
+    font-size: 0.75rem;
+    color: #666;
+    background: #f5eae2;
     padding: 3px 10px;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-weight: 500;
 }
 
+.card-book-action-btn {
+    background: #2c1810;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.card-book-action-btn:hover {
+    background: #c0622a;
+}
+
+/* CTA Banner */
 .guide-cta-banner {
     background: linear-gradient(135deg, #2c1810, #3e2c1c);
     color: white;
-    padding: 24px 32px;
-    border-radius: 16px;
+    padding: 28px 36px;
+    border-radius: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    box-shadow: 0 10px 30px rgba(44, 24, 16, 0.15);
 }
 
 .cta-content h3 {
     font-size: 1.8rem;
     margin: 0 0 10px 0;
     font-family: 'Playfair Display', serif;
+    color: #f5eae2;
 }
 
 .cta-content p {
     margin: 0;
-    opacity: 0.8;
+    opacity: 0.85;
+    font-size: 1rem;
 }
 
 .cta-button {
@@ -236,14 +374,693 @@
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .cta-button:hover {
     background: #c0622a;
     color: white;
-    transform: scale(1.05);
+    transform: translateY(-2px);
 }
 
+/* Interactive Modal Backdrop & Card */
+.guide-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 24, 16, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.guide-modal-card {
+    background: #fffdfa;
+    border: 1px solid rgba(192, 98, 42, 0.2);
+    border-radius: 28px;
+    width: 100%;
+    max-width: 660px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    color: #2c1810;
+}
+
+.modal-close-x {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #f5eae2;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #2c1810;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.modal-close-x:hover {
+    background: #c0622a;
+    color: white;
+}
+
+.modal-body-scrollable {
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    flex-grow: 1;
+}
+
+.modal-body-scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body-scrollable::-webkit-scrollbar-thumb {
+    background: #e8d0bc;
+    border-radius: 4px;
+}
+
+/* Modal Form Elements */
+.modal-guide-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #f2e4d8;
+    padding-bottom: 16px;
+}
+
+.modal-guide-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 800;
+    font-family: 'Playfair Display', serif;
+}
+
+.modal-guide-meta h3 {
+    margin: 0 0 2px 0;
+    font-size: 1.25rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.modal-guide-role {
+    margin: 0 0 2px 0;
+    color: #c0622a;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.modal-guide-rating {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.booking-field-group {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #2c1810;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Horizontal Date Picker */
+.horizontal-date-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.horizontal-date-row::-webkit-scrollbar {
+    height: 4px;
+}
+
+.horizontal-date-row::-webkit-scrollbar-thumb {
+    background: #f2e4d8;
+    border-radius: 2px;
+}
+
+.date-chip-btn {
+    flex: 0 0 74px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-chip-btn:hover {
+    border-color: #c0622a;
+    background: #fffdfb;
+}
+
+.date-chip-btn.selected {
+    background: #c0622a;
+    color: white;
+    border-color: #c0622a;
+    box-shadow: 0 4px 12px rgba(192, 98, 42, 0.25);
+}
+
+.date-chip-day {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+.date-chip-btn.selected .date-chip-day {
+    opacity: 0.9;
+}
+
+.date-chip-date {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Time Slot Picker */
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+}
+
+.time-slot-btn-card {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    padding: 12px 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.time-slot-btn-card:hover {
+    border-color: #c0622a;
+}
+
+.time-slot-btn-card.selected {
+    background: #fcf4ee;
+    border-color: #c0622a;
+    box-shadow: inset 0 0 0 1px #c0622a;
+}
+
+.slot-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.slot-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #2c1810;
+}
+
+.slot-availability {
+    font-size: 0.65rem;
+    background: #e8f8f0;
+    color: #27ae60;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.slot-availability.alert {
+    background: #fff0e6;
+    color: #e67e22;
+}
+
+.slot-time-str {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* Dual Column Layout */
+.booking-fields-row {
+    display: flex;
+    gap: 16px;
+}
+
+.half-width {
+    flex: 1;
+}
+
+/* Guest Counter */
+.guests-counter {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    background: white;
+    height: 44px;
+    overflow: hidden;
+}
+
+.guests-counter button {
+    width: 44px;
+    height: 100%;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c1810;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.guests-counter button:hover:not(:disabled) {
+    background: #fcf4ee;
+}
+
+.guests-counter button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.guests-value {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Language Selection Chips */
+.languages-checkbox-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    height: 44px;
+    align-items: center;
+}
+
+.lang-check-btn {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #555;
+}
+
+.lang-check-btn:hover {
+    border-color: #c0622a;
+}
+
+.lang-check-btn.checked {
+    background: #2c1810;
+    color: white;
+    border-color: #2c1810;
+}
+
+/* Pricing Breakdown */
+.booking-price-summary {
+    background: #fdfaf7;
+    border: 1px solid #f2e4d8;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.price-row.total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f2e4d8;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #2c1810;
+}
+
+.price-row.total span:last-child {
+    color: #c0622a;
+}
+
+.modal-actions-row {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-cancel-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #555;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-cancel-btn:hover {
+    background: #f5eae2;
+}
+
+.modal-submit-btn {
+    background: #c0622a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(192, 98, 42, 0.2);
+}
+
+.modal-submit-btn:hover {
+    background: #a04e1f;
+}
+
+/* Loading Simulation Step */
+.modal-step-processing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.booking-spinner-wrapper {
+    margin-bottom: 24px;
+}
+
+.booking-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f5eae2;
+    border-top: 4px solid #c0622a;
+    border-radius: 50%;
+    animation: book-spin 1s linear infinite;
+}
+
+@keyframes book-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.modal-step-processing h3 {
+    margin: 0 0 8px 0;
+    font-family: 'Playfair Display', serif;
+}
+
+.processing-message-text {
+    font-size: 0.95rem;
+    color: #c0622a;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.processing-sub-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0;
+}
+
+/* Ticket Output Step */
+.modal-step-ticket {
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-success-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.success-icon-badge {
+    background: #27ae60;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.25);
+}
+
+.ticket-success-header h3 {
+    margin: 0 0 4px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #2c1810;
+}
+
+.ticket-success-header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Real-looking Digital Ticket styling */
+.digital-ticket-container {
+    background: #2c1810;
+    color: white;
+    border-radius: 20px;
+    padding: 24px;
+    position: relative;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 35px rgba(44, 24, 16, 0.3);
+}
+
+.ticket-cutout {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #fffdfa;
+    border-radius: 50%;
+    top: 96px;
+    z-index: 5;
+}
+
+.ticket-cutout.left {
+    left: -10px;
+}
+
+.ticket-cutout.right {
+    right: -10px;
+}
+
+.ticket-brand-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.ticket-id {
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fbbf24;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.ticket-guide-title {
+    margin: 12px 0 2px 0;
+    font-size: 1.4rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.ticket-guide-role {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.ticket-divider-line {
+    border-top: 1.5px dashed rgba(255, 255, 255, 0.2);
+    margin: 16px 0;
+}
+
+.ticket-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 10px;
+}
+
+.ticket-detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-detail-item.full-width {
+    grid-column: span 2;
+}
+
+.item-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.item-val {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.ticket-footer-section {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.ticket-qr-and-instructions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.ticket-mock-qr {
+    width: 60px;
+    height: 60px;
+    background: white;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.qr-box {
+    background: #2c1810;
+}
+
+.qr-box.corner-tl { grid-area: 1 / 1 / 2 / 2; }
+.qr-box.corner-tr { grid-area: 1 / 3 / 2 / 4; }
+.qr-box.corner-bl { grid-area: 3 / 1 / 4 / 2; }
+.qr-box.inner-dot { grid-area: 2 / 2 / 3 / 3; }
+
+.ticket-instructions {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.3;
+}
+
+.ticket-instructions p {
+    margin: 0 0 4px 0;
+}
+
+.guide-phone {
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+.ticket-price-badge {
+    text-align: right;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-left: 16px;
+    flex-shrink: 0;
+}
+
+.ticket-price-badge span {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ticket-price-badge h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #fbbf24;
+    font-weight: 800;
+}
+
+.ticket-close-btn {
+    background: #c0622a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ticket-close-btn:hover {
+    background: #a04e1f;
+}
+
+.ticket-print-btn {
+    background: #2c1810;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ticket-print-btn:hover {
+    background: #442a1d;
+}
+
+.ticket-actions-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* Responsiveness adjustments */
 @media (max-width: 768px) {
     .guide-cta-banner {
         flex-direction: column;
@@ -252,5 +1069,29 @@
     
     .guide-title {
         font-size: 2.2rem;
+    }
+    
+    .booking-fields-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .half-width {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+    
+    .ticket-footer-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .ticket-price-badge {
+        text-align: left;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding-left: 0;
+        padding-top: 12px;
+        margin-top: 8px;
     }
 }
