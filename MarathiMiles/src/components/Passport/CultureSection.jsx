@@ -9,6 +9,7 @@ import palnaDetailImg from '../../assets/culture/palna_detail.png';
 
 // Raigad and Sinhagad Culture Assets
 import raigadCoronationImg from '../../assets/culture/raigad/coronation.png';
+import raigadPalaceImg from '../../assets/forts/raigad/palace.png';
 import sinhagadTanajiImg from '../../assets/culture/sinhagad/tanaji.png';
 
 const CULTURE_DATA = {
@@ -42,7 +43,7 @@ const CULTURE_DATA = {
         heading: "The Crowning of an Empire",
         desc1: "The Rajyabhishek (Coronation) ceremony marks the day in 1674 when Shivaji Maharaj was officially crowned Chhatrapati, formally establishing the independent Maratha Empire. Every June 6th, the capital fort of Raigad comes alive to recreate this historic moment.",
         desc2: "Thousands of followers gather at the royal court (Raj Sabha). Priests chant ancient Vedic mantras, while the massive Nagarkhana drums boom across the Sahyadris, celebrating the establishment of Swarajya.",
-        highlightImg1: "https://images.unsplash.com/photo-1626014903706-e7e26fc54045?w=500&auto=format&fit=crop",
+        highlightImg1: raigadPalaceImg,
         highlightTitle1: "Sinhasan Pooja",
         highlightDesc1: "Reverence paid at the exact spot where the golden throne (Sinhasan) once stood.",
         highlightImg2: dholTashaImg,

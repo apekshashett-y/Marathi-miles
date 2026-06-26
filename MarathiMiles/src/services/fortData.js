@@ -951,22 +951,34 @@ export const maharashtraForts = [
     },
     images360: [
       {
-        src: raigadGateImg,
+        src: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop",
         label: "Main Gate",
         subtitle: "Maha Darwaja – The Grand Entrance",
         audioGuide: "Listen to the history of this imposing gateway"
       },
       {
-        src: raigadPalaceImg,
+        src: "https://images.unsplash.com/photo-1582650517303-b42616d56f00?w=1200&auto=format&fit=crop",
         label: "Royal Palace",
         subtitle: "Raj Bhavan – Seat of the Empire",
         audioGuide: "Hear stories of the coronation and royal court"
       },
       {
-        src: raigadPanoramicImg,
+        src: "https://images.unsplash.com/photo-1587049352847-4d4b126a61b5?w=1200&auto=format&fit=crop",
         label: "Panoramic Views",
-        subtitle: "Sahyadri ranges and Konkan coast",
+        subtitle: "Takmak Tok & Sahyadri ranges",
         audioGuide: "Learn about the strategic vantage point of Raigad"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1555627230-0584742a0888?w=1200&auto=format&fit=crop",
+        label: "Jagadishwar Temple",
+        subtitle: "The divine shrine within the fort",
+        audioGuide: "Discover the spiritual significance of the temple"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1610705121404-b903e1c6b5cc?w=1200&auto=format&fit=crop",
+        label: "Shivaji Maharaj Samadhi",
+        subtitle: "The resting place of Chhatrapati",
+        audioGuide: "Pay respects at the solemn memorial"
       }
     ],
 
@@ -1503,8 +1515,10 @@ export const maharashtraForts = [
     ],
     vrExperience: "Walk the path of Tanaji's assault and see the fort in 360°.",
     images360: [
-      { src: sinhagadKalyanDarwajaImg, label: "Main Gate", subtitle: "Kalyan Darwaza" },
-      { src: sinhagadViewImg, label: "Panoramic Views", subtitle: "Khadakwasla Dam & Sahyadri ranges" }
+      { src: "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=1200&auto=format&fit=crop", label: "Main Gate", subtitle: "Kalyan Darwaza" },
+      { src: "https://images.unsplash.com/photo-1548013146-72479768bada?w=1200&auto=format&fit=crop", label: "Panoramic Views", subtitle: "Khadakwasla Dam & Sahyadri ranges" },
+      { src: "https://images.unsplash.com/photo-1596485802280-99c5b6b10705?w=1200&auto=format&fit=crop", label: "Pune Darwaza", subtitle: "Eastern approach to the fort" },
+      { src: "https://images.unsplash.com/photo-1626014903706-e7e26fc54045?w=1200&auto=format&fit=crop", label: "Tanaji Malusare Samadhi", subtitle: "Memorial of the brave warrior" }
     ],
     cuisine: [{ name: "Pithla Bhakri", image: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?w=800&auto=format&fit=crop", description: "Rustic gram flour curry with millet bread", spiceLevel: "Medium", bestTime: "Lunch", priceRange: "₹50-80" }],
     shopping: [],
@@ -1713,7 +1727,11 @@ export const maharashtraForts = [
       { src: pratapgadViewImg, label: "Misty Sahyadris", subtitle: "Jawali Forest Views" },
       { src: pratapgadTempleImg, label: "Maha Darwaza", subtitle: "The massive fort entrance" }
     ],
-    cuisine: [{ name: "Kanda Bhaji", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop", description: "Onion fritters with chai", spiceLevel: "Medium", bestTime: "Snack", priceRange: "₹30-60" }],
+    cuisine: [
+      { name: "Strawberry Cream", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop", description: "Fresh local strawberries with sweet cream", spiceLevel: "Sweet", bestTime: "Snack", priceRange: "₹150-250" },
+      { name: "Makai Pattice", image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=800&auto=format&fit=crop", description: "Crispy sweet corn patties", spiceLevel: "Medium", bestTime: "Snack", priceRange: "₹80-120" },
+      { name: "Pithla Bhakri", image: "https://images.unsplash.com/photo-1626779836859-9976378e91e6?w=800&auto=format&fit=crop", description: "Rustic gram flour curry cooked on wood-fire", spiceLevel: "Spicy", bestTime: "Lunch", priceRange: "₹90-150" }
+    ],
     shopping: [{ name: "Pratapgad Village Market", description: "Small market near the fort base.", highlights: ["Local snacks", "Souvenirs"], timing: "7 AM - 6 PM", bestFor: "Quick buys" }],
     experiences: [{ name: "Encounter Site & Fort Tour", duration: "2 hours", description: "Visit encounter spot and fort with narration", includes: ["Guide"], bestFor: "History buffs" }],
     itineraries: {

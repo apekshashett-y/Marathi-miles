@@ -6,6 +6,7 @@ import MoodRecommendation from './components/MoodRecommendation/MoodRecommendati
 import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
 import SmartExplorationV2 from './components/Passport/SmartExplorationV2';
+import RaigadSmartExplorationPage from './components/Passport/RaigadSmartExplorationPage';
 
 /* HOME PAGE */
 const MainApp = () => {
@@ -67,6 +68,10 @@ const App = () => {
       <Route
         path="/pastport/:fortId/smart-exploration"
         element={<SmartExplorationV2 />}
+      />
+      <Route
+        path="/pastport/raigad/smart-exploration-page"
+        element={<RaigadSmartExplorationPage />}
       />
     </Routes>
   );

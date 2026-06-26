@@ -140,7 +140,7 @@ const PRATAPGAD_FOOD = [
     {
         id: "strawberry_cream",
         name: "Strawberry Cream",
-        image: "https://images.unsplash.com/photo-1546886819-21840003e654?w=800&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop",
         description: "The signature dessert of the Mahabaleshwar region. Freshly plucked local strawberries layered with thick, sweetened cream.",
         places: ["Mapro Garden", "Bagicha Corner"],
         location: "Panchgani-Mahabaleshwar Road",
@@ -149,7 +149,7 @@ const PRATAPGAD_FOOD = [
     {
         id: "makai_pattice",
         name: "Makai (Corn) Pattice",
-        image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=800&auto=format&fit=crop",
         description: "Hot, crispy potato and sweet corn patties served with spicy green chutney. Perfect for the misty mountain weather.",
         places: ["Mapro Garden", "Mahabaleshwar Market"],
         location: "Mahabaleshwar",
@@ -158,7 +158,7 @@ const PRATAPGAD_FOOD = [
     {
         id: "pratapgad_pithla",
         name: "Chulivarchya Pithla Bhakri",
-        image: "https://images.unsplash.com/photo-1589301760014-d929f39ce9b1?w=800&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1626779836859-9976378e91e6?w=800&auto=format&fit=crop",
         description: "Authentic, rustic gram flour curry cooked on a wood-fired mud stove (chul), served hot at the base of the fort.",
         places: ["Pratapgad Base Dhabas", "Afzal Khan Tomb Stalls"],
         location: "Pratapgad Fort Base",

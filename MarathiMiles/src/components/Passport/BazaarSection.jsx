@@ -26,8 +26,8 @@ import copperImg from "../../assets/bazaar/copper.png";
 
 // Sinhagad Assets
 import walkingStickImg from "../../assets/bazaar/sinhagad/walking_stick.png";
-const berriesImg = "https://images.unsplash.com/photo-1596485802280-99c5b6b10705?w=800&auto=format&fit=crop";
-const clayPotImg = "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=800&auto=format&fit=crop";
+const berriesImg = "https://images.unsplash.com/photo-1605807646983-377bc5a76493?w=800&auto=format&fit=crop";
+const clayPotImg = "https://images.unsplash.com/photo-1610705121404-b903e1c6b5cc?w=800&auto=format&fit=crop";
 const sinhagadSpicesImg = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop";
 
 // Pratapgad Assets (Unsplash)
@@ -37,7 +37,7 @@ const woodenToyImg = "https://images.unsplash.com/photo-1596461404969-9ae70f2830
 const maproCrushImg = "https://images.unsplash.com/photo-1597500913936-e82a6abde05b?w=800&auto=format&fit=crop";
 
 // Lohagad Assets (Unsplash)
-const chikkiImg = "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=800&auto=format&fit=crop"; // Placeholder
+const chikkiImg = "https://images.unsplash.com/photo-1582285145749-e588820bd680?w=800&auto=format&fit=crop"; // Better chikki/food img
 const fudgeImg = "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=800&auto=format&fit=crop";
 const trekGearImg = "https://images.unsplash.com/photo-1515555230216-82228b88ea98?w=800&auto=format&fit=crop";
 const monsoonCornImg = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop";
@@ -158,7 +158,6 @@ const LOHAGAD_MARKETS = {
 function buildGMapsUrl(market, fortCoords) {
     return (
         `https://www.google.com/maps/dir/?api=1` +
-        `&origin=${fortCoords.lat},${fortCoords.lng}` +
         `&destination=${market.lat},${market.lng}` +
         `&travelmode=driving`
     );
@@ -1061,7 +1060,7 @@ const BazaarSection = ({ fort }) => {
                             <div className="market-legend">
                                 <div className="legend-item">
                                     <span className="legend-dot dot-red" />
-                                    <span>Shivneri Fort (Origin)</span>
+                                    <span>{fort?.name || "Fort"} (Origin)</span>
                                 </div>
                                 {Object.values(MARKETS).map((m) => (
                                     <div key={m.id} className={`legend-item ${activeMarket?.id === m.id ? "legend-item--active" : ""}`}>

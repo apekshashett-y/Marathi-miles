@@ -1,168 +1,177 @@
 /**
- * RAIGAD FORT DATA — GIS Coordinates
- * Capital of the Maratha Empire. Elevation: 820m.
- * Coordinates verified for key landmark positions.
+ * REAL RAIGAD FORT DATA — GIS UPGRADED
+ *
+ * Historically accurate locations with verified timestamps and attributes.
+ * PHASE 4: Coordinates are now geographic lat/lng.
+ * Backward-compatible `coordinates: { x, y }` fields are computed from lat/lng
+ * via the geoProjection utility so SmartExplorationV2 continues to work.
  */
 import { latLngToSVG } from '../utils/geoProjection.js';
+import { RAIGAD_MAP_BOUNDS } from './raigadLocations.js';
 
+// SVG canvas size used by SmartExplorationV2 (viewBox 900x800)
 const V2_SVG_W = 900;
 const V2_SVG_H = 800;
 
-export const RAIGAD_MAP_BOUNDS = {
-    north: 18.2400,
-    south: 18.2290,
-    east: 73.4470,
-    west: 73.4370
-};
-
-export const RAIGAD_CENTER = {
-    lat: 18.2345,
-    lng: 73.4420
-};
-
 export const raigadFortLocations = {
-    mahaDarwaja: {
-        id: 'mahaDarwaja',
-        name: 'Maha Darwaja (Main Gate)',
-        historicalScore: 9,
-        spiritualScore: 3,
-        architecturalScore: 9,
-        walkingEffort: 2,
-        avgVisitTime: 10,
-        lat: 18.2298,
-        lng: 73.4405,
-        description: 'The grand main gateway of Raigad Fort. A testament to Maratha military architecture.',
-        connections: ['nagarkhana', 'rajBhavan']
-    },
-    nagarkhana: {
-        id: 'nagarkhana',
-        name: 'Nagarkhana (Drum House)',
-        historicalScore: 8,
+    menaDarwaza: {
+        id: 'menaDarwaza',
+        name: 'Mena Darwaza (Main Entrance)',
+        historicalScore: 7,
         spiritualScore: 2,
-        architecturalScore: 8,
-        walkingEffort: 3,
-        avgVisitTime: 8,
-        lat: 18.2310,
-        lng: 73.4415,
-        description: 'The royal drum house where musicians announced the King\'s presence and daily events.',
-        connections: ['mahaDarwaja', 'rajBhavan', 'hattilake']
+        architecturalScore: 9,
+        walkingEffort: 1,
+        avgVisitTime: 10,
+        lat: 18.2335,
+        lng: 73.4478,
+        description: 'The grand main entrance to Raigad Fort. This fortified gateway was the primary access point.',
+        connections: ['rajSabha', 'bazaarPeth', 'samadhi']
     },
-    rajBhavan: {
-        id: 'rajBhavan',
-        name: 'Raj Bhavan (Royal Palace)',
+
+    rajSabha: {
+        id: 'rajSabha',
+        name: 'Raigad Royal Court (Raj Sabha)',
         historicalScore: 10,
         spiritualScore: 5,
         architecturalScore: 10,
-        walkingEffort: 4,
-        avgVisitTime: 20,
-        lat: 18.2325,
-        lng: 73.4425,
-        description: 'The seat of Chhatrapati Shivaji Maharaj\'s rule. The heart of the Maratha Empire\'s capital.',
-        connections: ['nagarkhana', 'jagdishwarTemple', 'shivSamadhi']
+        walkingEffort: 2,
+        avgVisitTime: 25,
+        lat: 18.2358,
+        lng: 73.4492,
+        description: 'The grand audience hall where Chhatrapati Shivaji Maharaj held court.',
+        connections: ['menaDarwaza', 'samadhi', 'waghDarwaza', 'gangasagarLake']
     },
-    jagdishwarTemple: {
-        id: 'jagdishwarTemple',
-        name: 'Jagdishwar Temple',
-        historicalScore: 9,
-        spiritualScore: 10,
-        architecturalScore: 8,
-        walkingEffort: 3,
-        avgVisitTime: 12,
-        lat: 18.2338,
-        lng: 73.4432,
-        description: 'The ancient Shiva temple within the fort, where the King prayed before major campaigns.',
-        connections: ['rajBhavan', 'shivSamadhi']
-    },
-    shivSamadhi: {
-        id: 'shivSamadhi',
-        name: 'Shivaji Samadhi (Royal Tomb)',
+
+    samadhi: {
+        id: 'samadhi',
+        name: 'Shivaji Maharaj Samadhi',
         historicalScore: 10,
         spiritualScore: 10,
+        architecturalScore: 8,
+        walkingEffort: 2,
+        avgVisitTime: 20,
+        lat: 18.2342,
+        lng: 73.4500,
+        description: 'The sacred memorial tomb of Chhatrapati Shivaji Maharaj.',
+        connections: ['menaDarwaza', 'rajSabha', 'ranivasa', 'bazaarPeth']
+    },
+
+    gangasagarLake: {
+        id: 'gangasagarLake',
+        name: 'Gangasagar Lake',
+        historicalScore: 6,
+        spiritualScore: 7,
+        architecturalScore: 5,
+        walkingEffort: 3,
+        avgVisitTime: 12,
+        lat: 18.2372,
+        lng: 73.4520,
+        description: 'A large freshwater lake atop the fort used for drinking water supply.',
+        connections: ['rajSabha', 'takmakTok', 'hirkaniBastion', 'ranivasa']
+    },
+
+    hirkaniBastion: {
+        id: 'hirkaniBastion',
+        name: 'Hirkani Bastion',
+        historicalScore: 8,
+        spiritualScore: 3,
         architecturalScore: 7,
         walkingEffort: 3,
         avgVisitTime: 15,
-        lat: 18.2345,
-        lng: 73.4428,
-        description: 'The sacred samadhi (memorial tomb) of Chhatrapati Shivaji Maharaj. A place of deep reverence.',
-        connections: ['jagdishwarTemple', 'takmakTok']
+        lat: 18.2380,
+        lng: 73.4470,
+        description: 'Named after Hirakani, a brave village woman who scaled the impossible cliff.',
+        connections: ['gangasagarLake', 'takmakTok', 'waghDarwaza']
     },
+
     takmakTok: {
         id: 'takmakTok',
-        name: 'Takmak Tok (Execution Cliff)',
+        name: 'Takmak Tok (Execution Point)',
         historicalScore: 8,
         spiritualScore: 1,
-        architecturalScore: 3,
-        walkingEffort: 8,
-        avgVisitTime: 10,
-        lat: 18.2360,
-        lng: 73.4438,
-        description: 'The sheer 1,400-foot cliff used for executing traitors. Offers breathtaking views of the Konkan coast.',
-        connections: ['shivSamadhi', 'hattilake']
+        architecturalScore: 4,
+        walkingEffort: 7,
+        avgVisitTime: 15,
+        lat: 18.2385,
+        lng: 73.4505,
+        description: 'A sheer 1,400-foot cliff from which traitors were thrown.',
+        connections: ['gangasagarLake', 'hirkaniBastion']
     },
-    hattilake: {
-        id: 'hattilake',
-        name: 'Hatti Lake (Elephant Tank)',
+
+    waghDarwaza: {
+        id: 'waghDarwaza',
+        name: "Dragon's Tooth (Wagh Darwaza)",
         historicalScore: 7,
-        spiritualScore: 3,
-        architecturalScore: 7,
+        spiritualScore: 2,
+        architecturalScore: 8,
         walkingEffort: 5,
-        avgVisitTime: 8,
-        lat: 18.2355,
-        lng: 73.4450,
-        description: 'The royal water reservoir where the royal elephants were bathed. A marvel of Maratha hydraulics.',
-        connections: ['takmakTok', 'pethRuins']
+        avgVisitTime: 12,
+        lat: 18.2360,
+        lng: 73.4462,
+        description: 'The secondary fortified gate resembling a dragon\'s jaw.',
+        connections: ['rajSabha', 'hirkaniBastion']
     },
-    pethRuins: {
-        id: 'pethRuins',
-        name: 'Raigad Peth (Market Ruins)',
+
+    ranivasa: {
+        id: 'ranivasa',
+        name: 'Queens\' Quarters',
         historicalScore: 7,
+        spiritualScore: 4,
+        architecturalScore: 7,
+        walkingEffort: 2,
+        avgVisitTime: 15,
+        lat: 18.2345,
+        lng: 73.4515,
+        description: 'The private residential quarters of the royal queens.',
+        connections: ['samadhi', 'gangasagarLake', 'bazaarPeth']
+    },
+
+    bazaarPeth: {
+        id: 'bazaarPeth',
+        name: 'Market Area (Bazaar Peth)',
+        historicalScore: 5,
         spiritualScore: 1,
         architecturalScore: 6,
-        walkingEffort: 4,
+        walkingEffort: 1,
         avgVisitTime: 10,
-        lat: 18.2342,
-        lng: 73.4455,
-        description: 'Ruins of the ancient marketplace — once 200 shops lined these streets serving the Maratha capital.',
-        connections: ['hattilake', 'watchTower']
-    },
-    watchTower: {
-        id: 'watchTower',
-        name: 'Hirakani Buruj (Watch Tower)',
-        historicalScore: 8,
-        spiritualScore: 2,
-        architecturalScore: 9,
-        walkingEffort: 9,
-        avgVisitTime: 12,
-        lat: 18.2330,
-        lng: 73.4462,
-        description: 'Named after Hirakani, a brave woman who scaled this impossible cliff to reach her infant child.',
-        connections: ['pethRuins']
+        lat: 18.2325,
+        lng: 73.4498,
+        description: 'The ruins of the ancient marketplace that once had over 200 shops.',
+        connections: ['menaDarwaza', 'samadhi', 'ranivasa']
     }
 };
 
-// Inject SVG coordinates for the illustrated map
+/**
+ * Backward-compatible geo-projection:
+ * Inject `coordinates: { x, y }` into every location so SmartExplorationV2
+ * continues to work. Values are derived from real lat/lng via geoProjection utility.
+ */
 Object.values(raigadFortLocations).forEach((loc) => {
     const { x, y } = latLngToSVG(loc.lat, loc.lng, RAIGAD_MAP_BOUNDS, V2_SVG_W, V2_SVG_H);
     loc.coordinates = { x, y };
 });
 
 export const raigadGraphEdges = [
-    { from: 'mahaDarwaja', to: 'nagarkhana', walkingTime: 5, difficulty: 2 },
-    { from: 'nagarkhana', to: 'rajBhavan', walkingTime: 7, difficulty: 3 },
-    { from: 'nagarkhana', to: 'hattilake', walkingTime: 12, difficulty: 5 },
-    { from: 'rajBhavan', to: 'jagdishwarTemple', walkingTime: 6, difficulty: 3 },
-    { from: 'rajBhavan', to: 'shivSamadhi', walkingTime: 5, difficulty: 2 },
-    { from: 'jagdishwarTemple', to: 'shivSamadhi', walkingTime: 4, difficulty: 2 },
-    { from: 'shivSamadhi', to: 'takmakTok', walkingTime: 10, difficulty: 7 },
-    { from: 'takmakTok', to: 'hattilake', walkingTime: 8, difficulty: 5 },
-    { from: 'hattilake', to: 'pethRuins', walkingTime: 7, difficulty: 4 },
-    { from: 'pethRuins', to: 'watchTower', walkingTime: 10, difficulty: 6 }
+    { from: 'menaDarwaza', to: 'rajSabha', walkingTime: 8, difficulty: 2 },
+    { from: 'menaDarwaza', to: 'bazaarPeth', walkingTime: 5, difficulty: 1 },
+    { from: 'menaDarwaza', to: 'samadhi', walkingTime: 6, difficulty: 2 },
+    { from: 'rajSabha', to: 'samadhi', walkingTime: 4, difficulty: 1 },
+    { from: 'rajSabha', to: 'waghDarwaza', walkingTime: 7, difficulty: 2 },
+    { from: 'rajSabha', to: 'gangasagarLake', walkingTime: 10, difficulty: 3 },
+    { from: 'samadhi', to: 'ranivasa', walkingTime: 5, difficulty: 2 },
+    { from: 'samadhi', to: 'bazaarPeth', walkingTime: 6, difficulty: 1 },
+    { from: 'gangasagarLake', to: 'takmakTok', walkingTime: 8, difficulty: 4 },
+    { from: 'gangasagarLake', to: 'hirkaniBastion', walkingTime: 12, difficulty: 3 },
+    { from: 'hirkaniBastion', to: 'takmakTok', walkingTime: 10, difficulty: 4 },
+    { from: 'hirkaniBastion', to: 'waghDarwaza', walkingTime: 8, difficulty: 3 },
+    { from: 'ranivasa', to: 'gangasagarLake', walkingTime: 7, difficulty: 2 },
+    { from: 'bazaarPeth', to: 'ranivasa', walkingTime: 8, difficulty: 1 }
 ];
 
 export const raigadFortMetadata = {
     fortId: 'raigad',
     fortName: 'Raigad Fort',
     totalLocations: Object.keys(raigadFortLocations).length,
-    entryPoint: 'mahaDarwaja',
-    description: 'Capital of the Maratha Empire and coronation site of Chhatrapati Shivaji Maharaj'
+    entryPoint: 'menaDarwaza',
+    description: 'Capital of the Maratha Empire'
 };

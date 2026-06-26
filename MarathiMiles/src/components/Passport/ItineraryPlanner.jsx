@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MeetTheGuide from "./MeetTheGuide";
 import SmartItineraryPlanner from "./SmartItineraryPlanner";
 import SmartExplorationV2 from "./SmartExplorationV2";
+import RaigadSmartExplorationV2 from "./RaigadSmartExplorationV2";
 import { generateFortPDF } from "../../utils/generateFortPDF";
 import "./ItineraryPlanner.css";
 
@@ -43,7 +44,8 @@ const ItineraryPlanner = ({ fort }) => {
                 </div>
                 {subView === 'guide' && <MeetTheGuide />}
                 {subView === 'planner' && <SmartItineraryPlanner />}
-                {subView === 'exploration' && <SmartExplorationV2 />}
+                {subView === 'exploration' && fort?.id === 2 && <RaigadSmartExplorationV2 onBack={() => setSubView(null)} />}
+                {subView === 'exploration' && fort?.id !== 2 && <SmartExplorationV2 onBack={() => setSubView(null)} />}
             </div>
         );
     };

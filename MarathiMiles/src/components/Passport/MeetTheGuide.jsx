@@ -5,33 +5,36 @@ const GUIDES = [
     {
         id: 'sagar',
         name: 'Sagar Deshmukh',
+        initials: 'SD',
+        avatarColor: '#c0392b',
         role: 'Chief Historian & Archaeologist',
         experience: '12+ Years',
         specialty: 'Maratha Architecture & Siege Warfare',
         bio: 'Sagar has spent over a decade studying the stone carvings and defensive structures of Shivneri. He brings history to life with stories of the seven gates and the tactical genius of the Maratha Empire.',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
         rating: 4.9,
         reviews: 124
     },
     {
         id: 'priya',
         name: 'Priya Kulkarni',
+        initials: 'PK',
+        avatarColor: '#8e44ad',
         role: 'Nature & Trekking Specialist',
         experience: '8 Years',
         specialty: 'Sahyadri Flora & Hidden Trails',
         bio: 'Priya is an expert in the biodiversity of the Junnar region. She knows every secret trail that avoids the crowds and leads to the best viewpoints for photography and birdwatching.',
-        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
         rating: 4.8,
         reviews: 98
     },
     {
         id: 'rahul',
         name: 'Rahul Patil',
+        initials: 'RP',
+        avatarColor: '#1a6b3a',
         role: 'Local Cultural Ambassador',
         experience: '15+ Years',
         specialty: 'Oral Traditions & Local Cuisine',
-        bio: 'A native of Junnar, Rahul knows the stories passed down through generations. He’ll show you the best spots for authentic Misal and introduce you to the local artisans in the bazaar.',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+        bio: 'A native of Junnar, Rahul knows the stories passed down through generations. He\'ll show you the best spots for authentic Misal and introduce you to the local artisans in the bazaar.',
         rating: 5.0,
         reviews: 215
     }
@@ -50,7 +53,9 @@ const MeetTheGuide = () => {
                 {GUIDES.map((guide) => (
                     <div key={guide.id} className="guide-card">
                         <div className="guide-img-container">
-                            <img src={guide.image} alt={guide.name} className="guide-img" />
+                            <div className="guide-avatar" style={{ backgroundColor: guide.avatarColor }}>
+                                <span className="guide-initials">{guide.initials}</span>
+                            </div>
                             <div className="guide-overlay">
                                 <button className="book-guide-btn">Book a Session</button>
                             </div>
