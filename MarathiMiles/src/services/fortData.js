@@ -10,16 +10,17 @@ import raigadPalaceImg from "../assets/forts/raigad/2.jpg";
 import raigadPanoramicImg from "../assets/forts/raigad/3.jpg";
 import raigadMainBannerImg from "../assets/forts/raigad/panoramic.png";
 
-import sinhagadKalyanDarwajaImg from "../assets/forts/sinhagad/kalyan_darwaja.png";
-import sinhagadViewImg from "../assets/forts/sinhagad/view.png";
+import sinhagadImg1 from "../assets/forts/sinhagad/1.jpg";
+import sinhagadImg2 from "../assets/forts/sinhagad/2.jpg";
+import sinhagadImg3 from "../assets/forts/sinhagad/3.jpg";
 
-import pratapgadViewImg from "../assets/forts/pratapgad/pratapgad_view.jpg";
-import pratapgadTempleImg from "../assets/forts/pratapgad/pratapgad_temple.jpg";
+import pratapgadViewImg from "../assets/forts/pratapgad/1.jpg";
+import pratapgadTempleImg from "../assets/forts/pratapgad/2.jpg";
 
 import lohagadPanoramicImg from "../assets/forts/lohagad/lohagad_panoramic.png";
 import lohagadWideImg from "../assets/forts/lohagad/lohagad_wide.png";
-import lohagadPathImg from "../assets/forts/lohagad/lohagad_path.jpg";
-import lohagadViewImg from "../assets/forts/lohagad/lohagad_view.jpg";
+import lohagadPathImg from "../assets/forts/lohagad/1.jpg";
+import lohagadViewImg from "../assets/forts/lohagad/2.jpg";
 
 export const maharashtraForts = [
   {
@@ -1360,7 +1361,7 @@ export const maharashtraForts = [
     era: "The Lion Fort",
     subtitle: "Where Tanaji fought for the glory of Swarajya.",
     significance: "Site of the legendary Battle of Sinhagad and a symbol of Maratha valour.",
-    imageUrl: "/sinhagad_fort.png",
+    imageUrl: sinhagadImg1,
     timeline: [
       {
         year: "14th Century",
@@ -1504,10 +1505,9 @@ export const maharashtraForts = [
     ],
     vrExperience: "Walk the path of Tanaji's assault and see the fort in 360°.",
     images360: [
-      { src: "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=1200&auto=format&fit=crop", label: "Main Gate", subtitle: "Kalyan Darwaza" },
-      { src: "https://images.unsplash.com/photo-1548013146-72479768bada?w=1200&auto=format&fit=crop", label: "Panoramic Views", subtitle: "Khadakwasla Dam & Sahyadri ranges" },
-      { src: "https://images.unsplash.com/photo-1596485802280-99c5b6b10705?w=1200&auto=format&fit=crop", label: "Pune Darwaza", subtitle: "Eastern approach to the fort" },
-      { src: "https://images.unsplash.com/photo-1626014903706-e7e26fc54045?w=1200&auto=format&fit=crop", label: "Tanaji Malusare Samadhi", subtitle: "Memorial of the brave warrior" }
+      { src: sinhagadImg1, label: "Main Gate", subtitle: "Kalyan Darwaza" },
+      { src: sinhagadImg2, label: "Panoramic Views", subtitle: "Khadakwasla Dam & Sahyadri ranges" },
+      { src: sinhagadImg3, label: "Pune Darwaza", subtitle: "Eastern approach to the fort" }
     ],
     cuisine: [{ name: "Pithla Bhakri", image: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?w=800&auto=format&fit=crop", description: "Rustic gram flour curry with millet bread", spiceLevel: "Medium", bestTime: "Lunch", priceRange: "₹50-80" }],
     shopping: [],
