@@ -18,6 +18,30 @@ import warliImg from "../../assets/bazaar/warli_painting.png";
 import honeyImg from "../../assets/bazaar/wild_honey.png";
 import fortModelImg from "../../assets/bazaar/fort_miniature.png";
 
+// Raigad Assets
+import kokumImg from "../../assets/bazaar/kokum.png";
+import cashewsImg from "../../assets/bazaar/cashews.png";
+import spicesImg from "../../assets/bazaar/spices.png";
+import copperImg from "../../assets/bazaar/copper.png";
+
+// Sinhagad Assets
+import walkingStickImg from "../../assets/bazaar/sinhagad/walking_stick.png";
+const berriesImg = "https://images.unsplash.com/photo-1596485802280-99c5b6b10705?w=800&auto=format&fit=crop";
+const clayPotImg = "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=800&auto=format&fit=crop";
+const sinhagadSpicesImg = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop";
+
+// Pratapgad Assets (Unsplash)
+const strawberryImg = "https://images.unsplash.com/photo-1518110924610-1845eb525e98?w=800&auto=format&fit=crop";
+const pratapgadHoneyImg = "https://images.unsplash.com/photo-1587049352847-4d4b126a61b5?w=800&auto=format&fit=crop";
+const woodenToyImg = "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&auto=format&fit=crop";
+const maproCrushImg = "https://images.unsplash.com/photo-1597500913936-e82a6abde05b?w=800&auto=format&fit=crop";
+
+// Lohagad Assets (Unsplash)
+const chikkiImg = "https://images.unsplash.com/photo-1621217036687-39328eb92040?w=800&auto=format&fit=crop"; // Placeholder
+const fudgeImg = "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=800&auto=format&fit=crop";
+const trekGearImg = "https://images.unsplash.com/photo-1515555230216-82228b88ea98?w=800&auto=format&fit=crop";
+const monsoonCornImg = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop";
+
 // ── Fix Leaflet default marker icons ──────────────────────────────────────────
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -31,7 +55,7 @@ const FORT_COORDS = { lat: 19.1923, lng: 73.8638 };
 const MAP_CENTER = [19.2010, 73.8710]; // mid-point overview
 
 // ── Market definitions ────────────────────────────────────────────────────────
-const MARKETS = {
+const SHIVNERI_MARKETS = {
     shivneri_base: {
         id: "shivneri_base",
         name: "Shivneri Base Market",
@@ -52,11 +76,89 @@ const MARKETS = {
     },
 };
 
+const RAIGAD_MARKETS = {
+    raigad_base: {
+        id: "raigad_base",
+        name: "Ropeway Base Bazaar",
+        lat: 18.2385,
+        lng: 73.4350,
+    },
+    mahad_main: {
+        id: "mahad_main",
+        name: "Mahad Town Market",
+        lat: 18.0820,
+        lng: 73.4226,
+    },
+    pachad_village: {
+        id: "pachad_village",
+        name: "Pachad Artisan Village",
+        lat: 18.2350,
+        lng: 73.4390,
+    },
+};
+
+const SINHAGAD_MARKETS = {
+    sinhagad_base: {
+        id: "sinhagad_base",
+        name: "Sinhagad Base Market",
+        lat: 18.3663,
+        lng: 73.7559,
+    },
+    khadakwasla_stalls: {
+        id: "khadakwasla_stalls",
+        name: "Khadakwasla Dam Stalls",
+        lat: 18.4313,
+        lng: 73.7667,
+    },
+    donje_village: {
+        id: "donje_village",
+        name: "Donje Phata",
+        lat: 18.3840,
+        lng: 73.7850,
+    },
+};
+
+const PRATAPGAD_MARKETS = {
+    mahabaleshwar_market: {
+        id: "mahabaleshwar_market",
+        name: "Mahabaleshwar Main Market",
+        lat: 17.9237,
+        lng: 73.6558,
+    },
+    mapro_garden: {
+        id: "mapro_garden",
+        name: "Mapro Garden Market",
+        lat: 17.9272,
+        lng: 73.7431,
+    },
+    pratapgad_base: {
+        id: "pratapgad_base",
+        name: "Pratapgad Base Stalls",
+        lat: 17.9250,
+        lng: 73.5700,
+    },
+};
+
+const LOHAGAD_MARKETS = {
+    lonavala_market: {
+        id: "lonavala_market",
+        name: "Lonavala Main Market",
+        lat: 18.7557,
+        lng: 73.4061,
+    },
+    lohagad_base: {
+        id: "lohagad_base",
+        name: "Lohagad Wadi Base Village",
+        lat: 18.7075,
+        lng: 73.4800,
+    },
+};
+
 // ── Build Google Maps DIRECTIONS URL (Fort → Market via lat/lng) ──────────────
-function buildGMapsUrl(market) {
+function buildGMapsUrl(market, fortCoords) {
     return (
         `https://www.google.com/maps/dir/?api=1` +
-        `&origin=${FORT_COORDS.lat},${FORT_COORDS.lng}` +
+        `&origin=${fortCoords.lat},${fortCoords.lng}` +
         `&destination=${market.lat},${market.lng}` +
         `&travelmode=driving`
     );
@@ -81,7 +183,7 @@ function travelMinutes(distKm) {
 }
 
 // ── Product data ──────────────────────────────────────────────────────────────
-const PRODUCTS = [
+const SHIVNERI_PRODUCTS = [
     {
         id: "shivaji_idol",
         name: "Shivaji Maharaj Miniature Idol",
@@ -144,8 +246,200 @@ const PRODUCTS = [
     },
 ];
 
+const RAIGAD_PRODUCTS = [
+    {
+        id: "kokum_agal",
+        name: "Kokum Agal (Concentrate)",
+        category: "Local Food Products",
+        description:
+            "A pure, unadulterated concentrate made from sun-dried Kokum (Garcinia indica) sourced directly from Konkan farms. Known for its cooling properties and distinct tangy flavor, it is the essential base for authentic Solkadhi. No artificial colors or preservatives.",
+        priceRange: "₹150 – ₹300",
+        priceMin: 150, priceMax: 300,
+        nearestMarket: "mahad_main",
+        artisanInfo: "Sourced from local farmers' cooperatives in the Mahad and Poladpur regions.",
+        image: kokumImg,
+    },
+    {
+        id: "konkan_cashews",
+        name: "Premium Raw Cashews",
+        category: "Local Food Products",
+        description:
+            "Fresh, whole raw cashew nuts harvested from the laterite soil orchards of the Konkan belt near Raigad. These cashews are known for their rich buttery taste, large size, and high nutritional value. Perfect for traditional Indian sweets or healthy snacking.",
+        priceRange: "₹800 – ₹1,500/kg",
+        priceMin: 800, priceMax: 1500,
+        nearestMarket: "raigad_base",
+        artisanInfo: "Direct from the orchards of Konkan coast cashew growers.",
+        image: cashewsImg,
+    },
+    {
+        id: "ghati_masala",
+        name: "Traditional Ghati Masala",
+        category: "Local Food Products",
+        description:
+            "A fiery, flavorful spice blend central to rural Maharashtrian cooking. Made by pounding over 15 distinct spices along with dried red chilies, this masala provides the authentic heat and deep red color required for Konkani curries like Kombdi Vade.",
+        priceRange: "₹200 – ₹500",
+        priceMin: 200, priceMax: 500,
+        nearestMarket: "mahad_main",
+        artisanInfo: "Hand-pounded by village women's self-help groups (Bachat Gat) in Pachad.",
+        image: spicesImg,
+    },
+    {
+        id: "copper_lota",
+        name: "Engraved Copper Artifacts",
+        category: "Handicrafts",
+        description:
+            "Traditional copper and brass water jugs (lota) and tumblers, meticulously hammered and engraved with Maratha martial motifs. Pachad village has been home to metal-smiths since the time of Shivaji Maharaj, when they forged weapons and armor for the Raigad garrison.",
+        priceRange: "₹500 – ₹2,500",
+        priceMin: 500, priceMax: 2500,
+        nearestMarket: "pachad_village",
+        artisanInfo: "Crafted by the Tambat (coppersmith) community of Pachad village.",
+        image: copperImg,
+    },
+];
+
+const SINHAGAD_PRODUCTS = [
+    {
+        id: "walking_stick",
+        name: "Carved Wooden Trekking Pole",
+        category: "Handicrafts",
+        description: "Essential for the steep climb up Sinhagad, these sturdy walking sticks are hand-carved from local bamboo and teakwood by the base villagers.",
+        priceRange: "₹50 – ₹150",
+        priceMin: 50, priceMax: 150,
+        nearestMarket: "sinhagad_base",
+        artisanInfo: "Carved by local youth from Donje and Atkarwadi villages.",
+        image: walkingStickImg,
+    },
+    {
+        id: "karvanda",
+        name: "Wild Karvanda Berries",
+        category: "Local Food Products",
+        description: "Known as the 'black grapes of Konkan', these tart, wild mountain berries are harvested by locals from the thorny bushes of the Sahyadris.",
+        priceRange: "₹30 – ₹60/basket",
+        priceMin: 30, priceMax: 60,
+        nearestMarket: "sinhagad_base",
+        artisanInfo: "Foraged daily from the slopes of Sinhagad.",
+        image: berriesImg,
+    },
+    {
+        id: "clay_matka",
+        name: "Terracotta Matka (Clay Pot)",
+        category: "Handicrafts",
+        description: "The traditional earthen pots used to set the famous Sinhagad Matka Dahi. They keep the curd thick, creamy, and cool even in summer.",
+        priceRange: "₹100 – ₹250",
+        priceMin: 100, priceMax: 250,
+        nearestMarket: "donje_village",
+        artisanInfo: "Hand-spun by potters (Kumbhars) in nearby Donje village.",
+        image: clayPotImg,
+    },
+    {
+        id: "pitla_mix",
+        name: "Instant Pitla Mix",
+        category: "Local Food Products",
+        description: "A ready-to-cook mix of roasted gram flour and traditional spices, allowing you to recreate the famous Sinhagad Pitla at home.",
+        priceRange: "₹80 – ₹150",
+        priceMin: 80, priceMax: 150,
+        nearestMarket: "khadakwasla_stalls",
+        artisanInfo: "Prepared by local women's cooperatives (Bachat Gat).",
+        image: sinhagadSpicesImg,
+    },
+];
+
+const PRATAPGAD_PRODUCTS = [
+    {
+        id: "strawberries",
+        name: "Fresh Mahabaleshwar Strawberries",
+        category: "Local Food Products",
+        description: "Juicy, sweet, and freshly plucked from the local farms of the Sahyadri mountains near Pratapgad.",
+        priceRange: "₹150 – ₹300/box",
+        priceMin: 150, priceMax: 300,
+        nearestMarket: "mahabaleshwar_market",
+        artisanInfo: "Harvested by local farmers of Mahabaleshwar.",
+        image: strawberryImg,
+    },
+    {
+        id: "mapro_syrup",
+        name: "Strawberry Crush & Fruit Syrups",
+        category: "Local Food Products",
+        description: "The legendary Mapro fruit crushes and jams. A must-buy souvenir from the region.",
+        priceRange: "₹200 – ₹450",
+        priceMin: 200, priceMax: 450,
+        nearestMarket: "mapro_garden",
+        artisanInfo: "Produced locally in the Panchgani-Mahabaleshwar belt.",
+        image: maproCrushImg,
+    },
+    {
+        id: "wooden_toys",
+        name: "Handcrafted Wooden Toys",
+        category: "Handicrafts",
+        description: "Colorful, traditional wooden toys and artifacts carved out of lightweight local wood.",
+        priceRange: "₹100 – ₹500",
+        priceMin: 100, priceMax: 500,
+        nearestMarket: "mahabaleshwar_market",
+        artisanInfo: "Crafted by skilled woodworkers of Satara district.",
+        image: woodenToyImg,
+    },
+    {
+        id: "forest_honey",
+        name: "Pure Sahyadri Forest Honey",
+        category: "Local Food Products",
+        description: "Thick, dark, and rich in medicinal properties, extracted from the deep forests surrounding Pratapgad.",
+        priceRange: "₹350 – ₹600",
+        priceMin: 350, priceMax: 600,
+        nearestMarket: "pratapgad_base",
+        artisanInfo: "Foraged by local tribal communities.",
+        image: pratapgadHoneyImg,
+    },
+];
+
+const LOHAGAD_PRODUCTS = [
+    {
+        id: "lonavala_chikki",
+        name: "Famous Lonavala Chikki",
+        category: "Local Food Products",
+        description: "The iconic sweet made from jaggery and roasted nuts. A staple buy when visiting Lohagad and Lonavala.",
+        priceRange: "₹200 – ₹400/kg",
+        priceMin: 200, priceMax: 400,
+        nearestMarket: "lonavala_market",
+        artisanInfo: "Made by traditional sweet makers like Maganlal.",
+        image: chikkiImg,
+    },
+    {
+        id: "chocolate_fudge",
+        name: "Walnut Chocolate Fudge",
+        category: "Local Food Products",
+        description: "Rich, dense chocolate fudge packed with walnuts, available extensively in the Lonavala market.",
+        priceRange: "₹300 – ₹600/box",
+        priceMin: 300, priceMax: 600,
+        nearestMarket: "lonavala_market",
+        artisanInfo: "Produced by local confectioners like Cooper's.",
+        image: fudgeImg,
+    },
+    {
+        id: "monsoon_corn",
+        name: "Roasted Monsoon Corn (Bhutta)",
+        category: "Local Food Products",
+        description: "Hot, fire-roasted corn seasoned with lime and chili powder, sold by villagers along the trek route.",
+        priceRange: "₹30 – ₹50",
+        priceMin: 30, priceMax: 50,
+        nearestMarket: "lohagad_base",
+        artisanInfo: "Sold by local villagers from Lohagad Wadi.",
+        image: monsoonCornImg,
+    },
+    {
+        id: "trekking_gear",
+        name: "Monsoon Trekking Gear",
+        category: "Traditional Items",
+        description: "Windcheaters, sturdy wooden sticks, and monsoon wear essential for safely scaling the fort.",
+        priceRange: "₹100 – ₹500",
+        priceMin: 100, priceMax: 500,
+        nearestMarket: "lohagad_base",
+        artisanInfo: "Local vendors catering to thousands of weekend trekkers.",
+        image: trekGearImg,
+    },
+];
+
 // ── Budget items ──────────────────────────────────────────────────────────────
-const BUDGET_ITEMS = [
+const SHIVNERI_BUDGET_ITEMS = [
     { name: "Small Warli Bookmark", category: "Handicrafts", price: 80 },
     { name: "Wild Honey Sample Jar (100g)", category: "Local Food Products", price: 150 },
     { name: "Warli Art Card Set (6 cards)", category: "Handicrafts", price: 200 },
@@ -163,8 +457,38 @@ const BUDGET_ITEMS = [
     { name: "Kolhapuri Chappals – Handmade", category: "Traditional Items", price: 1800 },
 ];
 
+const RAIGAD_BUDGET_ITEMS = [
+    { name: "Kokum Agal (250ml)", category: "Local Food Products", price: 150 },
+    { name: "Spicy Ghati Masala (100g)", category: "Local Food Products", price: 200 },
+    { name: "Konkan Cashews (250g)", category: "Local Food Products", price: 350 },
+    { name: "Small Copper Tumbler", category: "Handicrafts", price: 500 },
+    { name: "Premium Raw Cashews (500g)", category: "Local Food Products", price: 750 },
+    { name: "Engraved Copper Jug", category: "Handicrafts", price: 1500 },
+];
+
+const SINHAGAD_BUDGET_ITEMS = [
+    { name: "Karvanda Basket", category: "Local Food Products", price: 50 },
+    { name: "Wooden Walking Stick", category: "Handicrafts", price: 80 },
+    { name: "Instant Pitla Mix", category: "Local Food Products", price: 100 },
+    { name: "Small Clay Matka", category: "Handicrafts", price: 150 },
+];
+
+const PRATAPGAD_BUDGET_ITEMS = [
+    { name: "Fresh Strawberries (Small)", category: "Local Food Products", price: 150 },
+    { name: "Strawberry Jelly Sweets", category: "Local Food Products", price: 80 },
+    { name: "Small Wooden Top (Bhvra)", category: "Handicrafts", price: 50 },
+    { name: "Keychains & Fort Magnets", category: "Fort Souvenirs", price: 40 },
+];
+
+const LOHAGAD_BUDGET_ITEMS = [
+    { name: "Peanut Chikki Slab", category: "Local Food Products", price: 50 },
+    { name: "Trekking Stick", category: "Handicrafts", price: 60 },
+    { name: "Roasted Corn (Bhutta)", category: "Local Food Products", price: 30 },
+    { name: "Rain Poncho", category: "Traditional Items", price: 100 },
+];
+
 // ── Artisans ──────────────────────────────────────────────────────────────────
-const ARTISANS = [
+const SHIVNERI_ARTISANS = [
     {
         id: "savita",
         name: "Savita Jadhav",
@@ -194,6 +518,92 @@ const ARTISANS = [
         description:
             "A certified forest honey harvester licensed by the Maharashtra Forest Department, Mangal leads 12 women who sustainably harvest rock-bee honey from the Sahyadri cliffs without disturbing the colony.",
         avatar: "🍯", color: "#2ecc71",
+    },
+];
+
+const RAIGAD_ARTISANS = [
+    {
+        id: "tambat_ali",
+        name: "Pachad Tambat Community",
+        craft: "Copper & Brass Forging",
+        experience: "Generations",
+        location: "Pachad village, base of Raigad",
+        description:
+            "The traditional coppersmiths (Tambats) of Pachad trace their lineage back to the royal armourers of Shivaji's army. Today, they create beautiful etched copper vessels using age-old mathar-kaam (hammering) techniques.",
+        avatar: "⚒️", color: "#d35400",
+    },
+    {
+        id: "konkan_farmers",
+        name: "Konkan Cashew & Kokum Growers",
+        craft: "Organic Farming",
+        experience: 25,
+        location: "Mahad and Poladpur",
+        description:
+            "Local farmer cooperatives specializing in native crops. They harvest wild kokum and process cashew nuts using traditional roasting methods that preserve the natural oils and rich taste of the Konkan soil.",
+        avatar: "🌿", color: "#27ae60",
+    },
+];
+
+const SINHAGAD_ARTISANS = [
+    {
+        id: "donje_potters",
+        name: "Donje Kumbhar Ali",
+        craft: "Terracotta Pottery",
+        experience: "Generations",
+        location: "Donje Village",
+        description: "The traditional potters who supply the thousands of clay pots required daily for Sinhagad's iconic Matka Dahi.",
+        avatar: "🏺", color: "#d35400",
+    },
+    {
+        id: "atkarwadi_woodworkers",
+        name: "Atkarwadi Youth",
+        craft: "Bamboo & Wood Carving",
+        experience: 5,
+        location: "Sinhagad Base",
+        description: "Local youth who sustainably source and carve the trekking sticks sold to thousands of hikers ascending the fort every weekend.",
+        avatar: "🪓", color: "#8e44ad",
+    },
+];
+
+const PRATAPGAD_ARTISANS = [
+    {
+        id: "mahabaleshwar_farmers",
+        name: "Strawberry Farmers",
+        craft: "Berry Cultivation",
+        experience: "Generations",
+        location: "Mahabaleshwar Hills",
+        description: "The hardworking local farmers who cultivate the legendary sweet strawberries of Mahabaleshwar.",
+        avatar: "🍓", color: "#e74c3c",
+    },
+    {
+        id: "satara_woodworkers",
+        name: "Satara Wood Crafters",
+        craft: "Wooden Toys & Handicrafts",
+        experience: 15,
+        location: "Mahabaleshwar Market",
+        description: "Artisans carving vibrant and safe wooden toys using traditional tools and lightweight wood.",
+        avatar: "🪵", color: "#d35400",
+    },
+];
+
+const LOHAGAD_ARTISANS = [
+    {
+        id: "lonavala_chikki_makers",
+        name: "Lonavala Chikki Makers",
+        craft: "Traditional Sweets",
+        experience: "Over 100 years",
+        location: "Lonavala Market",
+        description: "Families that have been producing the famous crunchy nut and jaggery brittle for generations.",
+        avatar: "🥜", color: "#f39c12",
+    },
+    {
+        id: "lohagad_wadi_villagers",
+        name: "Lohagad Wadi Villagers",
+        craft: "Monsoon Hospitality",
+        experience: "Decades",
+        location: "Fort Base Village",
+        description: "Locals who set up seasonal stalls to provide hot food and essential trekking gear to monsoon hikers.",
+        avatar: "🏕️", color: "#27ae60",
     },
 ];
 
@@ -234,10 +644,10 @@ function MapController({ activeMarket, showRoute, showAll }) {
 }
 
 // ── Google Maps button with "Opening…" tooltip ────────────────────────────────
-function GMapsButton({ market, className = "detail-gmaps-btn" }) {
+function GMapsButton({ market, fortCoords, className = "detail-gmaps-btn" }) {
     const [tooltip, setTooltip] = useState(false);
     const timerRef = useRef(null);
-    const url = buildGMapsUrl(market);
+    const url = buildGMapsUrl(market, fortCoords);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -254,7 +664,7 @@ function GMapsButton({ market, className = "detail-gmaps-btn" }) {
         <div className="gmaps-btn-wrap">
             {tooltip && (
                 <div className="gmaps-tooltip">
-                    🗺️ Opening live navigation from Shivneri Fort…
+                    🗺️ Opening live navigation…
                 </div>
             )}
             <a
@@ -271,9 +681,9 @@ function GMapsButton({ market, className = "detail-gmaps-btn" }) {
 }
 
 // ── BudgetPlanner ─────────────────────────────────────────────────────────────
-function BudgetPlanner() {
+function BudgetPlanner({ items }) {
     const [budget, setBudget] = useState(2000);
-    const affordable = BUDGET_ITEMS.filter((i) => i.price <= budget).sort((a, b) => a.price - b.price);
+    const affordable = items.filter((i) => i.price <= budget).sort((a, b) => a.price - b.price);
     let total = 0;
     const selected = [];
     for (const item of affordable) {
@@ -328,8 +738,8 @@ function BudgetPlanner() {
 }
 
 // ── ProductCard ───────────────────────────────────────────────────────────────
-function ProductCard({ product, isActive, isHovered, onClick, onMouseEnter, onMouseLeave }) {
-    const market = MARKETS[product.nearestMarket];
+function ProductCard({ product, isActive, isHovered, onClick, onMouseEnter, onMouseLeave, markets }) {
+    const market = markets[product.nearestMarket];
     return (
         <div
             className={`bazaar-card ${isActive ? "bazaar-card--active" : ""} ${isHovered ? "bazaar-card--hovered" : ""}`}
@@ -358,10 +768,10 @@ function ProductCard({ product, isActive, isHovered, onClick, onMouseEnter, onMo
 }
 
 // ── ProductDetail modal ────────────────────────────────────────────────────────
-function ProductDetail({ product, onClose }) {
+function ProductDetail({ product, onClose, markets, fortCoords }) {
     if (!product) return null;
-    const market = MARKETS[product.nearestMarket];
-    const distKm = haversineKm(FORT_COORDS.lat, FORT_COORDS.lng, market.lat, market.lng);
+    const market = markets[product.nearestMarket];
+    const distKm = haversineKm(fortCoords.lat, fortCoords.lng, market.lat, market.lng);
     const minutes = travelMinutes(distKm);
 
     return (
@@ -385,7 +795,7 @@ function ProductDetail({ product, onClose }) {
                             <span>🚗</span>
                             <span>Est. Travel Time: <strong>~{minutes} mins</strong> at 30 km/h</span>
                         </div>
-                        <GMapsButton market={market} className="detail-gmaps-btn" />
+                        <GMapsButton market={market} fortCoords={fortCoords} className="detail-gmaps-btn" />
                     </div>
                     <div className="detail-divider" />
                     <div className="detail-artisan">
@@ -419,7 +829,25 @@ function ArtisanCard({ artisan }) {
 }
 
 // ── Main BazaarSection ────────────────────────────────────────────────────────
-const BazaarSection = () => {
+const BazaarSection = ({ fort }) => {
+    const isRaigad = fort?.id === 2;
+    const isSinhagad = fort?.id === 3;
+    const isPratapgad = fort?.id === 4;
+    const isLohagad = fort?.id === 5;
+    
+    const PRODUCTS = isLohagad ? LOHAGAD_PRODUCTS : (isPratapgad ? PRATAPGAD_PRODUCTS : (isSinhagad ? SINHAGAD_PRODUCTS : (isRaigad ? RAIGAD_PRODUCTS : SHIVNERI_PRODUCTS)));
+    const MARKETS = isLohagad ? LOHAGAD_MARKETS : (isPratapgad ? PRATAPGAD_MARKETS : (isSinhagad ? SINHAGAD_MARKETS : (isRaigad ? RAIGAD_MARKETS : SHIVNERI_MARKETS)));
+    const BUDGET_ITEMS = isLohagad ? LOHAGAD_BUDGET_ITEMS : (isPratapgad ? PRATAPGAD_BUDGET_ITEMS : (isSinhagad ? SINHAGAD_BUDGET_ITEMS : (isRaigad ? RAIGAD_BUDGET_ITEMS : SHIVNERI_BUDGET_ITEMS)));
+    const ARTISANS = isLohagad ? LOHAGAD_ARTISANS : (isPratapgad ? PRATAPGAD_ARTISANS : (isSinhagad ? SINHAGAD_ARTISANS : (isRaigad ? RAIGAD_ARTISANS : SHIVNERI_ARTISANS)));
+    
+    // Coordinates
+    let currentCoords = FORT_COORDS; // Shivneri default
+    if (isRaigad) currentCoords = { lat: 18.2345, lng: 73.4464 };
+    if (isSinhagad) currentCoords = { lat: 18.3663, lng: 73.7559 };
+    if (isPratapgad) currentCoords = { lat: 17.9250, lng: 73.5700 };
+    if (isLohagad) currentCoords = { lat: 18.7075, lng: 73.4800 };
+    const CURRENT_FORT_COORDS = currentCoords;
+
     const [activeCategory, setActiveCategory] = useState("All");
     const [activeProduct, setActiveProduct] = useState(null);
     const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -431,9 +859,8 @@ const BazaarSection = () => {
     const activeMarket = activeProduct ? MARKETS[activeProduct.nearestMarket] : null;
     const hoveredMarket = hoveredProduct ? MARKETS[hoveredProduct.nearestMarket] : null;
 
-    // polyline points: Fort → selected market
     const routePoints = activeMarket && showRoute
-        ? [[FORT_COORDS.lat, FORT_COORDS.lng], [activeMarket.lat, activeMarket.lng]]
+        ? [[CURRENT_FORT_COORDS.lat, CURRENT_FORT_COORDS.lng], [activeMarket.lat, activeMarket.lng]]
         : [];
 
     const filteredProducts =
@@ -441,10 +868,10 @@ const BazaarSection = () => {
 
     const handleCardClick = useCallback((product) => {
         if (activeProduct?.id === product.id) {
-            setDetailProduct(product);   // second tap = detail modal
+            setDetailProduct(product);
         } else {
             setActiveProduct(product);
-            setShowRoute(true);          // auto-draw route on first tap
+            setShowRoute(true);
             setShowAll(false);
         }
     }, [activeProduct]);
@@ -461,9 +888,8 @@ const BazaarSection = () => {
         setShowAll(true);
     };
 
-    // Popup distances
     const getMarketInfo = (market) => {
-        const distKm = haversineKm(FORT_COORDS.lat, FORT_COORDS.lng, market.lat, market.lng);
+        const distKm = haversineKm(CURRENT_FORT_COORDS.lat, CURRENT_FORT_COORDS.lng, market.lat, market.lng);
         const minutes = travelMinutes(distKm);
         return { distKm, minutes };
     };
@@ -471,16 +897,14 @@ const BazaarSection = () => {
     return (
         <section className="bazaar-section" id="heritage-bazaar">
 
-            {/* ── Header ── */}
             <div className="bazaar-header">
                 <span className="bazaar-eyebrow">SHOP THE HERITAGE</span>
-                <h2 className="bazaar-title">Shivneri Heritage Bazaar</h2>
+                <h2 className="bazaar-title">{fort?.name || "Heritage"} Bazaar</h2>
                 <p className="bazaar-subtitle">
-                    Discover authentic local markets, handicrafts &amp; souvenirs near Shivneri Fort
+                    Discover authentic local markets, handicrafts &amp; souvenirs near {fort?.name || "the fort"}
                 </p>
             </div>
 
-            {/* ── Filters ── */}
             <div className="bazaar-filters">
                 {CATEGORIES.map((cat) => (
                     <button
@@ -493,10 +917,7 @@ const BazaarSection = () => {
                 ))}
             </div>
 
-            {/* ── Body: grid + map ── */}
             <div className="bazaar-body">
-
-                {/* Product Grid */}
                 <div className="bazaar-grid">
                     {filteredProducts.length === 0
                         ? <p className="no-products">No products in this category yet.</p>
@@ -504,6 +925,7 @@ const BazaarSection = () => {
                             <ProductCard
                                 key={product.id}
                                 product={product}
+                                markets={MARKETS}
                                 isActive={activeProduct?.id === product.id}
                                 isHovered={hoveredProduct?.id === product.id && activeProduct?.id !== product.id}
                                 onClick={handleCardClick}
@@ -515,7 +937,6 @@ const BazaarSection = () => {
                     <p className="tap-hint-global">Tap once to draw route on map · Tap again to view details</p>
                 </div>
 
-                {/* Map Sidebar */}
                 <div className={`bazaar-map-sidebar ${mapCollapsed ? "map-collapsed" : ""}`}>
                     <button className="map-toggle-btn" onClick={() => setMapCollapsed((v) => !v)}>
                         {mapCollapsed ? "🗺️ Show Map" : "🗺️ Hide Map"}
@@ -528,7 +949,6 @@ const BazaarSection = () => {
                                 <span>Market Locations &amp; Routes</span>
                             </div>
 
-                            {/* Active info chip */}
                             {activeMarket && (
                                 <div className="active-market-chip">
                                     <div>
@@ -539,9 +959,8 @@ const BazaarSection = () => {
                                 </div>
                             )}
 
-                            {/* Leaflet Map */}
                             <MapContainer
-                                center={MAP_CENTER}
+                                center={CURRENT_FORT_COORDS}
                                 zoom={13}
                                 style={{ height: "400px", width: "100%" }}
                                 scrollWheelZoom={false}
@@ -552,17 +971,15 @@ const BazaarSection = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
                                 />
 
-                                {/* Shivneri Fort marker */}
-                                <Marker position={[FORT_COORDS.lat, FORT_COORDS.lng]} icon={ICON_FORT}>
+                                <Marker position={[CURRENT_FORT_COORDS.lat, CURRENT_FORT_COORDS.lng]} icon={ICON_FORT}>
                                     <Popup className="bazaar-popup">
                                         <div className="popup-inner">
-                                            <strong>🏰 Shivneri Fort</strong>
+                                            <strong>🏰 {fort?.name || "Fort"}</strong>
                                             <span className="popup-dist">Origin of your journey</span>
                                         </div>
                                     </Popup>
                                 </Marker>
 
-                                {/* Market markers */}
                                 {Object.values(MARKETS).map((market) => {
                                     const isActive = activeMarket?.id === market.id;
                                     const isHovered = hoveredMarket?.id === market.id && !isActive;
@@ -579,9 +996,9 @@ const BazaarSection = () => {
                                             <Popup className="bazaar-popup">
                                                 <div className="popup-inner">
                                                     <strong>{market.name}</strong>
-                                                    <span className="popup-dist">📏 Distance from Fort: {distKm} km</span>
+                                                    <span className="popup-dist">📏 Distance: {distKm} km</span>
                                                     <span className="popup-dist">🚗 Est. Travel: ~{minutes} mins</span>
-                                                    <GMapsButton market={market} className="popup-gmaps" />
+                                                    <GMapsButton market={market} fortCoords={CURRENT_FORT_COORDS} className="popup-gmaps" />
                                                 </div>
                                             </Popup>
                                         </Marker>
@@ -676,11 +1093,11 @@ const BazaarSection = () => {
             </div>
 
             {/* ── Budget Planner ── */}
-            <BudgetPlanner />
+            <BudgetPlanner items={BUDGET_ITEMS} />
 
             {/* ── Detail Modal ── */}
             {detailProduct && (
-                <ProductDetail product={detailProduct} onClose={() => setDetailProduct(null)} />
+                <ProductDetail product={detailProduct} markets={MARKETS} fortCoords={CURRENT_FORT_COORDS} onClose={() => setDetailProduct(null)} />
             )}
         </section>
     );

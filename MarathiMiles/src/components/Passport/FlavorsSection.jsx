@@ -5,7 +5,14 @@ import L from "leaflet";
 import "./FlavorsSection.css";
 
 import gavranThali from "../../assets/food/shivneri/gavran_thali.jpeg";
-import zunka from "../../assets/food/shivneri/zunka.jpeg";
+import shivneriZunka from "../../assets/food/shivneri/zunka.jpeg";
+
+import kombdiVadeImg from "../../assets/food/raigad/kombdi_vade.png";
+import solkadhiImg from "../../assets/food/raigad/solkadhi.png";
+
+import sinhagadZunkaImg from "../../assets/food/sinhagad/zunka.png";
+import sinhagadKandaBhajiImg from "../../assets/food/sinhagad/kanda_bhaji.png";
+import matkaDahiImg from "../../assets/food/sinhagad/matka_dahi.png";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -15,9 +22,13 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const FORT_COORDS = [19.1989, 73.8617]; // Shivneri Fort
+const SHIVNERI_COORDS = [19.1989, 73.8617];
+const RAIGAD_COORDS = [18.2345, 73.4464];
+const SINHAGAD_COORDS = [18.3663, 73.7559];
+const PRATAPGAD_COORDS = [17.9250, 73.5700];
+const LOHAGAD_COORDS = [18.7075, 73.4800];
 
-const FOOD_DATA = [
+const SHIVNERI_FOOD = [
     {
         id: "misal",
         name: "Junnar Misal",
@@ -57,7 +68,7 @@ const FOOD_DATA = [
     {
         id: "zunka",
         name: "Zunka Bhakar",
-        image: zunka,
+        image: shivneriZunka,
         description: "A rustic, thick gram flour preparation served with pearl millet bread (Bhakri), representing rural resilience and flavor.",
         places: ["Hotel Vedant", "Local Dhabas"],
         location: "Highway Dhabas, Junnar Outskirts",
@@ -65,7 +76,127 @@ const FOOD_DATA = [
     }
 ];
 
-const RESTAURANTS_DATA = [
+const RAIGAD_FOOD = [
+    {
+        id: "kombdi_vade",
+        name: "Kombdi Vade",
+        image: kombdiVadeImg,
+        description: "The quintessential Konkan non-veg feast. Spicy chicken curry served with deep-fried multi-grain bread (Vade).",
+        places: ["Hotel Kuber", "Pachad Base Eateries"],
+        location: "Raigad Ropeway Base",
+        price: "250-350"
+    },
+    {
+        id: "solkadhi",
+        name: "Solkadhi",
+        image: solkadhiImg,
+        description: "A cooling, pink digestive drink made from Kokum and fresh coconut milk. Essential after a spicy coastal meal.",
+        places: ["Hotel Kuber", "Local Thali places"],
+        location: "Mahad-Pachad Highway",
+        price: "40-60"
+    },
+    {
+        id: "ukadiche_modak",
+        name: "Ukadiche Modak",
+        image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&auto=format&fit=crop",
+        description: "Steamed rice flour dumplings stuffed with coconut and jaggery, a traditional Maharashtrian sweet.",
+        places: ["Pachad Sweets", "Mahad Town"],
+        location: "Pachad Village",
+        price: "150-200"
+    }
+];
+
+const SINHAGAD_FOOD = [
+    {
+        id: "zunka_bhakar",
+        name: "Zunka Bhakar",
+        image: sinhagadZunkaImg,
+        description: "The iconic dish of Sinhagad. A thick, spicy gram-flour curry served with hot Bajra/Jowar flatbread, raw onions, and fiery Thecha.",
+        places: ["Base Village Stalls", "Top Fort Stalls"],
+        location: "All over Sinhagad Fort",
+        price: "80-120"
+    },
+    {
+        id: "matka_dahi",
+        name: "Matka Dahi",
+        image: matkaDahiImg,
+        description: "Fresh, thick, and creamy yogurt set naturally in traditional terracotta clay pots (matkas). The perfect coolant after a steep trek.",
+        places: ["Fort Plateau Stalls", "Donje Village"],
+        location: "Sinhagad Plateau",
+        price: "50-80"
+    },
+    {
+        id: "kanda_bhaji",
+        name: "Khekda Bhaji",
+        image: sinhagadKandaBhajiImg,
+        description: "Deep-fried, ultra-crispy onion fritters best enjoyed with hot cutting chai while looking at the Khadakwasla dam views.",
+        places: ["Fort Top Shacks", "Base Trek Start"],
+        location: "Sinhagad Viewpoints",
+        price: "40-60"
+    }
+];
+
+const PRATAPGAD_FOOD = [
+    {
+        id: "strawberry_cream",
+        name: "Strawberry Cream",
+        image: "https://images.unsplash.com/photo-1546886819-21840003e654?w=800&auto=format&fit=crop",
+        description: "The signature dessert of the Mahabaleshwar region. Freshly plucked local strawberries layered with thick, sweetened cream.",
+        places: ["Mapro Garden", "Bagicha Corner"],
+        location: "Panchgani-Mahabaleshwar Road",
+        price: "150-250"
+    },
+    {
+        id: "makai_pattice",
+        name: "Makai (Corn) Pattice",
+        image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&auto=format&fit=crop",
+        description: "Hot, crispy potato and sweet corn patties served with spicy green chutney. Perfect for the misty mountain weather.",
+        places: ["Mapro Garden", "Mahabaleshwar Market"],
+        location: "Mahabaleshwar",
+        price: "80-120"
+    },
+    {
+        id: "pratapgad_pithla",
+        name: "Chulivarchya Pithla Bhakri",
+        image: "https://images.unsplash.com/photo-1589301760014-d929f39ce9b1?w=800&auto=format&fit=crop",
+        description: "Authentic, rustic gram flour curry cooked on a wood-fired mud stove (chul), served hot at the base of the fort.",
+        places: ["Pratapgad Base Dhabas", "Afzal Khan Tomb Stalls"],
+        location: "Pratapgad Fort Base",
+        price: "90-150"
+    }
+];
+
+const LOHAGAD_FOOD = [
+    {
+        id: "maggi",
+        name: "Hill Station Maggi",
+        image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=800&auto=format&fit=crop",
+        description: "Steaming hot, spicy Maggi noodles. A legendary comfort food when trekking through the misty, rainy slopes of Lohagad.",
+        places: ["Lohagad Base Dhabas"],
+        location: "Lonavala Region",
+        price: "40-70"
+    },
+    {
+        id: "vada_pav",
+        name: "Lonavala Vada Pav",
+        image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=800&auto=format&fit=crop",
+        description: "The quintessential Maharashtrian snack. Hot, spicy potato fritters in soft bread, perfect after a long trek.",
+        places: ["Lohagad Base Dhabas"],
+        location: "Local Street Food",
+        price: "20-40"
+    },
+    {
+        id: "bhutta",
+        name: "Roasted Bhutta",
+        image: "https://images.unsplash.com/photo-1596660608573-00e998c5dfc6?w=800&auto=format&fit=crop",
+        description: "Corn on the cob roasted over open coals and rubbed with spicy chili-lime salt, ubiquitous during the monsoons.",
+        places: ["Lohagad Base Dhabas"],
+        location: "Trek Route",
+        price: "30-50"
+    }
+];
+
+const SHIVNERI_RESTAURANTS = [
     {
         id: "vedant_hotel",
         name: "Hotel Vedant (Junnar)",
@@ -108,6 +239,98 @@ const RESTAURANTS_DATA = [
     }
 ];
 
+const RAIGAD_RESTAURANTS = [
+    {
+        id: "hotel_kuber",
+        name: "Hotel Kuber",
+        lat: 18.2380,
+        lng: 73.4350,
+        rating: 4.3,
+        timing: "8 AM - 10 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Kuber+Pachad",
+        serves: ["kombdi_vade", "solkadhi"]
+    },
+    {
+        id: "pachad_dhabas",
+        name: "Pachad Village Eateries",
+        lat: 18.2355,
+        lng: 73.4390,
+        rating: 4.5,
+        timing: "7 AM - 8 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Pachad+Village",
+        serves: ["ukadiche_modak", "solkadhi"]
+    }
+];
+
+const SINHAGAD_RESTAURANTS = [
+    {
+        id: "fort_stalls",
+        name: "Sinhagad Plateau Stalls",
+        lat: 18.3665,
+        lng: 73.7555,
+        rating: 4.8,
+        timing: "6 AM - 7 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Sinhagad+Fort+Food+Stalls",
+        serves: ["zunka_bhakar", "matka_dahi", "kanda_bhaji"]
+    },
+    {
+        id: "donje_base",
+        name: "Donje Base Eateries",
+        lat: 18.3840,
+        lng: 73.7850,
+        rating: 4.2,
+        timing: "7 AM - 9 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Donje+Village",
+        serves: ["zunka_bhakar", "matka_dahi"]
+    }
+];
+
+const PRATAPGAD_RESTAURANTS = [
+    {
+        id: "mapro_garden",
+        name: "Mapro Garden",
+        lat: 17.9272,
+        lng: 73.7431,
+        rating: 4.7,
+        timing: "8 AM - 9 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mapro+Garden+Mahabaleshwar",
+        serves: ["strawberry_cream", "makai_pattice"]
+    },
+    {
+        id: "pratapgad_base_dhabas",
+        name: "Pratapgad Base Eateries",
+        lat: 17.9250,
+        lng: 73.5700,
+        rating: 4.3,
+        timing: "7 AM - 7 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Pratapgad+Fort+Base",
+        serves: ["pratapgad_pithla"]
+    }
+];
+
+const LOHAGAD_RESTAURANTS = [
+    {
+        id: "lohagad_base_dhabas",
+        name: "Lohagad Base Dhabas",
+        lat: 18.7075,
+        lng: 73.4800,
+        rating: 4.5,
+        timing: "7 AM - 7 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lohagad+Fort+Base",
+        serves: ["maggi", "vada_pav", "bhutta"]
+    },
+    {
+        id: "kinara_village_dhaba",
+        name: "Kinara Village Dhaba",
+        lat: 18.7500,
+        lng: 73.4100,
+        rating: 4.2,
+        timing: "8 AM - 11 PM",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kinara+Village+Dhaba",
+        serves: ["vada_pav"]
+    }
+];
+
 function ChangeView({ center, routePoints }) {
     const map = useMap();
     useEffect(() => {
@@ -139,18 +362,24 @@ const userIcon = new L.Icon({
     shadowSize: [41, 41]
 });
 
-const FlavorsSection = () => {
+const FlavorsSection = ({ fort }) => {
+    const isRaigad = fort?.id === 2;
+    const isSinhagad = fort?.id === 3;
+    const isPratapgad = fort?.id === 4;
+    const isLohagad = fort?.id === 5;
+    
+    const FOOD_DATA = isLohagad ? LOHAGAD_FOOD : (isPratapgad ? PRATAPGAD_FOOD : (isSinhagad ? SINHAGAD_FOOD : (isRaigad ? RAIGAD_FOOD : SHIVNERI_FOOD)));
+    const RESTAURANTS_DATA = isLohagad ? LOHAGAD_RESTAURANTS : (isPratapgad ? PRATAPGAD_RESTAURANTS : (isSinhagad ? SINHAGAD_RESTAURANTS : (isRaigad ? RAIGAD_RESTAURANTS : SHIVNERI_RESTAURANTS)));
+    const CURRENT_COORDS = isLohagad ? LOHAGAD_COORDS : (isPratapgad ? PRATAPGAD_COORDS : (isSinhagad ? SINHAGAD_COORDS : (isRaigad ? RAIGAD_COORDS : SHIVNERI_COORDS)));
+
     const [selectedFood, setSelectedFood] = useState(null);
     const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
-    const [mapCenter, setMapCenter] = useState(FORT_COORDS);
+    const [mapCenter, setMapCenter] = useState(CURRENT_COORDS);
 
-    // Scroll to top when this section mounts
     useEffect(() => {
         window.scrollTo(0, 0);
-        
-        // Try getting user location
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setUserLocation([position.coords.latitude, position.coords.longitude]);
@@ -161,9 +390,7 @@ const FlavorsSection = () => {
     const handleFoodSelect = (food) => {
         setSelectedFood(food);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        // Find restaurants serving this food
-        const basePoint = userLocation || FORT_COORDS;
+        const basePoint = userLocation || CURRENT_COORDS;
         const filtered = RESTAURANTS_DATA
             .filter(r => r.serves.includes(food.id))
             .map(r => ({
@@ -186,9 +413,12 @@ const FlavorsSection = () => {
     if (selectedFood) {
         return (
             <section className="modern-flavors-section">
-                <div className="flavors-header-banner">
-                    <h1>{selectedFood.name}</h1>
-                    <p>Authentic Maharashtrian Flavors & Delicacies</p>
+                <div className="flavors-header">
+                    <span className="flavors-eyebrow">CULINARY JOURNEY</span>
+                    <h2 className="flavors-title">Taste {fort?.name || "the Heritage"}</h2>
+                    <p className="flavors-subtitle">
+                        Explore the authentic, local culinary delights that fuel the trekkers and villagers near {fort?.name || "the fort"}.
+                    </p>
                 </div>
                 
                 <div className="detail-view-container">
@@ -197,7 +427,6 @@ const FlavorsSection = () => {
                     </button>
                     
                     <div className="detail-content-split">
-                        {/* Left Side: Large Food Card */}
                         <div className="large-food-card">
                             <img className="large-food-img" src={selectedFood.image} alt={selectedFood.name} />
                             <div className="large-food-info">
@@ -225,7 +454,6 @@ const FlavorsSection = () => {
                             </div>
                         </div>
 
-                        {/* Right Side: Leaflet Map */}
                         <div className="map-side-panel">
                             <div className="map-header">
                                 <h3>Heritage Food Locations</h3>

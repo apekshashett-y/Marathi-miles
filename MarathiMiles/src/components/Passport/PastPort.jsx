@@ -450,9 +450,9 @@ const PastPort = () => {
         >
           ← Back to {selectedFort?.name || "Fort"}
         </button>
-        {activeFacet === 'cuisine' && <FlavorsSection />}
-        {activeFacet === 'bazaar' && <BazaarSection />}
-        {activeFacet === 'culture' && <CultureSection />}
+        {activeFacet === 'cuisine' && <FlavorsSection fort={selectedFort} />}
+        {activeFacet === 'bazaar' && <BazaarSection fort={selectedFort} />}
+        {activeFacet === 'culture' && <CultureSection fort={selectedFort} />}
         {activeFacet === 'itinerary' && <ItineraryPlanner fort={selectedFort} />}
       </div>
     );
