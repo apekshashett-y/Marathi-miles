@@ -320,7 +320,7 @@ const PastPort = () => {
         <section id="fort-selection-section" className="fort-selection-section" style={{ padding: '5rem 2rem' }}>
           <h2 className="fort-selection-heading" style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>Choose Your Fort</h2>
           <div className="fort-selection-grid">
-            {forts.map((fort) => {
+            {forts.filter((f) => f.id !== 6 && f.name !== "Rajgad Fort").map((fort) => {
               const isActive = activeCardId === fort.id;
               return (
               <div

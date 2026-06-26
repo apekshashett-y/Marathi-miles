@@ -6,7 +6,7 @@ import MoodRecommendation from './components/MoodRecommendation/MoodRecommendati
 import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
 import SmartExplorationV2 from './components/Passport/SmartExplorationV2';
-import RaigadSmartExplorationPage from './components/Passport/RaigadSmartExplorationPage';
+import RaigadSmartExplorationV2 from './components/Passport/RaigadSmartExplorationV2';
 import SinhagadSmartExplorationPage from './components/Passport/SinhagadSmartExplorationPage';
 import PratapgadSmartExplorationPage from './components/Passport/PratapgadSmartExplorationPage';
 import LohagadSmartExplorationPage from './components/Passport/LohagadSmartExplorationPage';
@@ -71,7 +71,7 @@ const App = () => {
       <Route path="/pastport/shivneri/smart-exploration-v2" element={<SmartExplorationV2 />} />
 
       {/* Smart Exploration - RAIGAD Route */}
-      <Route path="/pastport/raigad/smart-exploration-page" element={<RaigadSmartExplorationPage />} />
+      <Route path="/pastport/raigad/smart-exploration-page" element={<RaigadSmartExplorationV2 />} />
 
       {/* Smart Exploration - SINHAGAD Route */}
       <Route path="/pastport/sinhagad/smart-exploration-page" element={<SinhagadSmartExplorationPage />} />

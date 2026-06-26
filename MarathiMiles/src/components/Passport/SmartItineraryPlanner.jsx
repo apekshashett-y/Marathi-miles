@@ -33,7 +33,6 @@ const TYPE_ICON = {
 // ── Real base coordinates ─────────────────────────────────────────────────────
 const FORT = { id: "fort", lat: 19.1923, lng: 73.8638 };
 
-// ── Activity pool — sourced from real FlavorsSection & BazaarSection data ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
@@ -172,6 +171,68 @@ const ACTIVITY_POOL = [
         description: "Unobstructed western horizon for golden-hour photography from the ridge west of the fort gate.",
         tags: ["Scenic"],
     },
+
+    // New regional spots near Junnar / Shivneri
+    {
+        id: "ozar_temple",
+        name: "Ozar Vigneshwara Temple",
+        type: "culture", icon: "🛕",
+        lat: 19.1910, lng: 73.9350,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 45,
+        costMin: 0,
+        description: "One of the eight sacred Ashtavinayak temples of Maharashtra. Known for its golden dome and beautiful setting on the Kukadi river.",
+        tags: ["Culture", "Spiritual"],
+    },
+    {
+        id: "manikdoh_dam",
+        name: "Manikdoh Dam & Lake",
+        type: "scenic", icon: "🏞️",
+        lat: 19.2360, lng: 73.8340,
+        durationFast: 20, durationLeisure: 45, durationPhoto: 45,
+        costMin: 0,
+        description: "A massive gravity dam on the Kukadi River offering spectacular views of the Sahyadri mountains and tranquil lakeside walks.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "pimpalgaon_dam",
+        name: "Pimpalgaon Joga Dam",
+        type: "scenic", icon: "🦅",
+        lat: 19.2960, lng: 73.8500,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 0,
+        description: "A gorgeous wetland destination famous for migratory birds, including thousands of flamingos during the winter and post-monsoon season.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "naneghat_pass",
+        name: "Naneghat Ancient Trade Pass",
+        type: "scenic", icon: "🪨",
+        lat: 19.2885, lng: 73.6800,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 0,
+        description: "An ancient mountain pass dating back to the Satavahana dynasty (200 BCE). Famous for rock-cut caves with Brahmi inscriptions and the massive stone toll jar.",
+        tags: ["Relax / Scenic", "Scenic", "Historical"],
+    },
+    {
+        id: "chavand_fort",
+        name: "Chavand Fort (Prasannagad) Trek",
+        type: "scenic", icon: "🧗",
+        lat: 19.2310, lng: 73.7920,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 0,
+        description: "A hill fort featuring steep stone steps, ancient water tanks (Saptarangi Kund), and a Chamunda Devi temple on the summit plateau.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
+    },
+    {
+        id: "tulja_caves",
+        name: "Tulja Buddhist Caves",
+        type: "culture", icon: "🏛️",
+        lat: 19.2010, lng: 73.8300,
+        durationFast: 20, durationLeisure: 45, durationPhoto: 45,
+        costMin: 0,
+        description: "A group of 11 rock-cut Buddhist caves dating to the Satavahana period, including a circular Chaitya hall with 12 pillars.",
+        tags: ["Culture", "Historical"],
+    }
 ];
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
@@ -233,23 +294,32 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     }];
 
     curMin += fortMins;
-    minsLeft -= fortMins;
 
     // Preference → tag map
     const tagMap = { Food: "Food", Shopping: "Shopping", Culture: "Culture", "Relax / Scenic": "Scenic" };
     const wantedTags = preferences.map((p) => tagMap[p] || p);
 
-    // Candidate pool: filter by preference tags
-    let pool = ACTIVITY_POOL.filter(
+    // Combine preferred and other activities (placing preferred first)
+    const preferredPool = ACTIVITY_POOL.filter(
         (a) => a.id !== "fort_entry" && a.tags.some((t) => wantedTags.includes(t))
     );
+    const otherPool = ACTIVITY_POOL.filter(
+        (a) => a.id !== "fort_entry" && !a.tags.some((t) => wantedTags.includes(t))
+    );
+    let pool = [...preferredPool, ...otherPool];
 
     // Greedy nearest-first placement
     while (pool.length > 0 && minsLeft > 15) {
-        // Sort remaining candidates by distance from current position
-        pool.sort((a, b) =>
-            haversineKm(fromLat, fromLng, a.lat, a.lng) - haversineKm(fromLat, fromLng, b.lat, b.lng)
-        );
+        // Sort remaining candidates by virtual distance (taking preferences into account)
+        pool.sort((a, b) => {
+            const distA = haversineKm(fromLat, fromLng, a.lat, a.lng);
+            const distB = haversineKm(fromLat, fromLng, b.lat, b.lng);
+            const isPrefA = a.tags.some((t) => wantedTags.includes(t));
+            const isPrefB = b.tags.some((t) => wantedTags.includes(t));
+            const scoreA = distA - (isPrefA ? 15 : 0); // 15km bonus for preferred category
+            const scoreB = distB - (isPrefB ? 15 : 0);
+            return scoreA - scoreB;
+        });
 
         let placed = false;
         for (const cand of pool) {
@@ -484,17 +554,6 @@ const SmartItineraryPlanner = () => {
                         </div>
                     </div>
 
-                    {/* Budget */}
-                    <div className="itin-card itin-card--full">
-                        <h3 className="itin-card-title">₹ Budget for the Rest of the Day</h3>
-                        <div className="budget-row">
-                            <span>Your Budget:</span>
-                            <span className="budget-val">₹{budget.toLocaleString("en-IN")}</span>
-                        </div>
-                        <input type="range" min={500} max={5000} step={50} value={budget}
-                            onChange={(e) => setBudget(Number(e.target.value))} className="itin-slider" />
-                        <div className="slider-labels"><span>₹500</span><span>₹5,000</span></div>
-                    </div>
 
                     <button
                         className={`itin-generate-btn ${preferences.length === 0 ? "itin-generate-btn--disabled" : ""}`}
@@ -576,25 +635,6 @@ const SmartItineraryPlanner = () => {
                                 </div>
                             </div>
 
-                            {/* Budget breakdown */}
-                            <div className="itin-budget-box">
-                                <h4>💰 Budget Breakdown</h4>
-                                <div className="budget-lines">
-                                    <div className="b-line">
-                                        <span>Fort entry &amp; all stops (min)</span>
-                                        <span>₹{itinerary.totalSpent.toLocaleString("en-IN")}</span>
-                                    </div>
-                                    <div className="b-line b-line--remaining">
-                                        <span>Remaining balance</span>
-                                        <span className="b-val-green">₹{itinerary.remaining.toLocaleString("en-IN")}</span>
-                                    </div>
-                                </div>
-                                <div className="budget-msg">
-                                    You will spend approximately <strong>₹{itinerary.totalSpent.toLocaleString("en-IN")}</strong>.&nbsp;
-                                    You will have <strong>₹{itinerary.remaining.toLocaleString("en-IN")}</strong> remaining
-                                    for chai, tips, or impulse buys!
-                                </div>
-                            </div>
 
                             {/* Smart recommendation */}
                             <div className="itin-rec">

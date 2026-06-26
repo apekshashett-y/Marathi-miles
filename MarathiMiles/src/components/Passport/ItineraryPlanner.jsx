@@ -7,8 +7,8 @@ import PratapgadSmartItineraryPlanner from "./PratapgadSmartItineraryPlanner";
 import LohagadSmartItineraryPlanner from "./LohagadSmartItineraryPlanner";
 import RajgadSmartItineraryPlanner from "./RajgadSmartItineraryPlanner";
 import SmartExplorationV2 from "./SmartExplorationV2";
-import RaigadSmartExplorationV2 from "./RaigadSmartExplorationPage";
-import SinhagadSmartExplorationPage from "./SinhagadSmartExplorationPage";
+import RaigadSmartExplorationV2 from "./RaigadSmartExplorationV2";
+import SinhagadSmartExplorationV2 from "./SinhagadSmartExplorationV2";
 import PratapgadSmartExplorationPage from "./PratapgadSmartExplorationPage";
 import LohagadSmartExplorationPage from "./LohagadSmartExplorationPage";
 import { generateFortPDF } from "../../utils/generateFortPDF";
@@ -50,7 +50,7 @@ const ItineraryPlanner = ({ fort }) => {
                         ✕ Close Section
                     </button>
                 </div>
-                {subView === 'guide' && <MeetTheGuide />}
+                {subView === 'guide' && <MeetTheGuide fort={fort} />}
                 {subView === 'planner' && fort?.id === 2 && <RaigadSmartItineraryPlanner />}
                 {subView === 'planner' && fort?.id === 3 && <SinhagadSmartItineraryPlanner />}
                 {subView === 'planner' && fort?.id === 4 && <PratapgadSmartItineraryPlanner />}
@@ -58,7 +58,7 @@ const ItineraryPlanner = ({ fort }) => {
                 {subView === 'planner' && fort?.id === 6 && <RajgadSmartItineraryPlanner />}
                 {subView === 'planner' && fort?.id !== 2 && fort?.id !== 3 && fort?.id !== 4 && fort?.id !== 5 && fort?.id !== 6 && <SmartItineraryPlanner />}
                 {subView === 'exploration' && fort?.id === 2 && <RaigadSmartExplorationV2 onBack={() => setSubView(null)} />}
-                {subView === 'exploration' && fort?.id === 3 && <SinhagadSmartExplorationPage onBack={() => setSubView(null)} />}
+                {subView === 'exploration' && fort?.id === 3 && <SinhagadSmartExplorationV2 onBack={() => setSubView(null)} />}
                 {subView === 'exploration' && fort?.id === 4 && <PratapgadSmartExplorationPage onBack={() => setSubView(null)} />}
                 {subView === 'exploration' && fort?.id === 5 && <LohagadSmartExplorationPage onBack={() => setSubView(null)} />}
                 {subView === 'exploration' && fort?.id !== 2 && fort?.id !== 3 && fort?.id !== 4 && fort?.id !== 5 && <SmartExplorationV2 onBack={() => setSubView(null)} />}
@@ -84,7 +84,7 @@ const ItineraryPlanner = ({ fort }) => {
                     >
                         <div className="selection-icon">🧔</div>
                         <h3>Meet the Guide</h3>
-                        <p>Connect with local experts and historians for a personalized tour of Shivneri.</p>
+                        <p>Connect with local experts and historians for a personalized tour of {fort?.name || "the fort"}.</p>
                         <button className="selection-cta">{subView === 'guide' ? 'Viewing' : 'Browse Guides →'}</button>
                     </div>
 

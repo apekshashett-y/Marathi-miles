@@ -59,4 +59,41 @@ export const calculateAdaptiveBoosts = (locations) => {
 // Legacy stubs kept for compatibility if needed elsewhere
 export const trackClick = (id) => interactionTracker.recordClick(id);
 export const trackTime = (id, sec) => { }; // handled by timer logic now
-export const getAnalytics = () => interactionTracker.getAllData();
+export const trackTimeSpent = (id, sec) => interactionTracker.recordTimeSpent(id, sec);
+export const trackSkip = (id) => interactionTracker.recordSkip(id);
+
+export const getAnalytics = () => {
+    const rawData = interactionTracker.getAllData();
+    let totalInteractions = 0;
+    const topClicked = [];
+    const mostSkipped = [];
+
+    Object.keys(rawData).forEach(id => {
+        const data = rawData[id];
+        const clicks = data.clicks || 0;
+        const skips = data.skips || 0;
+        const total = clicks + skips;
+        totalInteractions += total;
+
+        topClicked.push({
+            id: id,
+            clickCount: clicks
+        });
+
+        mostSkipped.push({
+            id: id,
+            skipCount: skips,
+            skipRate: total > 0 ? (skips / total) : 0
+        });
+    });
+
+    // Sort descending
+    topClicked.sort((a, b) => b.clickCount - a.clickCount);
+    mostSkipped.sort((a, b) => b.skipCount - a.skipCount);
+
+    return {
+        totalInteractions,
+        topClicked,
+        mostSkipped
+    };
+};
