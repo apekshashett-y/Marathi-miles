@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import MeetTheGuide from "./MeetTheGuide";
 import SmartItineraryPlanner from "./SmartItineraryPlanner";
+import RaigadSmartItineraryPlanner from "./RaigadSmartItineraryPlanner";
+import SinhagadSmartItineraryPlanner from "./SinhagadSmartItineraryPlanner";
+import PratapgadSmartItineraryPlanner from "./PratapgadSmartItineraryPlanner";
+import LohagadSmartItineraryPlanner from "./LohagadSmartItineraryPlanner";
+import RajgadSmartItineraryPlanner from "./RajgadSmartItineraryPlanner";
 import SmartExplorationV2 from "./SmartExplorationV2";
 import RaigadSmartExplorationV2 from "./RaigadSmartExplorationPage";
 import SinhagadSmartExplorationPage from "./SinhagadSmartExplorationPage";
@@ -46,7 +51,12 @@ const ItineraryPlanner = ({ fort }) => {
                     </button>
                 </div>
                 {subView === 'guide' && <MeetTheGuide />}
-                {subView === 'planner' && <SmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id === 2 && <RaigadSmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id === 3 && <SinhagadSmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id === 4 && <PratapgadSmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id === 5 && <LohagadSmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id === 6 && <RajgadSmartItineraryPlanner />}
+                {subView === 'planner' && fort?.id !== 2 && fort?.id !== 3 && fort?.id !== 4 && fort?.id !== 5 && fort?.id !== 6 && <SmartItineraryPlanner />}
                 {subView === 'exploration' && fort?.id === 2 && <RaigadSmartExplorationV2 onBack={() => setSubView(null)} />}
                 {subView === 'exploration' && fort?.id === 3 && <SinhagadSmartExplorationPage onBack={() => setSubView(null)} />}
                 {subView === 'exploration' && fort?.id === 4 && <PratapgadSmartExplorationPage onBack={() => setSubView(null)} />}
@@ -67,7 +77,7 @@ const ItineraryPlanner = ({ fort }) => {
                     </p>
                 </div>
 
-                <div className="itin-selection-grid itin-four-col">
+                <div className="itin-selection-grid itin-three-col">
                     <div 
                         className={`itin-selection-card ${subView === 'guide' ? 'active' : ''}`} 
                         onClick={() => setSubView('guide')}
@@ -98,29 +108,7 @@ const ItineraryPlanner = ({ fort }) => {
                         <button className="selection-cta">{subView === 'exploration' ? 'Viewing' : 'Start Navigation →'}</button>
                     </div>
 
-                    {/* PDF Download Card */}
-                    {fort && (
-                        <div
-                            className="itin-selection-card"
-                            onClick={handlePdfDownload}
-                            style={{ cursor: pdfLoading ? 'wait' : 'pointer', position: 'relative' }}
-                        >
-                            {/* Free Download badge */}
-                            <span className="itin-pdf-badge">Free Download</span>
 
-                            <div className="selection-icon">
-                                {pdfLoading ? '⏳' : '📄'}
-                            </div>
-                            <h3>{pdfLoading ? 'Generating…' : 'Get your PDF'}</h3>
-                            <p>
-                                Download your complete <strong>{fort.name}</strong> journey guide — timings, food, shopping &amp; insider tips.
-                            </p>
-
-                            <button className="selection-cta" disabled={pdfLoading}>
-                                {pdfLoading ? 'Please wait…' : 'Download PDF →'}
-                            </button>
-                        </div>
-                    )}
                 </div>
             </div>
 

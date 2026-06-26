@@ -68,18 +68,21 @@
     margin-top: 50px;
 }
 
-.itin-four-col {
-    grid-template-columns: repeat(4, 1fr);
+.itin-three-col {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 950px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-@media (max-width: 1100px) {
-    .itin-four-col {
+@media (max-width: 950px) {
+    .itin-three-col {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 600px) {
-    .itin-four-col {
+    .itin-three-col {
         grid-template-columns: 1fr;
     }
 }

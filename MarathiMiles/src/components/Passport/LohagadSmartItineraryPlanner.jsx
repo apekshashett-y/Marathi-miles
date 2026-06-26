@@ -31,147 +31,123 @@ const TYPE_ICON = {
 };
 
 // ── Real base coordinates ─────────────────────────────────────────────────────
-const FORT = { id: "fort", lat: 19.1923, lng: 73.8638 };
+const FORT = { id: "lohagad_base", lat: 18.7055, lng: 73.4850 };
 
-// ── Activity pool — sourced from real FlavorsSection & BazaarSection data ─────
+// ── Activity pool — sourced from real Lohagad locations ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
-        id: "fort_bastion",
-        name: "North Bastion & Panoramic Viewpoint",
-        type: "scenic", icon: "🌄",
-        lat: 19.1940, lng: 73.8622,
-        durationFast: 20, durationLeisure: 40, durationPhoto: 60,
+        id: "ganeshDarwaja",
+        name: "Ganesh Darwaja",
+        type: "culture", icon: "⛩️",
+        lat: 18.7085, lng: 73.4845,
+        durationFast: 10, durationLeisure: 20, durationPhoto: 25,
         costMin: 0,
-        description: "270° views of the Kukadi valley and Sahyadri foothills. Perfect for golden-hour shots.",
-        tags: ["Scenic", "Culture"],
+        description: "The first of the four consecutive majestic gates of Lohagad, featuring carved motifs of Lord Ganesha.",
+        tags: ["Culture", "Architecture"],
     },
     {
-        id: "fort_well",
-        name: "Badami Talav & Ganesh Temple",
+        id: "narayanDarwaza",
+        name: "Narayan Darwaza",
         type: "culture", icon: "⛩️",
-        lat: 19.1930, lng: 73.8645,
+        lat: 18.7075, lng: 73.4835,
+        durationFast: 10, durationLeisure: 20, durationPhoto: 25,
+        costMin: 0,
+        description: "The second gate, built by the Peshwas. Known for its robust defensive architecture.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "hanumanDarwaza",
+        name: "Hanuman Darwaza",
+        type: "culture", icon: "🐒",
+        lat: 18.7065, lng: 73.4825,
+        durationFast: 10, durationLeisure: 15, durationPhoto: 20,
+        costMin: 0,
+        description: "The third gate, which is the oldest of the four, dating back to the Bahamani era.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "mahaDarwaza",
+        name: "Maha Darwaza",
+        type: "culture", icon: "🛡️",
+        lat: 18.7055, lng: 73.4815,
         durationFast: 15, durationLeisure: 25, durationPhoto: 35,
         costMin: 0,
-        description: "Ancient rock-cut water cistern and the Ganesh shrine carved directly into the laterite cliff.",
-        tags: ["Culture"],
+        description: "The main, final entrance to the plateau. It features massive bastions and intricate defensive works.",
+        tags: ["Culture", "Architecture"],
     },
     {
-        id: "lenyadri_caves",
-        name: "Lenyadri Buddhist Caves",
-        type: "culture", icon: "🪨",
-        lat: 19.2100, lng: 73.8630,
+        id: "shivMandir",
+        name: "Shiv Mandir",
+        type: "culture", icon: "🛕",
+        lat: 18.7065, lng: 73.4800,
+        durationFast: 15, durationLeisure: 25, durationPhoto: 35,
+        costMin: 0,
+        description: "An ancient Shiva temple situated on the plateau, offering peaceful surroundings.",
+        tags: ["Culture", "Spiritual"],
+    },
+    // Scenic
+    {
+        id: "vinchuKata",
+        name: "Vinchu Kata",
+        type: "scenic", icon: "🦂",
+        lat: 18.7025, lng: 73.4750,
         durationFast: 20, durationLeisure: 40, durationPhoto: 60,
-        costMin: 30,
-        description: "1st-century BCE rock-cut Buddhist caves on the same ridge as Shivneri. Ashtavinayak pilgrimage site.",
-        tags: ["Culture", "Scenic"],
-    },
-
-    // Food (real restaurants from FlavorsSection)
-    {
-        id: "misal_stop",
-        name: "Junnar Misal — Sahyadri Snacks Centre",
-        type: "food", icon: "🍛",
-        lat: 19.1982, lng: 73.8681,
-        durationFast: 25, durationLeisure: 40, durationPhoto: 30,
-        costMin: 100,
-        description: "Fiery black-masala misal pav unique to Junnar. Rated 4.2 ⭐ — open 7 AM–7 PM.",
-        tags: ["Food"],
+        costMin: 0,
+        description: "A long and narrow fortified spur extending from the main plateau, resembling a scorpion's tail.",
+        tags: ["Scenic", "Adventure"],
     },
     {
-        id: "kanda_bhaji",
-        name: "Kanda Bhaji at Fort Base Stalls",
-        type: "food", icon: "🧅",
-        lat: 19.1960, lng: 73.8660,
-        durationFast: 15, durationLeisure: 20, durationPhoto: 20,
-        costMin: 60,
-        description: "Deep-fried onion fritters ('Khekda Bhaji') at the base market stalls — best fresh off the pan.",
-        tags: ["Food"],
+        id: "laxmiKothi",
+        name: "Laxmi Kothi",
+        type: "scenic", icon: "🪙",
+        lat: 18.7045, lng: 73.4790,
+        durationFast: 10, durationLeisure: 20, durationPhoto: 30,
+        costMin: 0,
+        description: "A large rock-cut cave with multiple chambers, historically used as a treasury by the Marathas.",
+        tags: ["Scenic", "Historical"],
     },
     {
-        id: "gavran_thali",
-        name: "Gavran Thali — Hotel Vedant Junnar",
-        type: "food", icon: "🍽️",
-        lat: 19.2051, lng: 73.8718,
-        durationFast: 40, durationLeisure: 60, durationPhoto: 45,
-        costMin: 200,
-        description: "Farm-to-table thali: bhakri, pithla, thecha, gavran chole, solkadhi. Rated 4.4 ⭐ — open till 10 PM.",
-        tags: ["Food"],
+        id: "waterCistern",
+        name: "16-Angled Water Cistern",
+        type: "scenic", icon: "💧",
+        lat: 18.7035, lng: 73.4770,
+        durationFast: 10, durationLeisure: 20, durationPhoto: 30,
+        costMin: 0,
+        description: "A unique hexagonal rock-cut water cistern, showcasing ancient water management techniques.",
+        tags: ["Scenic", "Nature"],
     },
+    // Food / Shopping
     {
-        id: "vada_pav",
-        name: "Vada Pav at Junnar Bus Stand",
-        type: "food", icon: "🌮",
-        lat: 19.2080, lng: 73.8750,
-        durationFast: 10, durationLeisure: 15, durationPhoto: 15,
-        costMin: 30,
-        description: "Iconic Maharashtrian street food in the local Junnar style — extra spicy green chutney.",
-        tags: ["Food"],
-    },
-    {
-        id: "honey_tasting",
-        name: "Wild Honey Tasting — Shivneri Base Market",
-        type: "food", icon: "🍯",
-        lat: 19.2006, lng: 73.8746,
-        durationFast: 15, durationLeisure: 25, durationPhoto: 20,
+        id: "lonavalaChikki",
+        name: "Famous Lonavala Chikki",
+        type: "food", icon: "🥜",
+        lat: 18.7080, lng: 73.4850,
+        durationFast: 15, durationLeisure: 25, durationPhoto: 30,
         costMin: 150,
-        description: "Sample raw rock-bee honey from Sahyadri cliffs. Collected by Mangal Patil's cooperative.",
-        tags: ["Food", "Shopping"],
-    },
-
-    // Shopping (real bazaar data from BazaarSection)
-    {
-        id: "shivneri_market",
-        name: "Shivneri Base Market — Idols & Miniatures",
-        type: "shopping", icon: "🛕",
-        lat: 19.2006, lng: 73.8746,
-        durationFast: 25, durationLeisure: 45, durationPhoto: 35,
-        costMin: 450,
-        description: "Panchdhatu Shivaji idols, fort clay miniatures — directly from Dnyaneshwar Kale's workshop.",
-        tags: ["Shopping", "Culture"],
+        description: "Take home the famous sweet peanut and jaggery chikki from the Lonavala-Lohagad region.",
+        tags: ["Food", "Sweet", "Local"],
     },
     {
-        id: "warli_art",
-        name: "Warli Art — Junnar Main Market Road",
-        type: "shopping", icon: "🎨",
-        lat: 19.2080, lng: 73.8755,
-        durationFast: 20, durationLeisure: 35, durationPhoto: 40,
-        costMin: 80,
-        description: "Hand-painted tribal art from the Women's Co-op. Bookmarks ₹80 → A2 framed paintings ₹1,500.",
-        tags: ["Shopping", "Culture"],
+        id: "pithlaBhakri",
+        name: "Lohagad Base Pithla Bhakri",
+        type: "food", icon: "🥘",
+        lat: 18.7090, lng: 73.4860,
+        durationFast: 25, durationLeisure: 45, durationPhoto: 45,
+        costMin: 100,
+        description: "Authentic Maharashtrian meal served hot at the base village of Lohagad.",
+        tags: ["Food", "Local"],
     },
     {
-        id: "kolhapuri",
-        name: "Kolhapuri Chappals — Junnar Weekly Bazaar",
-        type: "shopping", icon: "👡",
-        lat: 19.2095, lng: 73.8782,
-        durationFast: 20, durationLeisure: 30, durationPhoto: 25,
-        costMin: 600,
-        description: "GI-certified handstitched leather sandals. Junnar bazaar representation every Tuesday.",
-        tags: ["Shopping"],
-    },
-
-    // Scenic / Relax
-    {
-        id: "kukadi_river",
-        name: "Kukadi River Bank Viewpoint",
-        type: "scenic", icon: "🌊",
-        lat: 19.1900, lng: 73.8600,
-        durationFast: 15, durationLeisure: 30, durationPhoto: 45,
-        costMin: 0,
-        description: "The river winds below Shivneri's western face — quiet spot popular with birdwatchers.",
-        tags: ["Scenic", "Relax / Scenic"],
-    },
-    {
-        id: "sunset_point",
-        name: "Shivneri Sunset Viewpoint",
-        type: "scenic", icon: "🌅",
-        lat: 19.1935, lng: 73.8610,
-        durationFast: 20, durationLeisure: 35, durationPhoto: 60,
-        costMin: 0,
-        description: "Unobstructed western horizon for golden-hour photography from the ridge west of the fort gate.",
-        tags: ["Scenic"],
-    },
+        id: "bhajaSnacks",
+        name: "Bhaja Caves Snack Stop",
+        type: "food", icon: "☕",
+        lat: 18.7100, lng: 73.4870,
+        durationFast: 15, durationLeisure: 20, durationPhoto: 20,
+        costMin: 50,
+        description: "A quick stop for hot Vada Pav and Chai before you start the trek.",
+        tags: ["Food", "Snack"],
+    }
 ];
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
@@ -223,11 +199,11 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     // Fort is always stop #1
     const stops = [{
         id: "fort_entry",
-        name: "Shivneri Fort Entry & Maha Darwaja",
+        name: "Lohagad Fort Entry",
         type: "culture", icon: "🏰",
         lat: FORT.lat, lng: FORT.lng,
         duration: fortMins, costMin: FORT_ENTRY,
-        description: "Walk through the 7 legendary gates. Visit Shivaji's birth chamber, bastions, and rock-cut cisterns.",
+        description: "Trek through the four magnificent gates and explore the majestic Vinchu Kata.",
         tags: ["Culture"],
         startMin: curMin, travelFromPrev: 0,
     }];
@@ -285,7 +261,7 @@ function buildMessage(mode, remaining, preferences, stops) {
         : mode.includes("Photo") ? "beautifully paced for photography"
             : "relaxed and unhurried";
     let parts = [];
-    if (hasFoodStop) parts.push("an authentic taste of Junnar's culinary heritage");
+    if (hasFoodStop) parts.push("an authentic taste of Lohagad's local heritage");
     if (hasShop) parts.push("time to bring home real artisan souvenirs");
     if (hasScenic) parts.push("moments to absorb the Sahyadri's timeless beauty");
     const desc = parts.join(", ") || "a rich cultural experience";
@@ -315,7 +291,7 @@ function StepDot({ n, active, done }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // ── Main Component
 // ─────────────────────────────────────────────────────────────────────────────
-const SmartItineraryPlanner = () => {
+const LohagadSmartItineraryPlanner = () => {
     const [step, setStep] = useState(1);
     const [fortTime, setFortTime] = useState("2 Hours");
     const [remaining, setRemaining] = useState("2–3 Hours");
@@ -377,7 +353,7 @@ const SmartItineraryPlanner = () => {
             const element = document.getElementById('pdf-export-content');
             const opt = {
                 margin: [15, 15, 15, 15], // array margin: top, left, bottom, right
-                filename: `Shivneri_Itinerary_${new Date().toISOString().split('T')[0]}.pdf`,
+                filename: `Lohagad_Itinerary_${new Date().toISOString().split('T')[0]}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true, letterRendering: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -403,7 +379,7 @@ const SmartItineraryPlanner = () => {
             {/* Header */}
             <div className="itin-header">
                 <span className="itin-eyebrow">SMART PLANNING</span>
-                <h2 className="itin-title">Plan Your Shivneri Day</h2>
+                <h2 className="itin-title">Plan Your Lohagad Day</h2>
                 <p className="itin-subtitle">
                     Tell us your time, budget &amp; mood — we'll craft a personalised itinerary using real local stops.
                 </p>
@@ -480,7 +456,7 @@ const SmartItineraryPlanner = () => {
                             <h3 className="itin-card-title">🕘 Start Time (Leaving Fort)</h3>
                             <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                                 className="itin-time-input" />
-                            <p className="time-hint">The clock time when you leave Shivneri and begin the rest of your day.</p>
+                            <p className="time-hint">The clock time when you leave Lohagad and begin the rest of your day.</p>
                         </div>
                     </div>
 
@@ -611,7 +587,7 @@ const SmartItineraryPlanner = () => {
                         <div id="pdf-export-content" className="pdf-doc">
                             {/* 1. Cover Section */}
                             <div className="pdf-cover">
-                                <h1 className="pdf-title">Shivneri Smart Itinerary</h1>
+                                <h1 className="pdf-title">Lohagad Smart Itinerary</h1>
                                 <p className="pdf-subtitle">Personalized Day Plan by MarathiMiles</p>
 
                                 <div className="pdf-meta-box">
@@ -677,4 +653,4 @@ const SmartItineraryPlanner = () => {
     );
 };
 
-export default SmartItineraryPlanner;
+export default LohagadSmartItineraryPlanner;
