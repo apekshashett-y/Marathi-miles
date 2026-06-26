@@ -549,17 +549,6 @@ const RaigadSmartItineraryPlanner = () => {
                         </div>
                     </div>
 
-                    {/* Budget */}
-                    <div className="itin-card itin-card--full">
-                        <h3 className="itin-card-title">₹ Budget for the Rest of the Day</h3>
-                        <div className="budget-row">
-                            <span>Your Budget:</span>
-                            <span className="budget-val">₹{budget.toLocaleString("en-IN")}</span>
-                        </div>
-                        <input type="range" min={500} max={5000} step={50} value={budget}
-                            onChange={(e) => setBudget(Number(e.target.value))} className="itin-slider" />
-                        <div className="slider-labels"><span>₹500</span><span>₹5,000</span></div>
-                    </div>
 
                     <button
                         className={`itin-generate-btn ${preferences.length === 0 ? "itin-generate-btn--disabled" : ""}`}
@@ -641,25 +630,6 @@ const RaigadSmartItineraryPlanner = () => {
                                 </div>
                             </div>
 
-                            {/* Budget breakdown */}
-                            <div className="itin-budget-box">
-                                <h4>💰 Budget Breakdown</h4>
-                                <div className="budget-lines">
-                                    <div className="b-line">
-                                        <span>Fort entry &amp; all stops (min)</span>
-                                        <span>₹{itinerary.totalSpent.toLocaleString("en-IN")}</span>
-                                    </div>
-                                    <div className="b-line b-line--remaining">
-                                        <span>Remaining balance</span>
-                                        <span className="b-val-green">₹{itinerary.remaining.toLocaleString("en-IN")}</span>
-                                    </div>
-                                </div>
-                                <div className="budget-msg">
-                                    You will spend approximately <strong>₹{itinerary.totalSpent.toLocaleString("en-IN")}</strong>.&nbsp;
-                                    You will have <strong>₹{itinerary.remaining.toLocaleString("en-IN")}</strong> remaining
-                                    for chai, tips, or impulse buys!
-                                </div>
-                            </div>
 
                             {/* Smart recommendation */}
                             <div className="itin-rec">
