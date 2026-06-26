@@ -102,8 +102,9 @@
 }
 
 .fort-selection-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -119,6 +120,14 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
   padding: 0;
+  flex: 1 1 300px;
+  max-width: 360px;
+}
+
+.fort-card.active-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
 }
 
 .fort-card:hover {

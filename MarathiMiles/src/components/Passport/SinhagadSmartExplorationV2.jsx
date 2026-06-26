@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { raigadFortLocations as staticLocs, raigadGraphEdges as staticEdges, raigadFortMetadata as staticMeta } from '../../data/raigadFortData.js';
+import { sinhagadFortLocations as staticLocs, sinhagadGraphEdges as staticEdges, sinhagadFortMetadata as staticMeta } from '../../data/sinhagadFortData.js';
 import { fetchSmartExplorationGraph } from '../../services/supabaseService.js';
 import {
     optimizeRoute,
@@ -16,10 +16,10 @@ import {
 import { getPredictionConfidence, trainModel } from '../../engines/behaviorPredictionEngine.js';
 import { updateQValue } from '../../engines/reinforcementEngine.js';
 import { interactionTracker } from '../../engines/interactionTracker.js';
-import { RAIGAD_CENTER } from '../../data/raigadLocations.js';
+import { SINHAGAD_CENTER } from '../../data/sinhagadLocations.js';
 
 // Lazy-load Leaflet map to avoid bundle bloat on first render
-const RaigadLeafletMap = lazy(() => import('./RaigadLeafletMap'));
+const SinhagadLeafletMap = lazy(() => import('./SinhagadLeafletMap'));
 
 import './SmartExplorationV2.css';
 
@@ -29,7 +29,7 @@ const STRATEGY_THEMES = {
     min_walking: { color: '#10b981', label: 'Minimum Walk', summary: 'Low Effort Route (Shortest Path Priority)', icon: '🌿' }
 };
 
-const RaigadSmartExplorationV2 = ({ onBack }) => {
+const SinhagadSmartExplorationV2 = ({ onBack }) => {
     const navigate = useNavigate();
 
     // User Inputs
@@ -49,7 +49,7 @@ const RaigadSmartExplorationV2 = ({ onBack }) => {
     const [sessionWeights, setSessionWeights] = useState({ h: 0.4, s: 0.2, a: 0.2, e: 0.2 });
     const [visitedHistory, setVisitedHistory] = useState([]);
     const [timeElapsed, setTimeElapsed] = useState(0);
-    const [lastLocationId, setLastLocationId] = useState('menaDarwaza');
+    const [lastLocationId, setLastLocationId] = useState('puneDarwaza');
     const [predictionConfidence, setPredictionConfidence] = useState(0);
     const [interactionMode, setInteractionMode] = useState('normal'); // 'normal' | 'soft_include' | 'reroute'
 
@@ -64,7 +64,7 @@ const RaigadSmartExplorationV2 = ({ onBack }) => {
     useEffect(() => {
         async function loadGraph() {
             try {
-                const data = await fetchSmartExplorationGraph(2);
+                const data = await fetchSmartExplorationGraph(3);
                 if (data && Object.keys(data.fortLocations).length > 0) {
                     setFortLocations(data.fortLocations);
                     setGraphEdges(data.fortEdges);
@@ -302,6 +302,7 @@ const RaigadSmartExplorationV2 = ({ onBack }) => {
             handleSimulationComplete();
         }
     }, [mapMode]);
+
     return (
         <div className={`smart-exploration-v2 theme-${selectedStrategy}`}>
             <header className="exploration-header">
@@ -408,7 +409,7 @@ const RaigadSmartExplorationV2 = ({ onBack }) => {
                                     <p>Loading GIS Map…</p>
                                 </div>
                             }>
-                                <RaigadLeafletMap
+                                <SinhagadLeafletMap
                                     optimizedPath={currentRoute ? currentRoute.route.map(id => ({ node: { ...fortLocations[id], id } })) : []}
                                     simState={{ isSimulating, simStep, simPhase, simSpeed }}
                                 />
@@ -566,4 +567,4 @@ const LoadingOverlay = () => (<motion.div className="loading-overlay"><div class
 const MetricCircle = ({ value, max, label, color, suffix = '' }) => { const r = 32; const c = 2 * Math.PI * r; const p = Math.min(Math.max(value / (max > 0 ? max : 100), 0), 1); return (<div className="circle-stat"><svg width="80" height="80"><circle className="circle-bg" cx="40" cy="40" r={r} /><motion.circle className="circle-progress" cx="40" cy="40" r={r} stroke={color} style={{ strokeDasharray: c }} animate={{ strokeDashoffset: c - (p * c) }} transition={{ duration: 1 }} /></svg><div className="stat-value">{Math.round(value)}{suffix}</div><div className="stat-label">{label}</div></div>); };
 const WeightBar = ({ label, value, color, max }) => (<div className="weight-row"><div className="weight-label"><span>{label}</span><span>{value}</span></div><div className="w-bar-bg"><div className="w-bar-fill" style={{ width: `${Math.min((value / max) * 100, 100)}%`, background: color }} /></div></div>);
 
-export default RaigadSmartExplorationV2;
+export default SinhagadSmartExplorationV2;

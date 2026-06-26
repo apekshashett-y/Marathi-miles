@@ -467,6 +467,7 @@ const PratapgadSmartExplorationPage = ({ onBack }) => {
                         onAddToRoute={() => handleAddToRoute(selectedLocationId)}
                         onReroute={() => handleRerouteFromLocation(selectedLocationId)}
                         interactionMode={interactionMode}
+                        locations={fortLocations}
                     />
                 )}
             </AnimatePresence>
@@ -541,8 +542,8 @@ const InsightsPanel = ({ isOpen, toggle, route }) => {
         </div></div></div>))}</div>{viewMode === 'technical' && route.rejectedLocations.length > 0 && (<div className="rejection-list"><h4 style={{ fontSize: '11px', color: '#aaa', textTransform: 'uppercase', margin: '10px 0 5px 0' }}>🚫 Processed & Rejected</h4>{route.rejectedLocations.slice(0, 3).map((rej, i) => (<div key={i} className="rejection-item"><span className="rej-name">{rej.name}</span><span className="rej-reason">{rej.reason}</span></div>))}</div>)}<div className="ai-summary"><div className="summary-title">🧠 AI Summary</div><p className="summary-text">{getSummary()}</p></div></motion.div>)}</AnimatePresence></>);
 };
 
-const LocationIntelligencePanel = ({ locationId, route, isForced, weights, onClose, onAddToRoute, onReroute, interactionMode }) => {
-    const loc = fortLocations[locationId];
+const LocationIntelligencePanel = ({ locationId, route, isForced, weights, onClose, onAddToRoute, onReroute, interactionMode, locations }) => {
+    const loc = locations[locationId];
     useEffect(() => {
         interactionTracker.startTimer(locationId);
         return () => interactionTracker.stopTimer(locationId);

@@ -1,14 +1,14 @@
 /**
- * 🌍 PROFESSIONAL GIS MODE — Leaflet Map Component
- * Real-world map rendering of Shivneri Fort using OpenStreetMap tiles.
- * Uses real lat/lng from shivneriLocations.js — no pixel values.
+ * 🌍 PROFESSIONAL GIS MODE — Leaflet Map Component for Sinhagad
+ * Real-world map rendering of Sinhagad Fort using OpenStreetMap tiles.
+ * Uses real lat/lng from sinhagadLocations.js.
  */
 
 import React, { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { raigadLocations, RAIGAD_CENTER } from "../../data/raigadLocations";
+import { sinhagadLocations, SINHAGAD_CENTER } from "../../data/sinhagadLocations";
 
 // Fix Leaflet's default icon broken by bundlers (Vite/Webpack)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -86,7 +86,7 @@ function SimulationMarker({ optimizedPath, simState }) {
             if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
                 pos = [stop.node.lat, stop.node.lng];
             } else if (stop.node && stop.node.id) {
-                const loc = raigadLocations.find(l => l.id === stop.node.id);
+                const loc = sinhagadLocations.find(l => l.id === stop.node.id);
                 if (loc) pos = [loc.lat, loc.lng];
             }
             if (!pos) return;
@@ -128,14 +128,14 @@ function RoutePolyline({ optimizedPath }) {
                 polyRef.current = null;
             }
 
-            // build lat/lngs directly from the route data (routeEngine should supply them)
+            // build lat/lngs directly from the route data
             const latlngs = optimizedPath
                 .map((stop) => {
                     if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
                         return [stop.node.lat, stop.node.lng];
                     }
                     // fallback lookup in case data is missing
-                    const loc = raigadLocations.find((l) => l.id === stop.node?.id);
+                    const loc = sinhagadLocations.find((l) => l.id === stop.node?.id);
                     return loc ? [loc.lat, loc.lng] : null;
                 })
                 .filter(Boolean);
@@ -153,7 +153,7 @@ function RoutePolyline({ optimizedPath }) {
             // single polyline for the entire route
             const polyline = L.polyline(latlngs, {
                 color: "#e08d55",
-                weight: 6, /* slightly thicker for better visibility */
+                weight: 6,
                 opacity: 0.85,
                 dashArray: "10, 8",
                 lineCap: "round",
@@ -173,7 +173,6 @@ function RoutePolyline({ optimizedPath }) {
         };
 
         if (map.whenReady) {
-            // Leaflet guarantees this callback runs after initialization
             map.whenReady(draw);
         } else {
             draw();
@@ -219,7 +218,7 @@ function ProgressPolyline({ optimizedPath, simState }) {
                 if (stop.node && typeof stop.node.lat === 'number' && typeof stop.node.lng === 'number') {
                     return [stop.node.lat, stop.node.lng];
                 }
-                const loc = raigadLocations.find((l) => l.id === stop.node?.id);
+                const loc = sinhagadLocations.find((l) => l.id === stop.node?.id);
                 return loc ? [loc.lat, loc.lng] : null;
             })
             .filter(Boolean);
@@ -257,12 +256,10 @@ function ProgressPolyline({ optimizedPath, simState }) {
     return null;
 }
 
-
-
 /**
- * Main Leaflet Map Component
+ * Main Leaflet Map Component for Sinhagad
  */
-export default function RaigadLeafletMap({ optimizedPath = [], simState = {} }) {
+export default function SinhagadLeafletMap({ optimizedPath = [], simState = {} }) {
     const pathNodeIds = new Set((optimizedPath || []).map((s) => s.node.id));
     const pathIndices = new Map((optimizedPath || []).map((s, i) => [s.node.id, i]));
 
@@ -283,32 +280,32 @@ export default function RaigadLeafletMap({ optimizedPath = [], simState = {} }) 
           margin: 12px 16px;
           min-width: 180px;
         }
-        .raigad-popup-title {
+        .sinhagad-popup-title {
           font-size: 14px;
           font-weight: 700;
           color: #fbbf24;
           margin: 0 0 6px;
           font-family: 'Playfair Display', serif;
         }
-        .raigad-popup-desc {
+        .sinhagad-popup-desc {
           font-size: 12px;
           color: rgba(255,255,255,0.75);
           line-height: 1.4;
           margin: 0 0 8px;
         }
-        .raigad-popup-badges {
+        .sinhagad-popup-badges {
           display: flex;
           gap: 6px;
           flex-wrap: wrap;
         }
-        .raigad-popup-badge {
+        .sinhagad-popup-badge {
           background: rgba(255,255,255,0.1);
           padding: 3px 8px;
           border-radius: 20px;
           font-size: 11px;
           color: rgba(255,255,255,0.85);
         }
-        .raigad-popup-badge.route {
+        .sinhagad-popup-badge.route {
           background: rgba(251,191,36,0.2);
           color: #fbbf24;
           border: 1px solid rgba(251,191,36,0.4);
@@ -327,7 +324,7 @@ export default function RaigadLeafletMap({ optimizedPath = [], simState = {} }) 
       `}</style>
 
             <MapContainer
-                center={[RAIGAD_CENTER.lat, RAIGAD_CENTER.lng]}
+                center={[SINHAGAD_CENTER.lat, SINHAGAD_CENTER.lng]}
                 zoom={16}
                 style={{ height: "100%", width: "100%" }}
                 zoomControl={true}
@@ -346,7 +343,7 @@ export default function RaigadLeafletMap({ optimizedPath = [], simState = {} }) 
                 <SimulationMarker optimizedPath={optimizedPath} simState={simState} />
 
                 {/* Location Markers */}
-                {raigadLocations.map((loc) => {
+                {sinhagadLocations.map((loc) => {
                     const isInPath = pathNodeIds.has(loc.id);
                     const pathIdx = pathIndices.get(loc.id);
 
@@ -358,19 +355,19 @@ export default function RaigadLeafletMap({ optimizedPath = [], simState = {} }) 
                         >
                             <Popup>
                                 <div>
-                                    <p className="raigad-popup-title">
+                                    <p className="sinhagad-popup-title">
                                         {loc.icon} {loc.fullName}
                                     </p>
-                                    <p className="raigad-popup-desc">{loc.description}</p>
-                                    <div className="raigad-popup-badges">
-                                        <span className="raigad-popup-badge">
+                                    <p className="sinhagad-popup-desc">{loc.description}</p>
+                                    <div className="sinhagad-popup-badges">
+                                        <span className="sinhagad-popup-badge">
                                             ⏱ {loc.visitTime} min
                                         </span>
-                                        <span className="raigad-popup-badge">
+                                        <span className="sinhagad-popup-badge">
                                             ★ {loc.importance}/10
                                         </span>
                                         {isInPath && (
-                                            <span className="raigad-popup-badge route">
+                                            <span className="sinhagad-popup-badge route">
                                                 #{pathIdx + 1} on route
                                             </span>
                                         )}
