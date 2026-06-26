@@ -33,7 +33,6 @@ const TYPE_ICON = {
 // ── Real base coordinates ─────────────────────────────────────────────────────
 const FORT = { id: "sinhagad_base", lat: 18.3675, lng: 73.7545 };
 
-// ── Activity pool — sourced from real Sinhagad locations ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
@@ -147,6 +146,67 @@ const ACTIVITY_POOL = [
         costMin: 40,
         description: "Thick, fresh curd set in earthen pots, famous among regular trekkers.",
         tags: ["Food", "Local"],
+    },
+    // New regional spots near Sinhagad / Pune
+    {
+        id: "khadakwasla_dam",
+        name: "Khadakwasla Dam Chowpatty",
+        type: "scenic", icon: "🌊",
+        lat: 18.4348, lng: 73.7635,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 50,
+        description: "The iconic dam and lakeside chowpatty offering sweet corn, bhaji, and beautiful sunset views over the reservoir.",
+        tags: ["Relax / Scenic", "Scenic", "Food"],
+    },
+    {
+        id: "panshet_dam",
+        name: "Panshet Dam Water Sports",
+        type: "scenic", icon: "⛵",
+        lat: 18.3970, lng: 73.6180,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 200,
+        description: "A major scenic reservoir offering speed boating, banana rides, kayaking, and stunning green hills.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
+    },
+    {
+        id: "varasgaon_dam",
+        name: "Varasgaon Dam & Waterfall Stop",
+        type: "scenic", icon: "🏞️",
+        lat: 18.3950, lng: 73.6010,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 0,
+        description: "Also known as Veer Baji Pasalkar Dam, featuring a cascading waterfall during monsoons and quiet viewpoints.",
+        tags: ["Relax / Scenic", "Scenic"],
+    },
+    {
+        id: "krushnai_waterpark",
+        name: "Krushnai Water Park",
+        type: "scenic", icon: "🏊",
+        lat: 18.3960, lng: 73.7570,
+        durationFast: 120, durationLeisure: 240, durationPhoto: 120,
+        costMin: 700,
+        description: "A massive family water park at the base of Sinhagad hills with wave pools, slides, and lush green gardens.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
+    },
+    {
+        id: "donje_valley",
+        name: "Sinhagad Valley Trek & Nature Trail",
+        type: "scenic", icon: "🥾",
+        lat: 18.3810, lng: 73.7650,
+        durationFast: 45, durationLeisure: 90, durationPhoto: 90,
+        costMin: 20,
+        description: "A quiet trekking pathway from the base village through forested trails, offering bird watching and raw mountain nature.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "katraj_zoo",
+        name: "Katraj Rajiv Gandhi Zoo",
+        type: "scenic", icon: "🦁",
+        lat: 18.4525, lng: 73.8590,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 40,
+        description: "A beautiful 130-acre zoo featuring an animal rescue centre, a snake park, and a large lake popular for walks.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
     }
 ];
 
@@ -209,23 +269,32 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     }];
 
     curMin += fortMins;
-    minsLeft -= fortMins;
 
     // Preference → tag map
     const tagMap = { Food: "Food", Shopping: "Shopping", Culture: "Culture", "Relax / Scenic": "Scenic" };
     const wantedTags = preferences.map((p) => tagMap[p] || p);
 
-    // Candidate pool: filter by preference tags
-    let pool = ACTIVITY_POOL.filter(
+    // Combine preferred and other activities (placing preferred first)
+    const preferredPool = ACTIVITY_POOL.filter(
         (a) => a.id !== "fort_entry" && a.tags.some((t) => wantedTags.includes(t))
     );
+    const otherPool = ACTIVITY_POOL.filter(
+        (a) => a.id !== "fort_entry" && !a.tags.some((t) => wantedTags.includes(t))
+    );
+    let pool = [...preferredPool, ...otherPool];
 
     // Greedy nearest-first placement
     while (pool.length > 0 && minsLeft > 15) {
-        // Sort remaining candidates by distance from current position
-        pool.sort((a, b) =>
-            haversineKm(fromLat, fromLng, a.lat, a.lng) - haversineKm(fromLat, fromLng, b.lat, b.lng)
-        );
+        // Sort remaining candidates by virtual distance (taking preferences into account)
+        pool.sort((a, b) => {
+            const distA = haversineKm(fromLat, fromLng, a.lat, a.lng);
+            const distB = haversineKm(fromLat, fromLng, b.lat, b.lng);
+            const isPrefA = a.tags.some((t) => wantedTags.includes(t));
+            const isPrefB = b.tags.some((t) => wantedTags.includes(t));
+            const scoreA = distA - (isPrefA ? 15 : 0); // 15km bonus for preferred category
+            const scoreB = distB - (isPrefB ? 15 : 0);
+            return scoreA - scoreB;
+        });
 
         let placed = false;
         for (const cand of pool) {

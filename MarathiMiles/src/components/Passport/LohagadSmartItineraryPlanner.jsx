@@ -33,7 +33,6 @@ const TYPE_ICON = {
 // ── Real base coordinates ─────────────────────────────────────────────────────
 const FORT = { id: "lohagad_base", lat: 18.7055, lng: 73.4850 };
 
-// ── Activity pool — sourced from real Lohagad locations ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
@@ -147,6 +146,77 @@ const ACTIVITY_POOL = [
         costMin: 50,
         description: "A quick stop for hot Vada Pav and Chai before you start the trek.",
         tags: ["Food", "Snack"],
+    },
+    // New regional spots near Lohagad / Lonavala
+    {
+        id: "bhaja_caves",
+        name: "Bhaja Caves (Buddhist Rock-Cut)",
+        type: "culture", icon: "🏛️",
+        lat: 18.7210, lng: 73.4870,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 25,
+        description: "22 ancient Buddhist rock-cut caves from the 2nd century BCE, featuring magnificent Chaitya halls and carved reliefs of Surya and Indra.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "karla_caves",
+        name: "Karla Caves & Ekvira Devi Temple",
+        type: "culture", icon: "🛕",
+        lat: 18.7630, lng: 73.4670,
+        durationFast: 45, durationLeisure: 90, durationPhoto: 90,
+        costMin: 25,
+        description: "One of India's largest and finest rock-cut Chaitya halls (1st century BCE), crowned by the vibrant Ekvira Aai Temple at the summit.",
+        tags: ["Culture", "Historical", "Spiritual"],
+    },
+    {
+        id: "pawna_lake",
+        name: "Pawna Lake Camping & Viewpoint",
+        type: "scenic", icon: "🏕️",
+        lat: 18.6630, lng: 73.4840,
+        durationFast: 45, durationLeisure: 90, durationPhoto: 90,
+        costMin: 200,
+        description: "A stunning backwater lake surrounded by forts. Popular for lakeside camping, bonfires, and sunrise views of Tung and Tikona forts.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
+    },
+    {
+        id: "lonavala_market",
+        name: "Lonavala Main Market & Chikki Shops",
+        type: "shopping", icon: "🏪",
+        lat: 18.7500, lng: 73.4050,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 45,
+        costMin: 200,
+        description: "The bustling hill-station market famous for chikki, fudge, wax candles, and handmade chocolates. Don't miss Maganlal and Cooper's!",
+        tags: ["Shopping", "Food"],
+    },
+    {
+        id: "bushy_dam",
+        name: "Bushy Dam (Lonavala)",
+        type: "scenic", icon: "🌊",
+        lat: 18.7350, lng: 73.3980,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 0,
+        description: "A scenic stepped dam that transforms into a cascading waterfall during the monsoon, creating a natural water park.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "tigers_leap",
+        name: "Tiger's Leap (Tiger Point)",
+        type: "scenic", icon: "🐯",
+        lat: 18.7370, lng: 73.3850,
+        durationFast: 20, durationLeisure: 45, durationPhoto: 45,
+        costMin: 20,
+        description: "A cliff-edge viewpoint 650m above sea level offering dramatic views of the valley. A rock formation here resembles a leaping tiger.",
+        tags: ["Relax / Scenic", "Scenic", "Viewpoint"],
+    },
+    {
+        id: "visapur_fort",
+        name: "Visapur Fort Trek",
+        type: "scenic", icon: "🧗",
+        lat: 18.7160, lng: 73.4660,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 0,
+        description: "Lohagad's twin fort, slightly higher and more rugged. Features multiple waterfalls during monsoon, ancient cisterns, and panoramic plateau views.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
     }
 ];
 
@@ -209,23 +279,32 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     }];
 
     curMin += fortMins;
-    minsLeft -= fortMins;
 
     // Preference → tag map
     const tagMap = { Food: "Food", Shopping: "Shopping", Culture: "Culture", "Relax / Scenic": "Scenic" };
     const wantedTags = preferences.map((p) => tagMap[p] || p);
 
-    // Candidate pool: filter by preference tags
-    let pool = ACTIVITY_POOL.filter(
+    // Combine preferred and other activities (placing preferred first)
+    const preferredPool = ACTIVITY_POOL.filter(
         (a) => a.id !== "fort_entry" && a.tags.some((t) => wantedTags.includes(t))
     );
+    const otherPool = ACTIVITY_POOL.filter(
+        (a) => a.id !== "fort_entry" && !a.tags.some((t) => wantedTags.includes(t))
+    );
+    let pool = [...preferredPool, ...otherPool];
 
     // Greedy nearest-first placement
     while (pool.length > 0 && minsLeft > 15) {
-        // Sort remaining candidates by distance from current position
-        pool.sort((a, b) =>
-            haversineKm(fromLat, fromLng, a.lat, a.lng) - haversineKm(fromLat, fromLng, b.lat, b.lng)
-        );
+        // Sort remaining candidates by virtual distance (taking preferences into account)
+        pool.sort((a, b) => {
+            const distA = haversineKm(fromLat, fromLng, a.lat, a.lng);
+            const distB = haversineKm(fromLat, fromLng, b.lat, b.lng);
+            const isPrefA = a.tags.some((t) => wantedTags.includes(t));
+            const isPrefB = b.tags.some((t) => wantedTags.includes(t));
+            const scoreA = distA - (isPrefA ? 15 : 0); // 15km bonus for preferred category
+            const scoreB = distB - (isPrefB ? 15 : 0);
+            return scoreA - scoreB;
+        });
 
         let placed = false;
         for (const cand of pool) {

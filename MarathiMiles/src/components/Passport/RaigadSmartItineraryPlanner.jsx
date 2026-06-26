@@ -33,7 +33,6 @@ const TYPE_ICON = {
 // ── Real base coordinates ─────────────────────────────────────────────────────
 const FORT = { id: "raigad_base", lat: 18.2355, lng: 73.4490 };
 
-// ── Activity pool — sourced from real Raigad locations ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
@@ -147,6 +146,87 @@ const ACTIVITY_POOL = [
         costMin: 30,
         description: "Cool down with freshly squeezed lemon juice (Limbu Sarbat) after a long walk.",
         tags: ["Food", "Refreshment"],
+    },
+    // New regional spots near Raigad / Mahad
+    {
+        id: "ropewayMuseum",
+        name: "Raigad Ropeway & Museum",
+        type: "culture", icon: "🚠",
+        lat: 18.2320, lng: 73.4390,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 350,
+        description: "Experience the scenic ropeway ride and visit the museum at the base showcasing historic arms and artifacts.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "pachadPalace",
+        name: "Jijamata Palace & Samadhi (Pachad)",
+        type: "culture", icon: "🏛️",
+        lat: 18.2300, lng: 73.4300,
+        durationFast: 20, durationLeisure: 45, durationPhoto: 45,
+        costMin: 0,
+        description: "The historic monument where Rajmata Jijabai spent her last days, featuring her Samadhi and palace ruins.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "gandharpaleCaves",
+        name: "Gandharpale Buddhist Caves",
+        type: "scenic", icon: "🧗",
+        lat: 18.0935, lng: 73.4300,
+        durationFast: 45, durationLeisure: 90, durationPhoto: 90,
+        costMin: 20,
+        description: "Ancient 3rd-century Buddhist rock-cut caves near Mahad, offering rich history and panoramic views of the Gandhari river.",
+        tags: ["Relax / Scenic", "Scenic", "Historical"],
+    },
+    {
+        id: "chavdarTale",
+        name: "Historic Chavdar Tale (Mahad)",
+        type: "culture", icon: "⛲",
+        lat: 18.0820, lng: 73.4200,
+        durationFast: 25, durationLeisure: 45, durationPhoto: 45,
+        costMin: 0,
+        description: "The sacred lake famous for the Satyagraha led by Dr. Babasaheb Ambedkar in 1927 for social equality.",
+        tags: ["Culture", "Historical"],
+    },
+    {
+        id: "shivtharGhal",
+        name: "Shivthar Ghal (Waterfall & Cave)",
+        type: "scenic", icon: "🌊",
+        lat: 18.1500, lng: 73.5500,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 0,
+        description: "The scenic cave behind a roaring waterfall where Samarth Ramdas penned the Dasbodh, set in a lush green valley.",
+        tags: ["Relax / Scenic", "Scenic", "Spiritual"],
+    },
+    {
+        id: "varadvinayakTemple",
+        name: "Varadvinayak Ashtavinayak Temple",
+        type: "culture", icon: "🛕",
+        lat: 18.0850, lng: 73.4220,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 45,
+        costMin: 0,
+        description: "A peaceful and historic temple dedicated to Lord Ganesha, part of the revered Ashtavinayak pilgrimage sites.",
+        tags: ["Culture", "Spiritual"],
+    },
+    {
+        id: "walanKund",
+        name: "Walan Kund Fish Pond",
+        type: "scenic", icon: "🐟",
+        lat: 18.0500, lng: 73.4800,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 0,
+        description: "A natural pool in the river containing massive sacred Mahseer fish, protected by local conservation traditions.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "kemburliWaterfall",
+        name: "Kemburli Waterfall Stop",
+        type: "scenic", icon: "🏞️",
+        lat: 18.0400, lng: 73.3900,
+        durationFast: 20, durationLeisure: 40, durationPhoto: 40,
+        costMin: 0,
+        description: "A gorgeous roadside waterfall site ideal for photography and soaking in the natural mountain streams.",
+        tags: ["Relax / Scenic", "Scenic"],
     }
 ];
 
@@ -209,23 +289,32 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     }];
 
     curMin += fortMins;
-    minsLeft -= fortMins;
 
     // Preference → tag map
     const tagMap = { Food: "Food", Shopping: "Shopping", Culture: "Culture", "Relax / Scenic": "Scenic" };
     const wantedTags = preferences.map((p) => tagMap[p] || p);
 
-    // Candidate pool: filter by preference tags
-    let pool = ACTIVITY_POOL.filter(
+    // Combine preferred and other activities (placing preferred first)
+    const preferredPool = ACTIVITY_POOL.filter(
         (a) => a.id !== "fort_entry" && a.tags.some((t) => wantedTags.includes(t))
     );
+    const otherPool = ACTIVITY_POOL.filter(
+        (a) => a.id !== "fort_entry" && !a.tags.some((t) => wantedTags.includes(t))
+    );
+    let pool = [...preferredPool, ...otherPool];
 
     // Greedy nearest-first placement
     while (pool.length > 0 && minsLeft > 15) {
-        // Sort remaining candidates by distance from current position
-        pool.sort((a, b) =>
-            haversineKm(fromLat, fromLng, a.lat, a.lng) - haversineKm(fromLat, fromLng, b.lat, b.lng)
-        );
+        // Sort remaining candidates by virtual distance (taking preferences into account)
+        pool.sort((a, b) => {
+            const distA = haversineKm(fromLat, fromLng, a.lat, a.lng);
+            const distB = haversineKm(fromLat, fromLng, b.lat, b.lng);
+            const isPrefA = a.tags.some((t) => wantedTags.includes(t));
+            const isPrefB = b.tags.some((t) => wantedTags.includes(t));
+            const scoreA = distA - (isPrefA ? 15 : 0); // 15km bonus for preferred category
+            const scoreB = distB - (isPrefB ? 15 : 0);
+            return scoreA - scoreB;
+        });
 
         let placed = false;
         for (const cand of pool) {

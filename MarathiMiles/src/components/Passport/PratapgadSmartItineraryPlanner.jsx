@@ -33,7 +33,6 @@ const TYPE_ICON = {
 // ── Real base coordinates ─────────────────────────────────────────────────────
 const FORT = { id: "pratapgad_base", lat: 17.9245, lng: 73.5695 };
 
-// ── Activity pool — sourced from real Pratapgad locations ─────
 const ACTIVITY_POOL = [
     // Culture / Fort
     {
@@ -137,6 +136,87 @@ const ACTIVITY_POOL = [
         costMin: 100,
         description: "Local stalls selling wooden handicrafts, walking sticks, and medicinal herbs from the Sahyadri forests.",
         tags: ["Shopping", "Souvenirs"],
+    },
+    // New regional spots near Pratapgad / Mahabaleshwar
+    {
+        id: "mahabaleshwar_market",
+        name: "Mahabaleshwar Main Market",
+        type: "shopping", icon: "🏪",
+        lat: 17.9240, lng: 73.6580,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 200,
+        description: "The bustling hill-station bazaar famous for chikki, honey, jams, leather goods, and fresh local produce.",
+        tags: ["Shopping", "Food"],
+    },
+    {
+        id: "venna_lake",
+        name: "Venna Lake Boating",
+        type: "scenic", icon: "🚣",
+        lat: 17.9220, lng: 73.6550,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 100,
+        description: "A serene man-made lake offering paddle boating, horse riding, and scenic garden walks amidst towering trees.",
+        tags: ["Relax / Scenic", "Scenic", "Adventure"],
+    },
+    {
+        id: "wilson_point",
+        name: "Wilson Point (Sunrise Point)",
+        type: "scenic", icon: "🌅",
+        lat: 17.9310, lng: 73.6620,
+        durationFast: 20, durationLeisure: 40, durationPhoto: 60,
+        costMin: 0,
+        description: "The highest point in Mahabaleshwar (1439m) offering the most spectacular sunrise views over the Sahyadri valleys.",
+        tags: ["Relax / Scenic", "Scenic", "Viewpoint"],
+    },
+    {
+        id: "arthurs_seat",
+        name: "Arthur's Seat Viewpoint",
+        type: "scenic", icon: "🪨",
+        lat: 17.9440, lng: 73.6340,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 0,
+        description: "Known as the 'Queen of All Points', offering a breathtaking 360° view of the Savitri river gorge and the Konkan plains.",
+        tags: ["Relax / Scenic", "Scenic", "Viewpoint"],
+    },
+    {
+        id: "mapro_garden",
+        name: "Mapro Garden (Panchgani)",
+        type: "food", icon: "🍫",
+        lat: 17.9250, lng: 73.7900,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 45,
+        costMin: 150,
+        description: "A family-friendly fruit and chocolate garden offering free tastings, pizza, waffles, and the iconic Mapro strawberry crush.",
+        tags: ["Food", "Shopping"],
+    },
+    {
+        id: "table_land",
+        name: "Table Land (Panchgani)",
+        type: "scenic", icon: "🏔️",
+        lat: 17.9210, lng: 73.7870,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 20,
+        description: "Asia's second-longest mountain plateau at 4500 ft. Volcanic laterite flat-top with horse riding and panoramic valley views.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "lingmala_waterfall",
+        name: "Lingmala Waterfall",
+        type: "scenic", icon: "🌊",
+        lat: 17.9120, lng: 73.6410,
+        durationFast: 30, durationLeisure: 60, durationPhoto: 60,
+        costMin: 30,
+        description: "A two-tiered waterfall plunging 600 feet through dense forest. Best visited during and after the monsoon season.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
+    },
+    {
+        id: "kaas_plateau",
+        name: "Kaas Plateau (Valley of Flowers)",
+        type: "scenic", icon: "🌸",
+        lat: 17.7220, lng: 73.8150,
+        durationFast: 60, durationLeisure: 120, durationPhoto: 120,
+        costMin: 100,
+        description: "A UNESCO World Heritage Site famous for thousands of endemic wildflowers blooming in August-September across the volcanic plateau.",
+        tags: ["Relax / Scenic", "Scenic", "Nature"],
     }
 ];
 
@@ -199,23 +279,32 @@ function generateItinerary({ fortTime, remaining, preferences, budget, mode, sta
     }];
 
     curMin += fortMins;
-    minsLeft -= fortMins;
 
     // Preference → tag map
     const tagMap = { Food: "Food", Shopping: "Shopping", Culture: "Culture", "Relax / Scenic": "Scenic" };
     const wantedTags = preferences.map((p) => tagMap[p] || p);
 
-    // Candidate pool: filter by preference tags
-    let pool = ACTIVITY_POOL.filter(
+    // Combine preferred and other activities (placing preferred first)
+    const preferredPool = ACTIVITY_POOL.filter(
         (a) => a.id !== "fort_entry" && a.tags.some((t) => wantedTags.includes(t))
     );
+    const otherPool = ACTIVITY_POOL.filter(
+        (a) => a.id !== "fort_entry" && !a.tags.some((t) => wantedTags.includes(t))
+    );
+    let pool = [...preferredPool, ...otherPool];
 
     // Greedy nearest-first placement
     while (pool.length > 0 && minsLeft > 15) {
-        // Sort remaining candidates by distance from current position
-        pool.sort((a, b) =>
-            haversineKm(fromLat, fromLng, a.lat, a.lng) - haversineKm(fromLat, fromLng, b.lat, b.lng)
-        );
+        // Sort remaining candidates by virtual distance (taking preferences into account)
+        pool.sort((a, b) => {
+            const distA = haversineKm(fromLat, fromLng, a.lat, a.lng);
+            const distB = haversineKm(fromLat, fromLng, b.lat, b.lng);
+            const isPrefA = a.tags.some((t) => wantedTags.includes(t));
+            const isPrefB = b.tags.some((t) => wantedTags.includes(t));
+            const scoreA = distA - (isPrefA ? 15 : 0); // 15km bonus for preferred category
+            const scoreB = distB - (isPrefB ? 15 : 0);
+            return scoreA - scoreB;
+        });
 
         let placed = false;
         for (const cand of pool) {

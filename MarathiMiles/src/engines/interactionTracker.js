@@ -81,6 +81,14 @@ export const interactionTracker = {
         saveStore(data);
     },
 
+    recordTimeSpent: (id, durationSec) => {
+        const data = getStore();
+        initLocation(data, id);
+        data[id].totalTimeSpent += durationSec;
+        saveStore(data);
+        console.log(`[TRACKER] Recorded manual time spent for ${id} (+${durationSec.toFixed(1)}s)`);
+    },
+
     getData: (id) => {
         const data = getStore();
         // Safe return
