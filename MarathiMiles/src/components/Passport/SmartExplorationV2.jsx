@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { shivneriFortLocations, shivneriGraphEdges, shivneriFortMetadata } from '../../data/shivneriFortData.js';
+import { shivneriFortLocations as staticLocs, shivneriGraphEdges as staticEdges, shivneriFortMetadata as staticMeta } from '../../data/shivneriFortData.js';
+import { fetchSmartExplorationGraph } from '../../services/supabaseService.js';
 import {
     optimizeRoute,
     generateAlternativeRoutes,
@@ -56,6 +57,26 @@ const SmartExplorationV2 = ({ onBack }) => {
     const [optimizationResult, setOptimizationResult] = useState(null);
     const [alternatives, setAlternatives] = useState(null);
 
+    const [fortLocations, setFortLocations] = useState(staticLocs);
+    const [graphEdges, setGraphEdges] = useState(staticEdges);
+    const [fortMetadata, setFortMetadata] = useState(staticMeta);
+
+    useEffect(() => {
+        async function loadGraph() {
+            try {
+                const data = await fetchSmartExplorationGraph(1);
+                if (data && Object.keys(data.fortLocations).length > 0) {
+                    setFortLocations(data.fortLocations);
+                    setGraphEdges(data.fortEdges);
+                    setFortMetadata(data.fortMetadata);
+                }
+            } catch (err) {
+                console.warn("Failed to load graph from Supabase, using static data:", err);
+            }
+        }
+        loadGraph();
+    }, []);
+
     // Hide Navbar/Footer when active using a robust body class
     useEffect(() => {
         document.body.classList.add('hide-site-nav');
@@ -88,7 +109,7 @@ const SmartExplorationV2 = ({ onBack }) => {
 
     const estimateTravelTime = (fromId, toId) => {
         if (fromId === toId) return 0;
-        const edge = shivneriGraphEdges.find(e =>
+        const edge = graphEdges.find(e =>
             (e.from === fromId && e.to === toId) || (e.to === fromId && e.from === toId)
         );
         return edge ? edge.walkingTime : 10;
@@ -111,8 +132,8 @@ const SmartExplorationV2 = ({ onBack }) => {
                 energyLevel,
                 entryPoint: deviationStart || lastLocationId,
                 previousVisited: isReroute ? [] : [...visitedHistory],
-                locations: shivneriFortLocations,
-                edges: shivneriGraphEdges,
+                locations: fortLocations,
+                edges: graphEdges,
                 strategy: activeStrategy
             };
 
@@ -124,7 +145,7 @@ const SmartExplorationV2 = ({ onBack }) => {
                 result = addStopToRoute(forceId, context);
                 setInteractionMode('soft_include');
             } else {
-                result = optimizeRoute(shivneriFortLocations, shivneriGraphEdges, context);
+                result = optimizeRoute(fortLocations, graphEdges, context);
                 setInteractionMode('normal');
             }
 
@@ -158,7 +179,7 @@ const SmartExplorationV2 = ({ onBack }) => {
             return;
         }
         setForcedLocationId(id);
-        trainModel(shivneriFortLocations[id], 'positive');
+        trainModel(fortLocations[id], 'positive');
 
         handleComputeRoute(id, null, false, (result) => {
             console.log("Optimization finished. New Route:", result.route);
@@ -167,7 +188,7 @@ const SmartExplorationV2 = ({ onBack }) => {
                 setExtensionModal({ open: true, locationId: id });
             } else {
                 setRerouteBanner({
-                    message: `✔ Included ${shivneriFortLocations[id].name} (Soft Inclusion)`,
+                    message: `✔ Included ${fortLocations[id].name} (Soft Inclusion)`,
                     delta: { oldScore: 0, type: 'i' }
                 });
                 setTimeout(() => setRerouteBanner(null), 4000);
@@ -192,7 +213,7 @@ const SmartExplorationV2 = ({ onBack }) => {
         handleComputeRoute(null, targetId, true);
         setSelectedLocationId(null);
         setRerouteBanner({
-            message: `🔄 Route restarted from ${shivneriFortLocations[targetId].name}`,
+            message: `🔄 Route restarted from ${fortLocations[targetId].name}`,
             delta: { oldScore: 0, type: 'r' }
         });
         setTimeout(() => setRerouteBanner(null), 4000);
@@ -221,7 +242,7 @@ const SmartExplorationV2 = ({ onBack }) => {
 
         const currentLocationId = routeIds[simStep];
         const nextLocationId = routeIds[simStep + 1];
-        const location = shivneriFortLocations[currentLocationId];
+        const location = fortLocations[currentLocationId];
         if (!location) {
             handleSimulationComplete();
             return;
@@ -270,7 +291,7 @@ const SmartExplorationV2 = ({ onBack }) => {
     };
 
     const handleLocationClick = (id) => {
-        if (!shivneriFortLocations[id]) return;
+        if (!fortLocations[id]) return;
         interactionTracker.recordClick(id);
         setSelectedLocationId(id);
     };
@@ -286,7 +307,7 @@ const SmartExplorationV2 = ({ onBack }) => {
             <header className="exploration-header">
                 <div className="header-left">
                     <span className="brand">⚔️ PastPort</span>
-                    <h1>{shivneriFortMetadata.fortName} Smart Map</h1>
+                    <h1>{fortMetadata.fortName} Smart Map</h1>
                     <span style={{ fontSize: '10px', color: '#10b981', marginLeft: '10px', background: 'rgba(16,185,129,0.1)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(16,185,129,0.2)' }}>
                         AI Confidence: {predictionConfidence}%
                     </span>
@@ -318,7 +339,7 @@ const SmartExplorationV2 = ({ onBack }) => {
                     <div className="modal-backdrop">
                         <motion.div className="modal-content" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                             <h3>Time Limit Exceeded</h3>
-                            <p>Adding <strong>{shivneriFortLocations[extensionModal.locationId]?.name}</strong> exceeds your remaining time budget.</p>
+                            <p>Adding <strong>{fortLocations[extensionModal.locationId]?.name}</strong> exceeds your remaining time budget.</p>
                             <div className="modal-actions">
                                 <button className="btn-primary" onClick={handleConfirmExtension}>Extend (+30m) & Add</button>
                                 <button className="btn-secondary" onClick={() => { setExtensionModal(null); setForcedLocationId(null); }}>Cancel</button>
@@ -369,7 +390,7 @@ const SmartExplorationV2 = ({ onBack }) => {
                 <section className="center-panel">
                     {mapMode === 'illustrated' ? (
                         <RouteVisualization
-                            locations={shivneriFortLocations}
+                            locations={fortLocations}
                             route={currentRoute}
                             isComputing={isComputing}
                             theme={theme}
@@ -388,13 +409,13 @@ const SmartExplorationV2 = ({ onBack }) => {
                                 </div>
                             }>
                                 <ShivneriLeafletMap
-                                    optimizedPath={currentRoute ? currentRoute.route.map(id => ({ node: { ...shivneriFortLocations[id], id } })) : []}
+                                    optimizedPath={currentRoute ? currentRoute.route.map(id => ({ node: { ...fortLocations[id], id } })) : []}
                                     simState={{ isSimulating, simStep, simPhase, simSpeed }}
                                 />
                             </Suspense>
                         </div>
                     )}
-                    <AnimatePresence>{isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={shivneriFortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={handleSimulationComplete} />)}</AnimatePresence>
+                    <AnimatePresence>{isSimulating && currentRoute && (<SimulationOverlay phase={simPhase} step={simStep} route={currentRoute} locations={fortLocations} speed={simSpeed} setSpeed={setSimSpeed} setStep={setSimStep} stop={handleSimulationComplete} />)}</AnimatePresence>
                     <AnimatePresence>{isComputing && <LoadingOverlay />}</AnimatePresence>
                 </section>
 
@@ -417,7 +438,7 @@ const SmartExplorationV2 = ({ onBack }) => {
                             )}
                             <div className="glass-panel timeline">
                                 {currentRoute.route.map((id, idx) => {
-                                    const loc = shivneriFortLocations[id];
+                                    const loc = fortLocations[id];
                                     const isCurrent = isSimulating && simStep === idx;
                                     const isPast = (isSimulating && simStep > idx) || (visitedHistory.includes(id) && !isSimulating);
                                     return (
@@ -521,7 +542,7 @@ const InsightsPanel = ({ isOpen, toggle, route }) => {
 };
 
 const LocationIntelligencePanel = ({ locationId, route, isForced, weights, onClose, onAddToRoute, onReroute, interactionMode }) => {
-    const loc = shivneriFortLocations[locationId];
+    const loc = fortLocations[locationId];
     useEffect(() => {
         interactionTracker.startTimer(locationId);
         return () => interactionTracker.stopTimer(locationId);

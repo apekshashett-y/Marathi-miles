@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { maharashtraForts } from "../../services/fortData";
+import { maharashtraForts as staticForts } from "../../services/fortData";
+import { fetchForts } from "../../services/supabaseService";
 import { shivneriData } from "../../data/shivneriData";
 import Timeline from "./Timeline";
 import Shivneri360Gallery from "../Shivneri360Gallery";
@@ -31,10 +32,32 @@ function getItineraryForHours(fort, hours) {
 
 const PastPort = () => {
   const navigate = useNavigate();
+  const [forts, setForts] = useState(staticForts);
+  const [loading, setLoading] = useState(true);
   const [selectedFort, setSelectedFort] = useState(null);
   const [expandedChapter, setExpandedChapter] = useState(null);
   const [selectedHours, setSelectedHours] = useState(null);
   const [timelineLanguage, setTimelineLanguage] = useState("en");
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await fetchForts();
+        if (data && data.length > 0) {
+          setForts(data);
+          setSelectedFort(prev => {
+            if (!prev) return null;
+            return data.find(f => f.id === prev.id) || prev;
+          });
+        }
+      } catch (err) {
+        console.warn("Failed to load forts from Supabase, using local fallback:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeCardId, setActiveCardId] = useState(null);
   const [activeFacet, setActiveFacet] = useState(null);
@@ -293,7 +316,7 @@ const PastPort = () => {
         <section id="fort-selection-section" className="fort-selection-section" style={{ padding: '5rem 2rem' }}>
           <h2 className="fort-selection-heading" style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>Choose Your Fort</h2>
           <div className="fort-selection-grid">
-            {maharashtraForts.map((fort) => {
+            {forts.map((fort) => {
               const isActive = activeCardId === fort.id;
               return (
               <div
