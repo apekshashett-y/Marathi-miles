@@ -9,7 +9,7 @@ import palnaDetailImg from '../../assets/culture/palna_detail.png';
 
 // Raigad and Sinhagad Culture Assets
 import raigadCoronationImg from '../../assets/culture/raigad/coronation.png';
-import raigadPalaceImg from '../../assets/forts/raigad/palace.png';
+import raigadPalaceImg from '../../assets/forts/raigad/2.jpg';
 import sinhagadTanajiImg from '../../assets/culture/sinhagad/tanaji.png';
 
 const CULTURE_DATA = {

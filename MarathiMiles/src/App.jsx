@@ -7,6 +7,9 @@ import PlaceExplorer from './components/PlaceExplorer/PlaceExplorer';
 import PastPort from './components/Passport/PastPort';
 import SmartExplorationV2 from './components/Passport/SmartExplorationV2';
 import RaigadSmartExplorationPage from './components/Passport/RaigadSmartExplorationPage';
+import SinhagadSmartExplorationPage from './components/Passport/SinhagadSmartExplorationPage';
+import PratapgadSmartExplorationPage from './components/Passport/PratapgadSmartExplorationPage';
+import LohagadSmartExplorationPage from './components/Passport/LohagadSmartExplorationPage';
 
 /* HOME PAGE */
 const MainApp = () => {
@@ -64,15 +67,20 @@ const App = () => {
       {/* Place Explorer - navbar shown, hero hidden, full footer shown */}
       <Route path="/place-explorer" element={<PlaceExplorerPage />} />
 
-      {/* Smart Exploration (inside PastPort flow) */}
-      <Route
-        path="/pastport/:fortId/smart-exploration"
-        element={<SmartExplorationV2 />}
-      />
-      <Route
-        path="/pastport/raigad/smart-exploration-page"
-        element={<RaigadSmartExplorationPage />}
-      />
+      {/* Smart Exploration - SHIVNERI V2 Route */}
+      <Route path="/pastport/shivneri/smart-exploration-v2" element={<SmartExplorationV2 />} />
+
+      {/* Smart Exploration - RAIGAD Route */}
+      <Route path="/pastport/raigad/smart-exploration-page" element={<RaigadSmartExplorationPage />} />
+
+      {/* Smart Exploration - SINHAGAD Route */}
+      <Route path="/pastport/sinhagad/smart-exploration-page" element={<SinhagadSmartExplorationPage />} />
+
+      {/* Smart Exploration - PRATAPGAD Route */}
+      <Route path="/pastport/pratapgad/smart-exploration-page" element={<PratapgadSmartExplorationPage />} />
+
+      {/* Smart Exploration - LOHAGAD Route */}
+      <Route path="/pastport/lohagad/smart-exploration-page" element={<LohagadSmartExplorationPage />} />
     </Routes>
   );
 };

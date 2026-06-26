@@ -5,9 +5,10 @@ import templeImg from "../assets/forts/shivneri/temple.jpg";
 import viewImg from "../assets/forts/shivneri/view.jpg";
 import mainHeroImg from "../assets/forts/shivneri/shivnerimain.jpg";
 
-import raigadGateImg from "../assets/forts/raigad/gate.png";
-import raigadPalaceImg from "../assets/forts/raigad/palace.png";
-import raigadPanoramicImg from "../assets/forts/raigad/panoramic.png";
+import raigadGateImg from "../assets/forts/raigad/1.png";
+import raigadPalaceImg from "../assets/forts/raigad/2.jpg";
+import raigadPanoramicImg from "../assets/forts/raigad/3.jpg";
+import raigadMainBannerImg from "../assets/forts/raigad/panoramic.png";
 
 import sinhagadKalyanDarwajaImg from "../assets/forts/sinhagad/kalyan_darwaja.png";
 import sinhagadViewImg from "../assets/forts/sinhagad/view.png";
@@ -674,7 +675,7 @@ export const maharashtraForts = [
     era: "Capital of the Maratha Empire (1674 CE)",
     subtitle: "Where the crown of Swarajya was first consecrated",
     significance: "The seat of Chhatrapati Shivaji Maharaj's coronation and the capital of the Maratha Empire.",
-    imageUrl: "/raigad_fort.png",
+    imageUrl: raigadMainBannerImg,
 
     // DEEP HISTORICAL TIMELINE - Story Chapters with Mood Tags
     timeline: [
@@ -951,34 +952,22 @@ export const maharashtraForts = [
     },
     images360: [
       {
-        src: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop",
+        src: raigadGateImg,
         label: "Main Gate",
         subtitle: "Maha Darwaja – The Grand Entrance",
         audioGuide: "Listen to the history of this imposing gateway"
       },
       {
-        src: "https://images.unsplash.com/photo-1582650517303-b42616d56f00?w=1200&auto=format&fit=crop",
+        src: raigadPalaceImg,
         label: "Royal Palace",
         subtitle: "Raj Bhavan – Seat of the Empire",
         audioGuide: "Hear stories of the coronation and royal court"
       },
       {
-        src: "https://images.unsplash.com/photo-1587049352847-4d4b126a61b5?w=1200&auto=format&fit=crop",
+        src: raigadPanoramicImg,
         label: "Panoramic Views",
         subtitle: "Takmak Tok & Sahyadri ranges",
         audioGuide: "Learn about the strategic vantage point of Raigad"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1555627230-0584742a0888?w=1200&auto=format&fit=crop",
-        label: "Jagadishwar Temple",
-        subtitle: "The divine shrine within the fort",
-        audioGuide: "Discover the spiritual significance of the temple"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1610705121404-b903e1c6b5cc?w=1200&auto=format&fit=crop",
-        label: "Shivaji Maharaj Samadhi",
-        subtitle: "The resting place of Chhatrapati",
-        audioGuide: "Pay respects at the solemn memorial"
       }
     ],
 

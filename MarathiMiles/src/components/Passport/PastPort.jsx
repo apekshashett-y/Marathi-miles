@@ -5,6 +5,10 @@ import { fetchForts } from "../../services/supabaseService";
 import { shivneriData } from "../../data/shivneriData";
 import Timeline from "./Timeline";
 import Shivneri360Gallery from "../Shivneri360Gallery";
+import Raigad360Gallery from "../Raigad360Gallery";
+import Sinhagad360Gallery from "../Sinhagad360Gallery";
+import Pratapgad360Gallery from "../Pratapgad360Gallery";
+import Lohagad360Gallery from "../Lohagad360Gallery";
 import FlavorsSection from "./FlavorsSection";
 import BazaarSection from "./BazaarSection";
 import CultureSection from "./CultureSection";
@@ -731,8 +735,13 @@ const PastPort = () => {
         )}
       </div>
 
-      {/* 360° Interactive Viewer Modal */}
-      {show360 && <Shivneri360Gallery onClose={() => setShow360(false)} />}
+      {/* 360° Gallery Modal */}
+      {show360 && Number(selectedFort?.id) === 1 && <Shivneri360Gallery onClose={() => setShow360(false)} />}
+      {show360 && Number(selectedFort?.id) === 2 && <Raigad360Gallery onClose={() => setShow360(false)} />}
+      {show360 && Number(selectedFort?.id) === 3 && <Sinhagad360Gallery onClose={() => setShow360(false)} />}
+      {show360 && Number(selectedFort?.id) === 4 && <Pratapgad360Gallery onClose={() => setShow360(false)} />}
+      {show360 && Number(selectedFort?.id) === 5 && <Lohagad360Gallery onClose={() => setShow360(false)} />}
+      {show360 && Number(selectedFort?.id) !== 1 && Number(selectedFort?.id) !== 2 && Number(selectedFort?.id) !== 3 && Number(selectedFort?.id) !== 4 && Number(selectedFort?.id) !== 5 && <Shivneri360Gallery onClose={() => setShow360(false)} />}
 
       {/* Explore Every Facet - 4 Cards UI */}
       <div id="explore-facets" style={{
